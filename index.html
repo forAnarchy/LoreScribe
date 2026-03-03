@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LoreScribe — Universal Game Translation Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;600&family=Noto+Sans+JP:wght@400;600&family=Noto+Sans+SC:wght@400;600&family=Noto+Nastaliq+Urdu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0c10; --bg2:#0f1218; --bg3:#141920; --border:#1e2a3a; --border2:#243040;
+    --accent:#00b4d8; --accent2:#0077a8; --gold:#e8a020; --gold2:#b87a10;
+    --ok:#22c55e; --ok-bg:rgba(34,197,94,0.08);
+    --warn:#f59e0b; --warn-bg:rgba(245,158,11,0.08);
+    --err:#ef4444; --err-bg:rgba(239,68,68,0.10);
+    --txt:#c8d8e8; --txt2:#7a99b8; --txt3:#4a6888;
+    --mono:"Share Tech Mono",monospace;
+    --sans:"Exo 2",sans-serif;
+    --title:"Rajdhani",sans-serif;
+    --ui-font:"Exo 2",sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--txt);font-family:var(--ui-font);font-size:14px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+  /* HEADER */
+  header{background:linear-gradient(90deg,#0a0e18,#101828,#0a0e18);border-bottom:1px solid var(--border2);padding:0 16px;height:52px;display:flex;align-items:center;gap:12px;flex-shrink:0;position:relative;}
+  header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.4;}
+  .logo{font-family:var(--title);font-size:22px;font-weight:700;color:var(--txt);letter-spacing:3px;text-transform:uppercase;white-space:nowrap;}
+  .logo span{color:var(--accent);}
+  .logo sub{font-size:10px;font-family:var(--mono);color:var(--txt3);letter-spacing:1px;vertical-align:middle;margin-left:6px;text-transform:lowercase;}
+  .header-sep{width:1px;height:28px;background:var(--border2);flex-shrink:0;}
+  .stats-bar{display:flex;gap:16px;flex:1;}
+  .stat{display:flex;flex-direction:column;gap:1px;}
+  .stat-label{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--txt3);font-family:var(--mono);}
+  .stat-val{font-family:var(--mono);font-size:14px;font-weight:600;}
+  .stat-val.ok{color:var(--ok);} .stat-val.warn{color:var(--warn);} .stat-val.err{color:var(--err);} .stat-val.total{color:var(--txt);}
+
+  /* LANGUAGE SWITCHER */
+  .lang-switcher{display:flex;gap:4px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:4px;}
+  .lang-btn{border:none;background:transparent;cursor:pointer;padding:3px 6px;border-radius:4px;font-size:16px;line-height:1;transition:all .15s;opacity:.5;position:relative;}
+  .lang-btn:hover{opacity:.85;background:var(--border);}
+  .lang-btn.active{opacity:1;background:var(--border2);box-shadow:0 0 8px rgba(0,180,216,.2);}
+  .lang-btn .lang-code{font-family:var(--mono);font-size:8px;color:var(--txt3);display:block;text-align:center;letter-spacing:.5px;line-height:1;margin-top:1px;}
+
+  /* FORMAT BAR */
+  #format-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+  .format-label{font-family:var(--mono);font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;}
+  .format-cards{display:flex;gap:6px;flex-wrap:wrap;}
+  .fmt-card{border:1px solid var(--border2);border-radius:5px;padding:5px 12px;cursor:pointer;transition:all .15s;background:var(--bg3);display:flex;flex-direction:column;gap:1px;min-width:100px;}
+  .fmt-card:hover{border-color:var(--accent);background:rgba(0,180,216,.06);}
+  .fmt-card.active{border-color:var(--accent);background:rgba(0,180,216,.1);box-shadow:0 0 12px rgba(0,180,216,.15);}
+  .fmt-name{font-family:var(--title);font-size:12px;font-weight:700;letter-spacing:1px;color:var(--txt);}
+  .fmt-card.active .fmt-name{color:var(--accent);}
+  .fmt-desc{font-family:var(--mono);font-size:9px;color:var(--txt3);}
+
+  /* TOOLBAR */
+  .toolbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:7px 16px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;}
+  .btn{font-family:var(--title);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border:1px solid var(--border2);border-radius:4px;background:var(--bg3);color:var(--txt2);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,180,216,.08);}
+  .btn.primary{background:var(--accent2);border-color:var(--accent);color:#fff;}
+  .btn.primary:hover{background:var(--accent);}
+  .btn.gold{background:var(--gold2);border-color:var(--gold);color:#fff;}
+  .btn.gold:hover{background:var(--gold);}
+  .btn:disabled{opacity:.35;cursor:not-allowed;}
+  .filter-group{display:flex;gap:3px;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:3px;}
+  .filter-btn{font-family:var(--mono);font-size:11px;padding:2px 9px;border:none;border-radius:3px;background:transparent;color:var(--txt3);cursor:pointer;transition:all .15s;}
+  .filter-btn.active{background:var(--border2);color:var(--txt);}
+  .filter-btn.ok.active{color:var(--ok);} .filter-btn.warn.active{color:var(--warn);} .filter-btn.err.active{color:var(--err);}
+  .search-wrap{position:relative;margin-left:auto;}
+  .search-wrap input{background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--txt);font-family:var(--mono);font-size:12px;padding:5px 10px 5px 28px;width:190px;outline:none;transition:border-color .15s;}
+  .search-wrap input:focus{border-color:var(--accent);}
+  .search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:12px;pointer-events:none;}
+
+  /* COL HEADERS */
+  .col-headers{display:grid;grid-template-columns:48px 1fr 1fr 90px;background:var(--bg2);border-bottom:1px solid var(--border2);flex-shrink:0;}
+  .col-hdr{font-family:var(--title);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);padding:6px 12px;border-right:1px solid var(--border);}
+  .col-hdr:last-child{border-right:none;text-align:center;}
+
+  /* TABLE */
+  .table-wrap{flex:1;overflow-y:auto;overflow-x:hidden;}
+  .table-wrap::-webkit-scrollbar{width:6px;}
+  .table-wrap::-webkit-scrollbar-track{background:var(--bg);}
+  .table-wrap::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+  .row{display:grid;grid-template-columns:48px 1fr 1fr 90px;border-bottom:1px solid var(--border);transition:background .1s;min-height:44px;}
+  .row:hover{background:rgba(255,255,255,.02);}
+  .row.status-ok{border-left:3px solid var(--ok);}
+  .row.status-warn{border-left:3px solid var(--warn);background:var(--warn-bg);}
+  .row.status-err{border-left:3px solid var(--err);background:var(--err-bg);}
+  .cell{padding:8px 12px;border-right:1px solid var(--border);display:flex;align-items:flex-start;}
+  .cell:last-child{border-right:none;}
+  .row-num{font-family:var(--mono);font-size:11px;color:var(--txt3);justify-content:center;align-items:center;padding:8px 4px;}
+  .orig-text{font-family:var(--mono);font-size:13px;color:var(--txt2);line-height:1.5;word-break:break-word;user-select:text;}
+  .trans-cell{padding:4px 8px;align-items:center;}
+  .trans-input{width:100%;background:transparent;border:none;border-bottom:1px solid transparent;color:var(--txt);font-family:var(--mono);font-size:13px;line-height:1.5;outline:none;resize:none;min-height:28px;transition:border-color .15s;word-break:break-word;}
+  .trans-input:focus{border-bottom-color:var(--accent);}
+  .row.status-warn .trans-input{color:var(--warn);}
+  .row.status-err .trans-input{color:var(--err);}
+  .status-cell{flex-direction:column;justify-content:center;align-items:center;gap:4px;padding:6px 4px;}
+  .status-badge{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:.5px;}
+  .badge-ok{background:rgba(34,197,94,.15);color:var(--ok);border:1px solid rgba(34,197,94,.3);}
+  .badge-warn{background:rgba(245,158,11,.15);color:var(--warn);border:1px solid rgba(245,158,11,.3);}
+  .badge-err{background:rgba(239,68,68,.15);color:var(--err);border:1px solid rgba(239,68,68,.3);}
+  .char-counter{font-family:var(--mono);font-size:10px;color:var(--txt3);}
+  .char-counter.tight{color:var(--warn);} .char-counter.over{color:var(--err);}
+
+  /* DROP ZONE */
+  #drop-zone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;border:2px dashed var(--border2);margin:24px;border-radius:8px;transition:all .2s;cursor:pointer;}
+  #drop-zone.drag-over{border-color:var(--accent);background:rgba(0,180,216,.05);}
+  .drop-icon{font-size:52px;opacity:.25;}
+  .drop-title{font-family:var(--title);font-size:24px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--txt2);}
+  .drop-sub{font-family:var(--mono);font-size:12px;color:var(--txt3);text-align:center;line-height:2;}
+  .drop-formats{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;justify-content:center;}
+  .drop-fmt-tag{font-family:var(--mono);font-size:11px;padding:3px 10px;border:1px solid var(--border2);border-radius:3px;color:var(--txt3);}
+  #file-input{display:none;}
+
+  /* PROGRESS */
+  .progress-bar-wrap{height:2px;background:var(--border);flex-shrink:0;overflow:hidden;}
+  #progress-bar{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%;transition:width .3s;}
+
+  /* FOOTER */
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:6px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;font-family:var(--mono);font-size:11px;color:var(--txt3);}
+  .footer-status{margin-left:auto;}
+
+  /* TOAST */
+  #toast{position:fixed;bottom:60px;right:24px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:12px 20px;font-family:var(--mono);font-size:13px;color:var(--txt);box-shadow:0 8px 32px rgba(0,0,0,.6);transform:translateY(20px);opacity:0;transition:all .25s;z-index:100;pointer-events:none;}
+  #toast.show{transform:translateY(0);opacity:1;}
+  #toast.ok{border-color:var(--ok);color:var(--ok);}
+  #toast.err{border-color:var(--err);color:var(--err);}
+
+  /* RTL support for Urdu */
+  body.rtl .row{direction:rtl;}
+  body.rtl .stats-bar{flex-direction:row-reverse;}
+  body.rtl .search-wrap{margin-left:0;margin-right:auto;}
+  body.rtl .toolbar{flex-direction:row-reverse;}
+  body.rtl .footer-status{margin-left:0;margin-right:auto;}
+
+  *{scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
+  .hidden{display:none!important;}
+
+  /* HELP MODAL */
+  #help-overlay {
+    position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
+    display:flex;align-items:center;justify-content:center;
+    backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .2s;
+  }
+  #help-overlay.open{opacity:1;pointer-events:all;}
+  #help-modal {
+    background:var(--bg2);border:1px solid var(--border2);border-radius:10px;
+    width:min(780px,94vw);max-height:86vh;display:flex;flex-direction:column;
+    box-shadow:0 24px 80px rgba(0,0,0,.7);
+    transform:translateY(16px) scale(.98);transition:transform .2s;
+  }
+  #help-overlay.open #help-modal{transform:translateY(0) scale(1);}
+  .help-header{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border2);flex-shrink:0;}
+  .help-header-icon{font-size:22px;}
+  .help-title{font-family:var(--title);font-size:18px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);flex:1;}
+  .help-close{background:none;border:1px solid var(--border2);border-radius:4px;color:var(--txt3);cursor:pointer;padding:4px 10px;font-size:18px;line-height:1;transition:all .15s;}
+  .help-close:hover{border-color:var(--err);color:var(--err);}
+  .help-body{overflow-y:auto;padding:24px 28px;flex:1;line-height:1.8;}
+  .help-body::-webkit-scrollbar{width:5px;}
+  .help-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+  .help-section{margin-bottom:28px;}
+  .help-section h2{font-family:var(--title);font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+  .help-section p{color:var(--txt2);font-size:13px;margin-bottom:8px;}
+  .help-section ul{list-style:none;padding:0;}
+  .help-section ul li{font-size:13px;color:var(--txt2);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:10px;align-items:baseline;}
+  .help-section ul li:last-child{border-bottom:none;}
+  .help-key{font-family:var(--mono);font-size:11px;color:var(--accent);background:rgba(0,180,216,.1);border:1px solid rgba(0,180,216,.25);border-radius:3px;padding:1px 7px;white-space:nowrap;flex-shrink:0;}
+  .help-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle;}
+  .help-footer-note{margin-top:20px;padding:12px 16px;background:rgba(0,180,216,.06);border:1px solid rgba(0,180,216,.2);border-radius:6px;font-family:var(--mono);font-size:12px;color:var(--txt3);}
+  .btn-help{font-family:var(--mono);font-size:14px;font-weight:700;width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);color:var(--txt3);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .btn-help:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,180,216,.1);}
+
+
+  /* HELP MODAL */
+  #help-overlay {
+    position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
+    display:flex;align-items:center;justify-content:center;
+    backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .2s;
+  }
+  #help-overlay.open{opacity:1;pointer-events:all;}
+  #help-modal {
+    background:var(--bg2);border:1px solid var(--border2);border-radius:10px;
+    width:min(780px,94vw);max-height:86vh;display:flex;flex-direction:column;
+    box-shadow:0 24px 80px rgba(0,0,0,.7);
+    transform:translateY(16px) scale(.98);transition:transform .2s;
+  }
+  #help-overlay.open #help-modal{transform:translateY(0) scale(1);}
+  .help-header{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border2);flex-shrink:0;}
+  .help-header-icon{font-size:22px;}
+  .help-title{font-family:var(--title);font-size:18px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);flex:1;}
+  .help-close{background:none;border:1px solid var(--border2);border-radius:4px;color:var(--txt3);cursor:pointer;padding:4px 10px;font-size:18px;line-height:1;transition:all .15s;}
+  .help-close:hover{border-color:var(--err);color:var(--err);}
+  .help-body{overflow-y:auto;padding:24px 28px;flex:1;line-height:1.8;}
+  .help-body::-webkit-scrollbar{width:5px;}
+  .help-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+  .help-section{margin-bottom:28px;}
+  .help-section h2{font-family:var(--title);font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+  .help-section p{color:var(--txt2);font-size:13px;margin-bottom:8px;}
+  .help-section ul{list-style:none;padding:0;}
+  .help-section ul li{font-size:13px;color:var(--txt2);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:10px;align-items:baseline;}
+  .help-section ul li:last-child{border-bottom:none;}
+  .help-key{font-family:var(--mono);font-size:11px;color:var(--accent);background:rgba(0,180,216,.1);border:1px solid rgba(0,180,216,.25);border-radius:3px;padding:1px 7px;white-space:nowrap;flex-shrink:0;}
+  .help-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle;}
+  .help-footer-note{margin-top:20px;padding:12px 16px;background:rgba(0,180,216,.06);border:1px solid rgba(0,180,216,.2);border-radius:6px;font-family:var(--mono);font-size:12px;color:var(--txt3);}
+  .btn-help{font-family:var(--mono);font-size:14px;font-weight:700;width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);color:var(--txt3);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .btn-help:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,180,216,.1);}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Lore<span>Scribe</span><sub>game translation editor</sub></div>
+  <div class="header-sep"></div>
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-label" data-i18n="stat_total">Total</span><span class="stat-val total" id="s-total">—</span></div>
+    <div class="stat"><span class="stat-label" data-i18n="stat_ok">OK</span><span class="stat-val ok" id="s-ok">—</span></div>
+    <div class="stat"><span class="stat-label" data-i18n="stat_missing">Missing</span><span class="stat-val warn" id="s-warn">—</span></div>
+    <div class="stat"><span class="stat-label" data-i18n="stat_toolong">Too Long</span><span class="stat-val err" id="s-err">—</span></div>
+    <div class="stat"><span class="stat-label" data-i18n="stat_progress">Progress</span><span class="stat-val ok" id="s-pct">—</span></div>
+  </div>
+  <div class="header-sep"></div>
+  <div class="lang-switcher">
+    <button class="lang-btn" onclick="setLang('tr')" title="Türkçe">🇹🇷<span class="lang-code">TR</span></button>
+    <button class="lang-btn active" onclick="setLang('en')" title="English">🇬🇧<span class="lang-code">EN</span></button>
+    <button class="lang-btn" onclick="setLang('ja')" title="日本語">🇯🇵<span class="lang-code">JA</span></button>
+    <button class="lang-btn" onclick="setLang('zh')" title="中文">🇨🇳<span class="lang-code">ZH</span></button>
+    <button class="lang-btn" onclick="setLang('ur')" title="اردو">🇵🇰<span class="lang-code">UR</span></button>
+    <button class="lang-btn" onclick="setLang('hi')" title="हिन्दी">🇮🇳<span class="lang-code">HI</span></button>
+    <button class="lang-btn" onclick="setLang('ar')" title="العربية">🇸🇦<span class="lang-code">AR</span></button>
+    <button class="lang-btn" onclick="setLang('hi')" title="हिन्दी">🇮🇳<span class="lang-code">HI</span></button>
+    <button class="lang-btn" onclick="setLang('ar')" title="العربية">🇸🇦<span class="lang-code">AR</span></button>
+  </div>
+  <button class="btn-help" onclick="openHelp()" title="Help">?</button>
+</header>
+
+<div class="progress-bar-wrap"><div id="progress-bar"></div></div>
+
+<div id="format-bar">
+  <span class="format-label" data-i18n="format_label">Format:</span>
+  <div class="format-cards">
+    <div class="fmt-card active" data-fmt="sf3" onclick="selectFormat('sf3',this)">
+      <span class="fmt-name">SF3 / Custom</span>
+      <span class="fmt-desc">OFFSET|BYTES|TEXT</span>
+    </div>
+    <div class="fmt-card" data-fmt="plain" onclick="selectFormat('plain',this)">
+      <span class="fmt-name" data-i18n="fmt_plain_name">Plain TXT</span>
+      <span class="fmt-desc" data-i18n="fmt_plain_desc">One line per text</span>
+    </div>
+    <div class="fmt-card" data-fmt="csv" onclick="selectFormat('csv',this)">
+      <span class="fmt-name">CSV</span>
+      <span class="fmt-desc">id,"orig","trans"</span>
+    </div>
+    <div class="fmt-card" data-fmt="auto" onclick="selectFormat('auto',this)">
+      <span class="fmt-name" data-i18n="fmt_auto_name">Auto</span>
+      <span class="fmt-desc" data-i18n="fmt_auto_desc">Auto-detect format</span>
+    </div>
+  </div>
+  <span class="format-label" id="fmt-hint" style="margin-left:12px;color:var(--accent);font-size:12px;"></span>
+</div>
+
+<div class="toolbar">
+  <button class="btn primary" onclick="document.getElementById('file-input').click()" data-i18n="btn_load">📂 Load File</button>
+  <input type="file" id="file-input" accept=".txt,.csv,.xml,.json,.po,.ini,.tsv">
+  <div class="header-sep"></div>
+  <div class="filter-group">
+    <button class="filter-btn all active" onclick="setFilter('all',this)" data-i18n="filter_all">All</button>
+    <button class="filter-btn ok"         onclick="setFilter('ok',this)"  data-i18n="filter_ok">✓ OK</button>
+    <button class="filter-btn warn"       onclick="setFilter('warn',this)" data-i18n="filter_warn">⚠ Missing</button>
+    <button class="filter-btn err"        onclick="setFilter('err',this)"  data-i18n="filter_err">✗ Long</button>
+  </div>
+  <div class="header-sep"></div>
+  <button class="btn" id="btn-prev-issue" onclick="jumpIssue(-1)" disabled data-i18n="btn_prev">↑ Prev Issue</button>
+  <button class="btn" id="btn-next-issue" onclick="jumpIssue(1)"  disabled data-i18n="btn_next">↓ Next Issue</button>
+  <div class="header-sep"></div>
+  <button class="btn gold" id="btn-export" onclick="exportFile()" disabled data-i18n="btn_export">⬇ Export Fixed File</button>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-box" data-i18n-placeholder="search_placeholder" placeholder="Search text..." oninput="onSearch(this.value)">
+  </div>
+</div>
+
+<div class="col-headers hidden" id="col-headers">
+  <div class="col-hdr">#</div>
+  <div class="col-hdr" data-i18n="col_orig">🌐 Original</div>
+  <div class="col-hdr" data-i18n="col_trans">🖊 Translation</div>
+  <div class="col-hdr" style="text-align:center" data-i18n="col_status">Status</div>
+</div>
+
+<div class="table-wrap hidden" id="table-wrap"></div>
+
+<div id="drop-zone" onclick="document.getElementById('file-input').click()">
+  <div class="drop-icon">📜</div>
+  <div class="drop-title" data-i18n="drop_title">Load Translation File</div>
+  <div class="drop-sub" data-i18n="drop_sub">Drop file here or click to browse<br>Select format above, or use Auto-detect</div>
+  <div class="drop-formats">
+    <span class="drop-fmt-tag">SF3 .txt</span>
+    <span class="drop-fmt-tag">Plain .txt</span>
+    <span class="drop-fmt-tag">.csv</span>
+    <span class="drop-fmt-tag">.po</span>
+    <span class="drop-fmt-tag">.xml</span>
+    <span class="drop-fmt-tag">.json</span>
+    <span class="drop-fmt-tag">.ini</span>
+  </div>
+</div>
+
+
+<div id="help-overlay">
+  <div id="help-modal">
+    <div class="help-header">
+      <span class="help-header-icon">📖</span>
+      <span class="help-title" id="help-modal-title">USER GUIDE</span>
+      <button class="help-close" onclick="closeHelp()">&#x2715;</button>
+    </div>
+    <div class="help-body" id="help-body-content"></div>
+  </div>
+</div>
+
+
+<div id="help-overlay">
+  <div id="help-modal">
+    <div class="help-header">
+      <span class="help-header-icon">📖</span>
+      <span class="help-title" id="help-modal-title">USER GUIDE</span>
+      <button class="help-close" onclick="closeHelp()">&#x2715;</button>
+    </div>
+    <div class="help-body" id="help-body-content"></div>
+  </div>
+</div>
+
+<footer>
+  <span id="footer-file" data-i18n="footer_no_file">No file loaded</span>
+  <span>|</span>
+  <span id="footer-fmt">Format: —</span>
+  <span>|</span>
+  <span id="footer-visible">—</span>
+  <span class="footer-status" id="footer-saved"></span>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+// ═══ STATE ════════════════════════════════════════════
+let rows=[], filtered=[], filter='all', searchQ='', fileName='', fmt='sf3', issueIdx=-1;
+let currentLang = 'en';
+
+// ═══ TRANSLATIONS ═════════════════════════════════════
+const I18N = {
+  tr: {
+    stat_total:'Toplam', stat_ok:'Tamam', stat_missing:'Çevrilmemiş', stat_toolong:'Çok Uzun', stat_progress:'İlerleme',
+    format_label:'Format:',
+    fmt_plain_name:'Sade TXT', fmt_plain_desc:'Her satır bir metin',
+    fmt_auto_name:'Otomatik', fmt_auto_desc:'Formatı kendisi seçer',
+    btn_load:'📂 Dosya Yükle', btn_prev:'↑ Önceki Sorun', btn_next:'↓ Sonraki Sorun', btn_export:'⬇ Düzeltilmiş Dosyayı İndir',
+    filter_all:'Tümü', filter_ok:'✓ Tamam', filter_warn:'⚠ Eksik', filter_err:'✗ Uzun',
+    col_orig:'🌐 Orijinal', col_trans:'🖊 Çeviri — düzenlenebilir', col_status:'Durum',
+    drop_title:'Çeviri Dosyasını Yükle',
+    drop_sub:'Dosyayı buraya sürükle bırak ya da tıkla ve seç<br>Yukarıdan formatını seç, otomatik algılama da çalışır',
+    footer_no_file:'Dosya yüklenmedi',
+    badge_ok:'TAMAM', badge_warn:'EKSİK', badge_err:'UZUN',
+    search_placeholder:'Metin ara...',
+    toast_loaded:' satır yüklendi',
+    toast_no_rows:'Geçerli satır bulunamadı!',
+    toast_exported:'Dosya indirildi!',
+    confirm_truncate:' satır çok uzun ve kırpılacak. Yine de dışa aktar?',
+    footer_rows:' satır',
+    footer_unsaved:'● kaydedilmemiş değişiklik',
+    footer_exported:'✓ dışa aktarıldı',
+    fmt_hint_sf3:'OFFSET|BYTE_UZUNLUGU|METIN — sf3_tool çıktısı',
+    fmt_hint_plain:'Her satır tek bir metin bloğu. Uzunluk kontrolü yok.',
+    fmt_hint_csv:'id,"orijinal","çeviri" — ilk satır başlık sayılır',
+    fmt_hint_auto:'Format dosyaya bakılarak otomatik seçilir',
+  },
+  en: {
+    stat_total:'Total', stat_ok:'OK', stat_missing:'Missing', stat_toolong:'Too Long', stat_progress:'Progress',
+    format_label:'Format:',
+    fmt_plain_name:'Plain TXT', fmt_plain_desc:'One line per text',
+    fmt_auto_name:'Auto', fmt_auto_desc:'Auto-detect format',
+    btn_load:'📂 Load File', btn_prev:'↑ Prev Issue', btn_next:'↓ Next Issue', btn_export:'⬇ Export Fixed File',
+    filter_all:'All', filter_ok:'✓ OK', filter_warn:'⚠ Missing', filter_err:'✗ Long',
+    col_orig:'🌐 Original', col_trans:'🖊 Translation — editable', col_status:'Status',
+    drop_title:'Load Translation File',
+    drop_sub:'Drop file here or click to browse<br>Select format above, or use Auto-detect',
+    footer_no_file:'No file loaded',
+    badge_ok:'OK', badge_warn:'MISSING', badge_err:'TOO LONG',
+    search_placeholder:'Search text...',
+    toast_loaded:' rows loaded',
+    toast_no_rows:'No valid rows found!',
+    toast_exported:'File downloaded!',
+    confirm_truncate:' rows are too long and will be truncated. Export anyway?',
+    footer_rows:' rows',
+    footer_unsaved:'● unsaved changes',
+    footer_exported:'✓ exported',
+    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_tool output',
+    fmt_hint_plain:'Each line is one text block. No length check.',
+    fmt_hint_csv:'id,"original","translation" — first row treated as header',
+    fmt_hint_auto:'Format is auto-detected from file contents',
+  },
+  ja: {
+    stat_total:'合計', stat_ok:'完了', stat_missing:'未翻訳', stat_toolong:'長すぎ', stat_progress:'進捗',
+    format_label:'形式:',
+    fmt_plain_name:'プレーンTXT', fmt_plain_desc:'1行1テキスト',
+    fmt_auto_name:'自動', fmt_auto_desc:'形式を自動検出',
+    btn_load:'📂 ファイル読込', btn_prev:'↑ 前の問題', btn_next:'↓ 次の問題', btn_export:'⬇ 修正ファイルを保存',
+    filter_all:'すべて', filter_ok:'✓ 完了', filter_warn:'⚠ 未翻訳', filter_err:'✗ 長すぎ',
+    col_orig:'🌐 原文', col_trans:'🖊 翻訳 — 編集可', col_status:'状態',
+    drop_title:'翻訳ファイルを読み込む',
+    drop_sub:'ここにファイルをドロップ、またはクリックして選択<br>上で形式を選ぶか、自動検出を使用',
+    footer_no_file:'ファイル未読込',
+    badge_ok:'完了', badge_warn:'未翻訳', badge_err:'長過',
+    search_placeholder:'テキスト検索...',
+    toast_loaded:' 行を読み込みました',
+    toast_no_rows:'有効な行が見つかりません！',
+    toast_exported:'ファイルをダウンロードしました！',
+    confirm_truncate:' 行が長すぎて切り捨てられます。エクスポートしますか？',
+    footer_rows:' 行',
+    footer_unsaved:'● 未保存の変更',
+    footer_exported:'✓ エクスポート済み',
+    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_toolの出力',
+    fmt_hint_plain:'各行が1つのテキストブロック。長さチェックなし。',
+    fmt_hint_csv:'id,"原文","翻訳" — 最初の行はヘッダーとして扱います',
+    fmt_hint_auto:'ファイル内容から形式を自動検出します',
+  },
+  zh: {
+    stat_total:'总计', stat_ok:'完成', stat_missing:'未翻译', stat_toolong:'过长', stat_progress:'进度',
+    format_label:'格式:',
+    fmt_plain_name:'纯文本', fmt_plain_desc:'每行一段文本',
+    fmt_auto_name:'自动', fmt_auto_desc:'自动检测格式',
+    btn_load:'📂 加载文件', btn_prev:'↑ 上一个问题', btn_next:'↓ 下一个问题', btn_export:'⬇ 导出修正文件',
+    filter_all:'全部', filter_ok:'✓ 完成', filter_warn:'⚠ 缺失', filter_err:'✗ 过长',
+    col_orig:'🌐 原文', col_trans:'🖊 译文 — 可编辑', col_status:'状态',
+    drop_title:'加载翻译文件',
+    drop_sub:'将文件拖放到此处或点击浏览<br>在上方选择格式，或使用自动检测',
+    footer_no_file:'未加载文件',
+    badge_ok:'完成', badge_warn:'缺失', badge_err:'过长',
+    search_placeholder:'搜索文本...',
+    toast_loaded:' 行已加载',
+    toast_no_rows:'未找到有效行！',
+    toast_exported:'文件已下载！',
+    confirm_truncate:' 行过长将被截断。仍要导出吗？',
+    footer_rows:' 行',
+    footer_unsaved:'● 有未保存的更改',
+    footer_exported:'✓ 已导出',
+    fmt_hint_sf3:'OFFSET|字节长度|文本 — sf3_tool输出',
+    fmt_hint_plain:'每行是一个文本块。不检查长度。',
+    fmt_hint_csv:'id,"原文","译文" — 第一行视为标题',
+    fmt_hint_auto:'从文件内容自动检测格式',
+  },
+  ur: {
+    stat_total:'کل', stat_ok:'مکمل', stat_missing:'نامکمل', stat_toolong:'بہت لمبا', stat_progress:'پیش رفت',
+    format_label:'فارمیٹ:',
+    fmt_plain_name:'سادہ TXT', fmt_plain_desc:'ہر سطر ایک متن',
+    fmt_auto_name:'خودکار', fmt_auto_desc:'فارمیٹ خود شناخت کرے',
+    btn_load:'📂 فائل لوڈ کریں', btn_prev:'↑ پچھلا مسئلہ', btn_next:'↓ اگلا مسئلہ', btn_export:'⬇ درست فائل ڈاؤنلوڈ',
+    filter_all:'سب', filter_ok:'✓ مکمل', filter_warn:'⚠ نامکمل', filter_err:'✗ لمبا',
+    col_orig:'🌐 اصل', col_trans:'🖊 ترجمہ — قابل ترمیم', col_status:'حالت',
+    drop_title:'ترجمہ فائل لوڈ کریں',
+    drop_sub:'فائل یہاں ڈراپ کریں یا کلک کریں<br>اوپر فارمیٹ منتخب کریں یا خودکار استعمال کریں',
+    footer_no_file:'کوئی فائل لوڈ نہیں',
+    badge_ok:'مکمل', badge_warn:'نامکمل', badge_err:'لمبا',
+    search_placeholder:'متن تلاش کریں...',
+    toast_loaded:' سطریں لوڈ ہوئیں',
+    toast_no_rows:'کوئی درست سطر نہیں ملی!',
+    toast_exported:'فائل ڈاؤنلوڈ ہوئی!',
+    confirm_truncate:' سطریں بہت لمبی ہیں اور کٹ جائیں گی۔ پھر بھی برآمد کریں؟',
+    footer_rows:' سطریں',
+    footer_unsaved:'● غیر محفوظ تبدیلیاں',
+    footer_exported:'✓ برآمد ہوئی',
+    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_tool آؤٹ پٹ',
+    fmt_hint_plain:'ہر سطر ایک متن بلاک ہے۔ لمبائی کی جانچ نہیں۔',
+    fmt_hint_csv:'id,"اصل","ترجمہ" — پہلی سطر ہیڈر سمجھی جائے گی',
+    fmt_hint_auto:'فائل مواد سے فارمیٹ خودکار شناخت ہوگا',
+  },
+  hi: {
+    stat_total:'कुल', stat_ok:'पूर्ण', stat_missing:'शेष', stat_toolong:'बहुत लंबा', stat_progress:'प्रगति',
+    format_label:'प्रारूप:',
+    fmt_plain_name:'सादा TXT', fmt_plain_desc:'प्रत्येक पंक्ति एक पाठ',
+    fmt_auto_name:'स्वचालित', fmt_auto_desc:'प्रारूप स्वयं पहचाने',
+    btn_load:'📂 फ़ाइल लोड करें', btn_prev:'↑ पिछली समस्या', btn_next:'↓ अगली समस्या', btn_export:'⬇ सुधरी फ़ाइल डाउनलोड',
+    filter_all:'सभी', filter_ok:'✓ पूर्ण', filter_warn:'⚠ शेष', filter_err:'✗ लंबा',
+    col_orig:'🌐 मूल पाठ', col_trans:'🖊 अनुवाद — संपादन योग्य', col_status:'स्थिति',
+    drop_title:'अनुवाद फ़ाइल लोड करें',
+    drop_sub:'फ़ाइल यहाँ छोड़ें या क्लिक करके चुनें<br>ऊपर से प्रारूप चुनें या स्वचालित पहचान का उपयोग करें',
+    footer_no_file:'कोई फ़ाइल लोड नहीं',
+    badge_ok:'पूर्ण', badge_warn:'शेष', badge_err:'लंबा',
+    search_placeholder:'पाठ खोजें...',
+    toast_loaded:' पंक्तियाँ लोड हुईं',
+    toast_no_rows:'कोई मान्य पंक्ति नहीं मिली!',
+    toast_exported:'फ़ाइल डाउनलोड हुई!',
+    confirm_truncate:' पंक्तियाँ बहुत लंबी हैं और कट जाएंगी। फिर भी निर्यात करें?',
+    footer_rows:' पंक्तियाँ',
+    footer_unsaved:'● असहेजे परिवर्तन',
+    footer_exported:'✓ निर्यात हुआ',
+    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_tool आउटपुट',
+    fmt_hint_plain:'प्रत्येक पंक्ति एक पाठ खंड है। लंबाई जाँच नहीं।',
+    fmt_hint_csv:'id,"मूल","अनुवाद" — पहली पंक्ति शीर्षक मानी जाएगी',
+    fmt_hint_auto:'फ़ाइल सामग्री से प्रारूप स्वचालित पहचाना जाएगा',
+  },
+  ar: {
+    stat_total:'الإجمالي', stat_ok:'مكتمل', stat_missing:'غير مترجم', stat_toolong:'طويل جداً', stat_progress:'التقدم',
+    format_label:'الصيغة:',
+    fmt_plain_name:'نص عادي', fmt_plain_desc:'سطر واحد لكل نص',
+    fmt_auto_name:'تلقائي', fmt_auto_desc:'اكتشاف الصيغة تلقائياً',
+    btn_load:'📂 تحميل ملف', btn_prev:'↑ المشكلة السابقة', btn_next:'↓ المشكلة التالية', btn_export:'⬇ تنزيل الملف المُصحَّح',
+    filter_all:'الكل', filter_ok:'✓ مكتمل', filter_warn:'⚠ ناقص', filter_err:'✗ طويل',
+    col_orig:'🌐 النص الأصلي', col_trans:'🖊 الترجمة — قابل للتعديل', col_status:'الحالة',
+    drop_title:'تحميل ملف الترجمة',
+    drop_sub:'اسحب الملف هنا أو انقر للتصفح<br>اختر الصيغة أعلاه أو استخدم الاكتشاف التلقائي',
+    footer_no_file:'لم يتم تحميل ملف',
+    badge_ok:'مكتمل', badge_warn:'ناقص', badge_err:'طويل',
+    search_placeholder:'ابحث عن نص...',
+    toast_loaded:' سطراً تم تحميله',
+    toast_no_rows:'لم يتم العثور على سطور صالحة!',
+    toast_exported:'تم تنزيل الملف!',
+    confirm_truncate:' سطور طويلة جداً وستُقطع. هل تريد التصدير؟',
+    footer_rows:' سطور',
+    footer_unsaved:'● تغييرات غير محفوظة',
+    footer_exported:'✓ تم التصدير',
+    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — مخرجات sf3_tool',
+    fmt_hint_plain:'كل سطر كتلة نصية واحدة. لا يوجد فحص للطول.',
+    fmt_hint_csv:'id,"أصلي","ترجمة" — يُعامَل السطر الأول كرأس',
+    fmt_hint_auto:'يتم اكتشاف الصيغة تلقائياً من محتوى الملف',
+  },
+};
+
+// Font families per language
+const LANG_FONTS = {
+  tr: '"Exo 2", sans-serif',
+  en: '"Exo 2", sans-serif',
+  ja: '"Noto Sans JP", "Exo 2", sans-serif',
+  zh: '"Noto Sans SC", "Exo 2", sans-serif',
+  ur: '"Noto Nastaliq Urdu", "Exo 2", sans-serif',
+  hi: '"Noto Sans Devanagari", "Exo 2", sans-serif',
+  ar: '"Noto Naskh Arabic", "Exo 2", sans-serif',
+  hi: '"Noto Sans Devanagari", "Exo 2", sans-serif',
+  ar: '"Noto Naskh Arabic", "Exo 2", sans-serif',
+};
+
+// ═══ APPLY LANGUAGE ═══════════════════════════════════
+function t(key) { return (I18N[currentLang] || I18N.en)[key] || key; }
+
+function setLang(lang) {
+  currentLang = lang;
+
+  // Update html lang + dir
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ur' || lang === 'ar') ? 'rtl' : 'ltr';
+  document.body.classList.toggle('rtl', lang === 'ur' || lang === 'ar');
+
+  // Update UI font
+  document.documentElement.style.setProperty('--ui-font', LANG_FONTS[lang]);
+
+  // Apply all data-i18n text nodes
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (I18N[lang] && I18N[lang][key]) {
+      if (el.tagName === 'INPUT') el.placeholder = I18N[lang][key];
+      else el.textContent = I18N[lang][key];
+    }
+  });
+
+  // Placeholder special case
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (I18N[lang] && I18N[lang][key]) el.placeholder = I18N[lang][key];
+  });
+
+  // Update drop-sub (has HTML)
+  const ds = document.querySelector('.drop-sub');
+  if (ds) ds.innerHTML = t('drop_sub');
+
+  // Active lang button
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  // Update format hint
+  updateFormatHint();
+
+  // Update dynamic badges in rendered rows
+  document.querySelectorAll('.status-badge').forEach(b => {
+    if (b.classList.contains('badge-ok'))   b.textContent = t('badge_ok');
+    if (b.classList.contains('badge-warn')) b.textContent = t('badge_warn');
+    if (b.classList.contains('badge-err'))  b.textContent = t('badge_err');
+  });
+
+  // Footer
+  const ff = document.getElementById('footer-file');
+  if (ff && ff.textContent === (I18N.tr.footer_no_file || '') ||
+      ff && ff.textContent === (I18N.en.footer_no_file || '') ||
+      ff && ff.textContent === (I18N.ja.footer_no_file || '') ||
+      ff && ff.textContent === (I18N.zh.footer_no_file || '') ||
+      ff && ff.textContent === (I18N.ur.footer_no_file || '')) {
+    ff.textContent = t('footer_no_file');
+  }
+  const fv = document.getElementById('footer-visible');
+  if (fv) {
+    const n = filtered.length;
+    if (n > 0) fv.textContent = n + t('footer_rows');
+  }
+}
+
+// ═══ FORMAT SELECTION ═════════════════════════════════
+function updateFormatHint() {
+  const hintMap = { sf3:'fmt_hint_sf3', plain:'fmt_hint_plain', csv:'fmt_hint_csv', auto:'fmt_hint_auto' };
+  const key = hintMap[fmt] || 'fmt_hint_auto';
+  document.getElementById('fmt-hint').textContent = t(key);
+}
+
+function selectFormat(f, el) {
+  fmt = f;
+  document.querySelectorAll('.fmt-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  updateFormatHint();
+}
+updateFormatHint();
+
+// ═══ PARSERS ══════════════════════════════════════════
+function detectFormat(text) {
+  const sf3Lines = text.split('\n').filter(l => l && !l.startsWith('#'));
+  if (sf3Lines.slice(0,10).filter(l => /^\d+\|\d+\|/.test(l)).length >= 3) return 'sf3';
+  if (text.includes('msgid ') && text.includes('msgstr ')) return 'po';
+  try { JSON.parse(text); return 'json'; } catch {}
+  if (text.trimStart().startsWith('<')) return 'xml';
+  const firstLine = text.split('\n').find(l => l.trim() && !l.startsWith('#'));
+  if (firstLine) {
+    if ((firstLine.match(/,/g)||[]).length >= 1) return 'csv';
+    if ((firstLine.match(/\t/g)||[]).length >= 1) return 'tsv';
+  }
+  if (/^[^\[#]+=.+/m.test(text)) return 'ini';
+  return 'plain';
+}
+
+function parseSF3(text) {
+  const result=[];
+  for (const raw of text.split('\n')) {
+    const line=raw.trimEnd();
+    if (!line||line.startsWith('#')) continue;
+    const p1=line.indexOf('|'), p2=p1!==-1?line.indexOf('|',p1+1):-1;
+    if (p1===-1||p2===-1) continue;
+    const offset=parseInt(line.slice(0,p1),10), byteLen=parseInt(line.slice(p1+1,p2),10), txt=line.slice(p2+1);
+    if (isNaN(offset)||isNaN(byteLen)) continue;
+    result.push({offset,byteLen,orig:txt,trans:txt});
+  }
+  return result;
+}
+function parsePlain(text) { return text.split('\n').map(l=>l.trimEnd()).filter(l=>l&&!l.startsWith('#')).map(txt=>({offset:-1,byteLen:-1,orig:txt,trans:txt})); }
+function parseCSV(text) {
+  const lines=text.split('\n').filter(l=>l.trim()); const result=[]; let skip=false;
+  if (lines.length>0){const h=lines[0].toLowerCase(); if(h.includes('id')||h.includes('original')||h.includes('source')||h.includes('key')) skip=true;}
+  for (let i=(skip?1:0);i<lines.length;i++){
+    const p=splitCSVLine(lines[i]); if(p.length<2) continue;
+    const orig=p.length>=3?p[1]:p[0], trans=p.length>=3?p[2]:p[1];
+    result.push({offset:-1,byteLen:-1,orig:orig.trim(),trans:trans.trim()});
+  }
+  return result;
+}
+function splitCSVLine(line) {
+  const r=[]; let cur='',inQ=false;
+  for (const c of line){if(c==='"'){inQ=!inQ;continue;}if((c===','||c==='\t')&&!inQ){r.push(cur);cur='';continue;}cur+=c;}
+  r.push(cur); return r;
+}
+function parseTSV(text) { return text.split('\n').filter(l=>l.trim()&&!l.startsWith('#')).map(l=>{const p=l.split('\t');return{offset:-1,byteLen:-1,orig:(p[1]||p[0]||'').trim(),trans:(p[2]||p[1]||'').trim()};}).filter(r=>r.orig); }
+function parsePO(text) {
+  const result=[]; for (const block of text.split('\n\n')){
+    const mid=block.match(/^msgid\s+"(.*)"/m), mstr=block.match(/^msgstr\s+"(.*)"/m);
+    if(!mid||mid[1]==='') continue;
+    const orig=mid[1].replace(/\\n/g,'\n').replace(/\\"/g,'"');
+    const trans=mstr?mstr[1].replace(/\\n/g,'\n').replace(/\\"/g,'"'):'';
+    result.push({offset:-1,byteLen:-1,orig,trans:trans||orig});
+  }
+  return result;
+}
+function parseXML(text) {
+  const result=[],re=/<(?:string|entry|text|translation)[^>]*?(?:id|key|name)="([^"]*)"[^>]*>([\s\S]*?)<\/(?:string|entry|text|translation)>/gi; let m;
+  while((m=re.exec(text))!==null){const orig=m[2].trim().replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');if(orig)result.push({offset:-1,byteLen:-1,orig,trans:orig});}
+  return result;
+}
+function parseJSON(text) {
+  const result=[]; try{const data=JSON.parse(text);
+    if(Array.isArray(data)){for(const item of data){if(typeof item==='object'){const orig=item.original||item.source||item.text||item.value||'';const trans=item.translation||item.target||item.translated||orig;if(orig)result.push({offset:-1,byteLen:-1,orig:String(orig),trans:String(trans)});}}}
+    else if(typeof data==='object'){for(const[k,v]of Object.entries(data)){if(typeof v==='string')result.push({offset:-1,byteLen:-1,orig:v,trans:v});else if(typeof v==='object'&&v.original)result.push({offset:-1,byteLen:-1,orig:v.original,trans:v.translation||v.original});}}
+  }catch{} return result;
+}
+function parseINI(text) { return text.split('\n').filter(l=>l.trim()&&!l.startsWith(';')&&!l.startsWith('#')&&!l.startsWith('[')).map(l=>{const eq=l.indexOf('=');if(eq===-1)return null;const val=l.slice(eq+1).trim();return{offset:-1,byteLen:-1,orig:val,trans:val};}).filter(Boolean); }
+
+function parseFile(text, forceFmt) {
+  const f=forceFmt==='auto'?detectFormat(text):forceFmt;
+  document.getElementById('footer-fmt').textContent='Format: '+f.toUpperCase();
+  const parsers={sf3:parseSF3,plain:parsePlain,csv:parseCSV,tsv:parseTSV,po:parsePO,xml:parseXML,json:parseJSON,ini:parseINI};
+  return {rows:(parsers[f]||parsePlain)(text), fmt:f};
+}
+
+// ═══ STATUS ═══════════════════════════════════════════
+function getStatus(row) {
+  const t_=row.trans.trim();
+  if(!t_||t_===row.orig) return 'warn';
+  if(row.byteLen>0 && [...row.trans].length*2>row.byteLen) return 'err';
+  return 'ok';
+}
+function maxChars(row) { return row.byteLen>0?Math.floor(row.byteLen/2):-1; }
+
+// ═══ RENDER ═══════════════════════════════════════════
+function render() {
+  filtered=rows.map((r,i)=>i).filter(i=>{
+    const r=rows[i]; r.status=getStatus(r);
+    if(filter!=='all'&&r.status!==filter) return false;
+    if(searchQ){const q=searchQ.toLowerCase();return r.orig.toLowerCase().includes(q)||r.trans.toLowerCase().includes(q);}
+    return true;
+  });
+  const wrap=document.getElementById('table-wrap'); wrap.innerHTML='';
+  const frag=document.createDocumentFragment();
+  for (const i of filtered){
+    const r=rows[i], max=maxChars(r), cur=[...r.trans].length;
+    const over=max>0&&cur>max, tight=max>0&&!over&&max-cur<=5;
+    const div=document.createElement('div'); div.className=`row status-${r.status}`; div.dataset.idx=i;
+    const numCell=document.createElement('div'); numCell.className='cell row-num'; numCell.textContent=i+1;
+    const origCell=document.createElement('div'); origCell.className='cell';
+    const origSpan=document.createElement('span'); origSpan.className='orig-text'; origSpan.textContent=r.orig; origCell.appendChild(origSpan);
+    const transCell=document.createElement('div'); transCell.className='cell trans-cell';
+    const ta=document.createElement('textarea'); ta.className='trans-input'; ta.value=r.trans; ta.rows=1; ta.spellcheck=true; ta.dataset.idx=i;
+    ta.addEventListener('input',onTransInput); ta.addEventListener('focus',onTransFocus); transCell.appendChild(ta);
+    const statusCell=document.createElement('div'); statusCell.className='cell status-cell';
+    const badge=document.createElement('span'); badge.className=`status-badge badge-${r.status}`;
+    badge.textContent=r.status==='ok'?t('badge_ok'):r.status==='warn'?t('badge_warn'):t('badge_err');
+    statusCell.appendChild(badge);
+    if(max>0){const counter=document.createElement('span'); counter.className=`char-counter${over?' over':tight?' tight':''}`;counter.textContent=`${cur} / ${max}`;statusCell.appendChild(counter);}
+    div.appendChild(numCell); div.appendChild(origCell); div.appendChild(transCell); div.appendChild(statusCell);
+    frag.appendChild(div);
+  }
+  wrap.appendChild(frag);
+  updateStats();
+  document.getElementById('footer-visible').textContent=filtered.length+t('footer_rows');
+}
+
+// ═══ HANDLERS ═════════════════════════════════════════
+function onTransInput(e) {
+  const i=parseInt(e.target.dataset.idx,10); rows[i].trans=e.target.value; rows[i].status=getStatus(rows[i]);
+  const rowEl=e.target.closest('.row'); rowEl.className=`row status-${rows[i].status}`;
+  const max=maxChars(rows[i]),cur=[...rows[i].trans].length,over=max>0&&cur>max,tight=max>0&&!over&&max-cur<=5;
+  const counter=rowEl.querySelector('.char-counter');
+  if(counter){counter.className=`char-counter${over?' over':tight?' tight':''}`;counter.textContent=`${cur} / ${max}`;}
+  const badge=rowEl.querySelector('.status-badge'); badge.className=`status-badge badge-${rows[i].status}`;
+  badge.textContent=rows[i].status==='ok'?t('badge_ok'):rows[i].status==='warn'?t('badge_warn'):t('badge_err');
+  updateStats(); document.getElementById('footer-saved').textContent=t('footer_unsaved');
+}
+function onTransFocus(e){e.target.style.height='auto';e.target.style.height=e.target.scrollHeight+'px';}
+
+// ═══ STATS ════════════════════════════════════════════
+function updateStats(){
+  let ok=0,warn=0,err=0;
+  for(const r of rows){r.status=getStatus(r);if(r.status==='ok')ok++;else if(r.status==='warn')warn++;else err++;}
+  const total=rows.length,pct=total?Math.round(ok/total*100):0;
+  document.getElementById('s-total').textContent=total;
+  document.getElementById('s-ok').textContent=ok;
+  document.getElementById('s-warn').textContent=warn;
+  document.getElementById('s-err').textContent=err;
+  document.getElementById('s-pct').textContent=pct+'%';
+  document.getElementById('progress-bar').style.width=pct+'%';
+  const has=warn+err>0;
+  document.getElementById('btn-prev-issue').disabled=!has;
+  document.getElementById('btn-next-issue').disabled=!has;
+  document.getElementById('btn-export').disabled=rows.length===0;
+}
+
+// ═══ FILTER / SEARCH ══════════════════════════════════
+function setFilter(f,el){filter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');render();}
+function onSearch(v){searchQ=v;render();}
+
+// ═══ JUMP TO ISSUE ════════════════════════════════════
+function jumpIssue(dir){
+  const issues=rows.map((r,i)=>i).filter(i=>rows[i].status!=='ok');
+  if(!issues.length) return;
+  issueIdx=Math.max(0,Math.min(issues.length-1,issueIdx+dir));
+  const targetIdx=issues[issueIdx];
+  filter='all';searchQ='';
+  document.getElementById('search-box').value='';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.filter-btn.all').classList.add('active');
+  render();
+  const el=document.querySelector(`.row[data-idx="${targetIdx}"]`);
+  if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.outline='2px solid var(--accent)';setTimeout(()=>el.style.outline='',1200);el.querySelector('.trans-input').focus();}
+}
+
+// ═══ EXPORT ═══════════════════════════════════════════
+function exportFile(){
+  const errs=rows.filter(r=>r.status==='err').length;
+  if(errs>0&&!confirm(errs+t('confirm_truncate'))) return;
+  const detectedFmt=document.getElementById('footer-fmt').textContent.replace('Format: ','').toLowerCase();
+  let output='';
+  if(detectedFmt==='sf3'){
+    const lines=['# LoreScribe Translation File','# Format: OFFSET|BYTE_LEN|TEXT','#'];
+    for(const r of rows) lines.push(`${r.offset}|${r.byteLen}|${r.trans}`);
+    output=lines.join('\n');
+  } else if(detectedFmt==='csv'){
+    const lines=['id,original,translation'];
+    rows.forEach((r,i)=>lines.push(`${i+1},"${r.orig.replace(/"/g,'""')}","${r.trans.replace(/"/g,'\"\"')}"` ));
+    output=lines.join('\n');
+  } else if(detectedFmt==='tsv'){
+    const lines=['id\toriginal\ttranslation'];
+    rows.forEach((r,i)=>lines.push(`${i+1}\t${r.orig}\t${r.trans}`));
+    output=lines.join('\n');
+  } else if(detectedFmt==='po'){
+    const lines=['# Generated by LoreScribe',''];
+    for(const r of rows){lines.push(`msgid "${r.orig.replace(/"/g,'\\"')}"`) ;lines.push(`msgstr "${r.trans.replace(/"/g,'\\"')}"`) ;lines.push('');}
+    output=lines.join('\n');
+  } else { output=rows.map(r=>r.trans).join('\n'); }
+  const blob=new Blob([output],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=fileName.replace(/\.[^.]+$/,'')+'_TRANSLATED.'+(detectedFmt==='tsv'?'tsv':detectedFmt==='po'?'po':'txt');
+  a.click(); URL.revokeObjectURL(a.href);
+  document.getElementById('footer-saved').textContent=t('footer_exported');
+  showToast(t('toast_exported'),'ok');
+}
+
+// ═══ LOAD ═════════════════════════════════════════════
+function loadText(text,name){
+  const result=parseFile(text,fmt);
+  if(!result.rows.length){showToast(t('toast_no_rows'),'err');return;}
+  rows=result.rows; fileName=name; issueIdx=-1;
+  document.getElementById('drop-zone').classList.add('hidden');
+  document.getElementById('table-wrap').classList.remove('hidden');
+  document.getElementById('col-headers').classList.remove('hidden');
+  document.getElementById('footer-file').textContent=name;
+  render();
+  showToast(rows.length+t('toast_loaded')+' ('+result.fmt.toUpperCase()+')','ok');
+}
+
+// ═══ FILE INPUT + DND ═════════════════════════════════
+document.getElementById('file-input').addEventListener('change',e=>{
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader(); reader.onload=ev=>loadText(ev.target.result,file.name); reader.readAsText(file,'UTF-8');
+});
+const dz=document.getElementById('drop-zone');
+document.body.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over');});
+document.body.addEventListener('dragleave',e=>{if(!e.relatedTarget)dz.classList.remove('drag-over');});
+document.body.addEventListener('drop',e=>{
+  e.preventDefault();dz.classList.remove('drag-over');
+  const file=e.dataTransfer.files[0]; if(!file) return;
+  const reader=new FileReader(); reader.onload=ev=>loadText(ev.target.result,file.name); reader.readAsText(file,'UTF-8');
+});
+
+// ═══ TOAST + KEYBOARD ═════════════════════════════════
+function showToast(msg,type=''){
+  const el=document.getElementById('toast'); el.textContent=msg; el.className=`show ${type}`;
+  setTimeout(()=>el.className=type,2500);
+}
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey&&e.key==='s'){e.preventDefault();if(rows.length)exportFile();}
+  if(e.key==='F3'){e.preventDefault();jumpIssue(e.shiftKey?-1:1);}
+});
+
+const HELP_CONTENT = {
+  tr: { title: 'KULLANIM KILAVUZU', html: `<div class="help-section"><h2>LoreScribe Nedir?</h2><p>LoreScribe, oyun çevirilerindeki metin uyumsuzluklarını tespit etmek ve düzeltmek için tasarlanmış evrensel bir çeviri editörüdür. Sıfır kurulum — sadece tarayıcınızda çalışır.</p></div><div class="help-section"><h2>Hızlı Başlangıç</h2><ul><li><span class="help-key">1. Adım</span><span>Yukarıdan dosya formatını seçin (veya "Otomatik" bırakın)</span></li><li><span class="help-key">2. Adım</span><span>Çeviri dosyanızı sürükle-bırak yapın ya da 📂 ile seçin</span></li><li><span class="help-key">3. Adım</span><span>Sağ sütundaki çevirileri düzenleyin</span></li><li><span class="help-key">4. Adım</span><span>Ctrl+S ile düzeltilmiş dosyayı indirin</span></li></ul></div><div class="help-section"><h2>Durum Renkleri</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>TAMAM</span><span>Çeviri mevcut ve uzunluk uygun</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>EKSİK</span><span>Çeviri yok veya orijinalle aynı — çeviri gerekiyor</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>UZUN</span><span>Metin orijinalden uzun — kısaltılmalı</span></li></ul></div><div class="help-section"><h2>Desteklenen Formatlar</h2><ul><li><span class="help-key">SF3 / Özel</span><span>OFFSET|BYTE|METIN — sf3_tool çıktısı</span></li><li><span class="help-key">Sade TXT</span><span>Her satır bir metin bloğu</span></li><li><span class="help-key">CSV</span><span>id,"orijinal","çeviri"</span></li><li><span class="help-key">PO</span><span>GNU gettext — açık kaynak oyunlar</span></li><li><span class="help-key">XML</span><span><string id="..."> stili</span></li><li><span class="help-key">JSON</span><span>Düz obje veya dizi</span></li><li><span class="help-key">INI</span><span>key=value config</span></li></ul></div><div class="help-section"><h2>Klavye Kısayolları</h2><ul><li><span class="help-key">Ctrl+S</span><span>Dosyayı indir</span></li><li><span class="help-key">F3</span><span>Sonraki soruna git</span></li><li><span class="help-key">Shift+F3</span><span>Önceki soruna git</span></li></ul></div><div class="help-section"><h2>SF3 Formatı</h2><p>sf3_tool çıktısında her satır OFFSET|BYTE_UZUNLUGU|METIN şeklindedir. Yalnızca METİN kısmını çevirin. Karakter sayacı kalan alanı gösterir. ğ ü ş ı ö ç gibi Türkçe karakterler tam desteklidir.</p></div><div class="help-footer-note">Dosyayı UTF-8 (BOM'suz) olarak kaydedin. Notepad: 'Farklı Kaydet' → UTF-8 | VS Code: sağ alt köşe → UTF-8</div>` },
+  en: { title: 'USER GUIDE', html: `<div class="help-section"><h2>What is LoreScribe?</h2><p>LoreScribe is a universal translation editor for detecting and fixing text mismatches in game translations. Zero installation — runs entirely in your browser.</p></div><div class="help-section"><h2>Quick Start</h2><ul><li><span class="help-key">Step 1</span><span>Select the file format above (or leave on "Auto")</span></li><li><span class="help-key">Step 2</span><span>Drag & drop your file or click 📂 to browse</span></li><li><span class="help-key">Step 3</span><span>Edit translations in the right column</span></li><li><span class="help-key">Step 4</span><span>Press Ctrl+S to download the corrected file</span></li></ul></div><div class="help-section"><h2>Status Colors</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>OK</span><span>Translation exists and fits within allowed length</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>MISSING</span><span>No translation or same as original — needs work</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>TOO LONG</span><span>Translation exceeds original byte length — must be shortened</span></li></ul></div><div class="help-section"><h2>Supported Formats</h2><ul><li><span class="help-key">SF3 / Custom</span><span>OFFSET|BYTE_LEN|TEXT — sf3_tool output</span></li><li><span class="help-key">Plain TXT</span><span>Each line is one text block</span></li><li><span class="help-key">CSV</span><span>id,"original","translation"</span></li><li><span class="help-key">PO</span><span>GNU gettext — open source games</span></li><li><span class="help-key">XML</span><span><string id="..."> style</span></li><li><span class="help-key">JSON</span><span>Flat object or array</span></li><li><span class="help-key">INI</span><span>key=value config files</span></li></ul></div><div class="help-section"><h2>Keyboard Shortcuts</h2><ul><li><span class="help-key">Ctrl+S</span><span>Download corrected file</span></li><li><span class="help-key">F3</span><span>Jump to next issue</span></li><li><span class="help-key">Shift+F3</span><span>Jump to previous issue</span></li></ul></div><div class="help-section"><h2>About SF3 Format</h2><p>Files from sf3_tool follow OFFSET|BYTE_LEN|TEXT format. Only edit the TEXT portion. The character counter shows remaining space. All Unicode characters including Turkish, Japanese, Arabic are fully supported.</p></div><div class="help-footer-note">Always save your file as UTF-8 (without BOM). Notepad: "Save As" → UTF-8 | VS Code: bottom-right → UTF-8</div>` },
+  ja: { title: '使用ガイド', html: `<div class="help-section"><h2>LoreScribeとは?</h2><p>ゲーム翻訳のテキスト不一致を検出・修正するための汎用翻訳エディターです。インストール不要 — ブラウザだけで動作します。</p></div><div class="help-section"><h2>クイックスタート</h2><ul><li><span class="help-key">ステップ1</span><span>上部でファイル形式を選択（「自動」のままでも可）</span></li><li><span class="help-key">ステップ2</span><span>ファイルをドラッグ＆ドロップ、または📂で選択</span></li><li><span class="help-key">ステップ3</span><span>右列の翻訳を編集</span></li><li><span class="help-key">ステップ4</span><span>Ctrl+Sで修正済みファイルをダウンロード</span></li></ul></div><div class="help-section"><h2>ステータスの色</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>完了</span><span>翻訳があり長さも適切</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>未翻訳</span><span>翻訳がないか原文と同じ — 翻訳が必要</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>長過</span><span>翻訳が元のバイト長を超えている — 短くする必要あり</span></li></ul></div><div class="help-section"><h2>対応フォーマット</h2><ul><li><span class="help-key">SF3 / カスタム</span><span>OFFSET|BYTE_LEN|TEXT — sf3_toolの出力</span></li><li><span class="help-key">プレーンTXT</span><span>1行1テキストブロック</span></li><li><span class="help-key">CSV</span><span>id,"原文","翻訳"</span></li><li><span class="help-key">PO</span><span>GNU gettext — オープンソースゲーム</span></li><li><span class="help-key">XML</span><span><string id="...">形式</span></li><li><span class="help-key">JSON</span><span>フラットオブジェクトまたは配列</span></li><li><span class="help-key">INI</span><span>key=value設定ファイル</span></li></ul></div><div class="help-section"><h2>キーボードショートカット</h2><ul><li><span class="help-key">Ctrl+S</span><span>ファイルをダウンロード</span></li><li><span class="help-key">F3</span><span>次の問題にジャンプ</span></li><li><span class="help-key">Shift+F3</span><span>前の問題にジャンプ</span></li></ul></div><div class="help-section"><h2>SF3フォーマットについて</h2><p>sf3_toolで生成されたファイルはOFFSET|BYTE_LEN|TEXT形式です。TEXTの部分のみ編集してください。文字カウンターが残り文字数を表示します。</p></div><div class="help-footer-note">ファイルはBOMなしUTF-8で保存してください。メモ帳:「名前を付けて保存」→ UTF-8 | VS Code: 右下 → UTF-8</div>` },
+  zh: { title: '使用指南', html: `<div class="help-section"><h2>什么是LoreScribe?</h2><p>LoreScribe是专为检测和修复游戏翻译中文本不匹配而设计的通用翻译编辑器。无需安装 — 完全在浏览器中运行。</p></div><div class="help-section"><h2>快速开始</h2><ul><li><span class="help-key">第一步</span><span>在上方选择文件格式（或保留"自动"）</span></li><li><span class="help-key">第二步</span><span>拖放翻译文件或点击📂按钮选择</span></li><li><span class="help-key">第三步</span><span>在右列编辑翻译内容</span></li><li><span class="help-key">第四步</span><span>按Ctrl+S下载修正后的文件</span></li></ul></div><div class="help-section"><h2>状态颜色</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>完成</span><span>翻译存在且长度合适</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>缺失</span><span>尚无翻译或与原文相同 — 需要翻译</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>过长</span><span>翻译超过原始字节长度 — 必须缩短</span></li></ul></div><div class="help-section"><h2>支持的格式</h2><ul><li><span class="help-key">SF3 / 自定义</span><span>OFFSET|字节长度|文本 — sf3_tool输出</span></li><li><span class="help-key">纯文本</span><span>每行一个文本块</span></li><li><span class="help-key">CSV</span><span>id,"原文","译文"</span></li><li><span class="help-key">PO</span><span>GNU gettext — 开源游戏</span></li><li><span class="help-key">XML</span><span><string id="...">样式</span></li><li><span class="help-key">JSON</span><span>平面对象或数组格式</span></li><li><span class="help-key">INI</span><span>key=value配置文件</span></li></ul></div><div class="help-section"><h2>键盘快捷键</h2><ul><li><span class="help-key">Ctrl+S</span><span>下载修正后的文件</span></li><li><span class="help-key">F3</span><span>跳转到下一个问题</span></li><li><span class="help-key">Shift+F3</span><span>跳转到上一个问题</span></li></ul></div><div class="help-section"><h2>关于SF3格式</h2><p>由sf3_tool生成的文件遵循OFFSET|字节长度|文本格式。只编辑文本部分。字符计数器显示剩余可用字符数。完全支持所有Unicode字符。</p></div><div class="help-footer-note">请将文件保存为UTF-8（无BOM）格式。记事本："另存为" → UTF-8 | VS Code：右下角 → UTF-8</div>` },
+  ur: { title: 'استعمال کی رہنمائی', html: `<div class="help-section"><h2>LoreScribe کیا ہے؟</h2><p>LoreScribe ایک عالمگیر ترجمہ ایڈیٹر ہے جو گیم ترجموں میں متن کی عدم مطابقت کا پتہ لگانے اور درست کرنے کے لیے بنایا گیا ہے۔ کوئی انسٹالیشن نہیں — صرف براؤزر میں چلتا ہے۔</p></div><div class="help-section"><h2>فوری آغاز</h2><ul><li><span class="help-key">مرحلہ 1</span><span>اوپر سے فائل فارمیٹ منتخب کریں</span></li><li><span class="help-key">مرحلہ 2</span><span>فائل یہاں ڈراپ کریں یا 📂 سے منتخب کریں</span></li><li><span class="help-key">مرحلہ 3</span><span>دائیں کالم میں ترجمہ ترمیم کریں</span></li><li><span class="help-key">مرحلہ 4</span><span>Ctrl+S سے فائل ڈاؤنلوڈ کریں</span></li></ul></div><div class="help-section"><h2>حالت کے رنگ</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>مکمل</span><span>ترجمہ موجود اور لمبائی مناسب</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>نامکمل</span><span>ترجمہ نہیں یا اصل جیسا — کام درکار</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>لمبا</span><span>ترجمہ اصل سے زیادہ لمبا — مختصر کریں</span></li></ul></div><div class="help-section"><h2>معاون فارمیٹس</h2><ul><li><span class="help-key">SF3</span><span>OFFSET|BYTE_LEN|TEXT</span></li><li><span class="help-key">سادہ TXT</span><span>ہر سطر ایک متن</span></li><li><span class="help-key">CSV</span><span>id,"اصل","ترجمہ"</span></li><li><span class="help-key">PO</span><span>GNU gettext</span></li><li><span class="help-key">XML</span><span><string id="..."></span></li><li><span class="help-key">JSON</span><span>آبجیکٹ یا ارے</span></li><li><span class="help-key">INI</span><span>key=value</span></li></ul></div><div class="help-section"><h2>کی بورڈ شارٹ کٹس</h2><ul><li><span class="help-key">Ctrl+S</span><span>فائل ڈاؤنلوڈ</span></li><li><span class="help-key">F3</span><span>اگلا مسئلہ</span></li><li><span class="help-key">Shift+F3</span><span>پچھلا مسئلہ</span></li></ul></div><div class="help-section"><h2>SF3 فارمیٹ</h2><p>sf3_tool کی فائلیں OFFSET|BYTE_LEN|TEXT فارمیٹ پر ہیں۔ صرف TEXT حصہ تبدیل کریں۔ کردار کاؤنٹر باقی حروف دکھاتا ہے۔</p></div><div class="help-footer-note">فائل UTF-8 (BOM کے بغیر) میں محفوظ کریں۔ نوٹ پیڈ: Save As → UTF-8 | VS Code: نیچے دائیں → UTF-8</div>` },
+  hi: { title: 'उपयोग मार्गदर्शिका', html: `<div class="help-section"><h2>LoreScribe क्या है?</h2><p>LoreScribe एक सार्वभौमिक अनुवाद संपादक है जो गेम अनुवादों में पाठ की असंगतियों को पहचानने और ठीक करने के लिए बनाया गया है। कोई इंस्टॉलेशन नहीं — केवल ब्राउज़र में चलता है।</p></div><div class="help-section"><h2>त्वरित प्रारंभ</h2><ul><li><span class="help-key">चरण 1</span><span>ऊपर से फ़ाइल प्रारूप चुनें</span></li><li><span class="help-key">चरण 2</span><span>फ़ाइल यहाँ खींचें-छोड़ें या 📂 से चुनें</span></li><li><span class="help-key">चरण 3</span><span>दाहिने कॉलम में अनुवाद संपादित करें</span></li><li><span class="help-key">चरण 4</span><span>Ctrl+S दबाकर फ़ाइल डाउनलोड करें</span></li></ul></div><div class="help-section"><h2>स्थिति रंग</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>पूर्ण</span><span>अनुवाद मौजूद और लंबाई उचित</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>शेष</span><span>अभी अनुवाद नहीं — काम ज़रूरी</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>लंबा</span><span>अनुवाद मूल से लंबा — छोटा करें</span></li></ul></div><div class="help-section"><h2>समर्थित प्रारूप</h2><ul><li><span class="help-key">SF3</span><span>OFFSET|BYTE_LEN|TEXT</span></li><li><span class="help-key">सादा TXT</span><span>प्रत्येक पंक्ति एक पाठ</span></li><li><span class="help-key">CSV</span><span>id,"मूल","अनुवाद"</span></li><li><span class="help-key">PO</span><span>GNU gettext</span></li><li><span class="help-key">XML</span><span><string id="..."></span></li><li><span class="help-key">JSON</span><span>ऑब्जेक्ट या ऐरे</span></li><li><span class="help-key">INI</span><span>key=value</span></li></ul></div><div class="help-section"><h2>कीबोर्ड शॉर्टकट</h2><ul><li><span class="help-key">Ctrl+S</span><span>फ़ाइल डाउनलोड</span></li><li><span class="help-key">F3</span><span>अगली समस्या</span></li><li><span class="help-key">Shift+F3</span><span>पिछली समस्या</span></li></ul></div><div class="help-section"><h2>SF3 प्रारूप</h2><p>sf3_tool की फ़ाइलें OFFSET|BYTE_LEN|TEXT प्रारूप में हैं। केवल TEXT भाग बदलें। कैरेक्टर काउंटर शेष अक्षर दिखाता है।</p></div><div class="help-footer-note">फ़ाइल UTF-8 (BOM रहित) में सहेजें। नोटपैड: Save As → UTF-8 | VS Code: दाहिना नीचे → UTF-8</div>` },
+  ar: { title: 'دليل الاستخدام', html: `<div class="help-section"><h2>ما هو LoreScribe؟</h2><p>LoreScribe محرر ترجمة عالمي مصمم للكشف عن عدم تطابق النصوص وإصلاحها في ترجمات الألعاب. لا يحتاج إلى تثبيت — يعمل في المتصفح مباشرة.</p></div><div class="help-section"><h2>البدء السريع</h2><ul><li><span class="help-key">الخطوة 1</span><span>اختر تنسيق الملف من الأعلى</span></li><li><span class="help-key">الخطوة 2</span><span>اسحب وأفلت الملف أو انقر 📂</span></li><li><span class="help-key">الخطوة 3</span><span>عدّل الترجمات في العمود الأيمن</span></li><li><span class="help-key">الخطوة 4</span><span>اضغط Ctrl+S لتنزيل الملف المُصحَّح</span></li></ul></div><div class="help-section"><h2>ألوان الحالة</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>مكتمل</span><span>الترجمة موجودة والطول مناسب</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>ناقص</span><span>لا توجد ترجمة أو مطابقة للأصل — يحتاج عمل</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>طويل</span><span>الترجمة تتجاوز الطول المسموح — يجب تقصيرها</span></li></ul></div><div class="help-section"><h2>الصيغ المدعومة</h2><ul><li><span class="help-key">SF3</span><span>OFFSET|BYTE_LEN|TEXT</span></li><li><span class="help-key">نص عادي</span><span>كل سطر كتلة نصية</span></li><li><span class="help-key">CSV</span><span>id,"أصلي","ترجمة"</span></li><li><span class="help-key">PO</span><span>GNU gettext</span></li><li><span class="help-key">XML</span><span><string id="..."></span></li><li><span class="help-key">JSON</span><span>كائن مسطح أو مصفوفة</span></li><li><span class="help-key">INI</span><span>key=value</span></li></ul></div><div class="help-section"><h2>اختصارات لوحة المفاتيح</h2><ul><li><span class="help-key">Ctrl+S</span><span>تنزيل الملف</span></li><li><span class="help-key">F3</span><span>المشكلة التالية</span></li><li><span class="help-key">Shift+F3</span><span>المشكلة السابقة</span></li></ul></div><div class="help-section"><h2>حول صيغة SF3</h2><p>تتبع ملفات sf3_tool صيغة OFFSET|BYTE_LEN|TEXT. قم بتحرير جزء TEXT فقط. يُظهر عداد الحروف المساحة المتبقية. تُدعم جميع حروف Unicode بالكامل.</p></div><div class="help-footer-note">احفظ الملف بترميز UTF-8 (بدون BOM). المفكرة: حفظ باسم → UTF-8 | VS Code: الزاوية اليمنى السفلى → UTF-8</div>` },
+};
+
+function openHelp() {
+  const ov = document.getElementById('help-overlay');
+  const c  = HELP_CONTENT[currentLang] || HELP_CONTENT.en;
+  document.getElementById('help-modal-title').textContent = c.title;
+  document.getElementById('help-body-content').innerHTML  = c.html;
+  document.getElementById('help-modal').dir = (currentLang==='ar'||currentLang==='ur')?'rtl':'ltr';
+  ov.classList.add('open');
+}
+function closeHelp() { document.getElementById('help-overlay').classList.remove('open'); }
+document.getElementById('help-overlay').addEventListener('click', function(e){ if(e.target===this) closeHelp(); });
+
+const HELP_CONTENT = {
+  tr: { title: 'KULLANIM KILAVUZU', html: `<div class="help-section"><h2>LoreScribe Nedir?</h2><p>LoreScribe, oyun çevirilerindeki metin uyumsuzluklarını tespit etmek ve düzeltmek için tasarlanmış evrensel bir çeviri editörüdür. Sıfır kurulum — sadece tarayıcınızda çalışır.</p></div><div class="help-section"><h2>Hızlı Başlangıç</h2><ul><li><span class="help-key">1. Adım</span><span>Yukarıdan dosya formatını seçin (veya "Otomatik" bırakın)</span></li><li><span class="help-key">2. Adım</span><span>Çeviri dosyanızı sürükle-bırak yapın ya da 📂 ile seçin</span></li><li><span class="help-key">3. Adım</span><span>Sağ sütundaki çevirileri düzenleyin</span></li><li><span class="help-key">4. Adım</span><span>Ctrl+S ile düzeltilmiş dosyayı indirin</span></li></ul></div><div class="help-section"><h2>Durum Renkleri</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>TAMAM</span><span>Çeviri mevcut ve uzunluk uygun</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>EKSİK</span><span>Çeviri yok veya orijinalle aynı — çeviri gerekiyor</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>UZUN</span><span>Metin orijinalden uzun — kısaltılmalı</span></li></ul></div><div class="help-section"><h2>Desteklenen Formatlar</h2><ul><li><span class="help-key">SF3 / Özel</span><span>OFFSET|BYTE|METIN — sf3_tool çıktısı</span></li><li><span class="help-key">Sade TXT</span><span>Her satır bir metin bloğu</span></li><li><span class="help-key">CSV</span><span>id,"orijinal","çeviri"</span></li><li><span class="help-key">PO</span><span>GNU gettext — açık kaynak oyunlar</span></li><li><span class="help-key">XML</span><span><string id="..."> stili</span></li><li><span class="help-key">JSON</span><span>Düz obje veya dizi</span></li><li><span class="help-key">INI</span><span>key=value config</span></li></ul></div><div class="help-section"><h2>Klavye Kısayolları</h2><ul><li><span class="help-key">Ctrl+S</span><span>Dosyayı indir</span></li><li><span class="help-key">F3</span><span>Sonraki soruna git</span></li><li><span class="help-key">Shift+F3</span><span>Önceki soruna git</span></li></ul></div><div class="help-section"><h2>SF3 Formatı</h2><p>sf3_tool çıktısında her satır OFFSET|BYTE_UZUNLUGU|METIN şeklindedir. Yalnızca METİN kısmını çevirin. Karakter sayacı kalan alanı gösterir. ğ ü ş ı ö ç gibi Türkçe karakterler tam desteklidir.</p></div><div class="help-footer-note">Dosyayı UTF-8 (BOM'suz) olarak kaydedin. Notepad: 'Farklı Kaydet' → UTF-8 | VS Code: sağ alt köşe → UTF-8</div>` },
+  en: { title: 'USER GUIDE', html: `<div class="help-section"><h2>What is LoreScribe?</h2><p>LoreScribe is a universal translation editor for detecting and fixing text mismatches in game translations. Zero installation — runs entirely in your browser.</p></div><div class="help-section"><h2>Quick Start</h2><ul><li><span class="help-key">Step 1</span><span>Select the file format above (or leave on "Auto")</span></li><li><span class="help-key">Step 2</span><span>Drag & drop your file or click 📂 to browse</span></li><li><span class="help-key">Step 3</span><span>Edit translations in the right column</span></li><li><span class="help-key">Step 4</span><span>Press Ctrl+S to download the corrected file</span></li></ul></div><div class="help-section"><h2>Status Colors</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>OK</span><span>Translation exists and fits within allowed length</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>MISSING</span><span>No translation or same as original — needs work</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>TOO LONG</span><span>Translation exceeds original byte length — must be shortened</span></li></ul></div><div class="help-section"><h2>Supported Formats</h2><ul><li><span class="help-key">SF3 / Custom</span><span>OFFSET|BYTE_LEN|TEXT — sf3_tool output</span></li><li><span class="help-key">Plain TXT</span><span>Each line is one text block</span></li><li><span class="help-key">CSV</span><span>id,"original","translation"</span></li><li><span class="help-key">PO</span><span>GNU gettext — open source games</span></li><li><span class="help-key">XML</span><span><string id="..."> style</span></li><li><span class="help-key">JSON</span><span>Flat object or array</span></li><li><span class="help-key">INI</span><span>key=value config files</span></li></ul></div><div class="help-section"><h2>Keyboard Shortcuts</h2><ul><li><span class="help-key">Ctrl+S</span><span>Download corrected file</span></li><li><span class="help-key">F3</span><span>Jump to next issue</span></li><li><span class="help-key">Shift+F3</span><span>Jump to previous issue</span></li></ul></div><div class="help-section"><h2>About SF3 Format</h2><p>Files from sf3_tool follow OFFSET|BYTE_LEN|TEXT format. Only edit the TEXT portion. The character counter shows remaining space. All Unicode characters including Turkish, Japanese, Arabic are fully supported.</p></div><div class="help-footer-note">Always save your file as UTF-8 (without BOM). Notepad: "Save As" → UTF-8 | VS Code: bottom-right → UTF-8</div>` },
+  ja: { title: '使用ガイド', html: `<div class="help-section"><h2>LoreScribeとは?</h2><p>ゲーム翻訳のテキスト不一致を検出・修正するための汎用翻訳エディターです。インストール不要 — ブラウザだけで動作します。</p></div><div class="help-section"><h2>クイックスタート</h2><ul><li><span class="help-key">ステップ1</span><span>上部でファイル形式を選択（「自動」のままでも可）</span></li><li><span class="help-key">ステップ2</span><span>ファイルをドラッグ＆ドロップ、または📂で選択</span></li><li><span class="help-key">ステップ3</span><span>右列の翻訳を編集</span></li><li><span class="help-key">ステップ4</span><span>Ctrl+Sで修正済みファイルをダウンロード</span></li></ul></div><div class="help-section"><h2>ステータスの色</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>完了</span><span>翻訳があり長さも適切</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>未翻訳</span><span>翻訳がないか原文と同じ — 翻訳が必要</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>長過</span><span>翻訳が元のバイト長を超えている — 短くする必要あり</span></li></ul></div><div class="help-section"><h2>対応フォーマット</h2><ul><li><span class="help-key">SF3 / カスタム</span><span>OFFSET|BYTE_LEN|TEXT — sf3_toolの出力</span></li><li><span class="help-key">プレーンTXT</span><span>1行1テキストブロック</span></li><li><span class="help-key">CSV</span><span>id,"原文","翻訳"</span></li><li><span class="help-key">PO</span><span>GNU gettext — オープンソースゲーム</span></li><li><span class="help-key">XML</span><span><string id="...">形式</span></li><li><span class="help-key">JSON</span><span>フラットオブジェクトまたは配列</span></li><li><span class="help-key">INI</span><span>key=value設定ファイル</span></li></ul></div><div class="help-section"><h2>キーボードショートカット</h2><ul><li><span class="help-key">Ctrl+S</span><span>ファイルをダウンロード</span></li><li><span class="help-key">F3</span><span>次の問題にジャンプ</span></li><li><span class="help-key">Shift+F3</span><span>前の問題にジャンプ</span></li></ul></div><div class="help-section"><h2>SF3フォーマットについて</h2><p>sf3_toolで生成されたファイルはOFFSET|BYTE_LEN|TEXT形式です。TEXTの部分のみ編集してください。文字カウンターが残り文字数を表示します。</p></div><div class="help-footer-note">ファイルはBOMなしUTF-8で保存してください。メモ帳:「名前を付けて保存」→ UTF-8 | VS Code: 右下 → UTF-8</div>` },
+  zh: { title: '使用指南', html: `<div class="help-section"><h2>什么是LoreScribe?</h2><p>LoreScribe是专为检测和修复游戏翻译中文本不匹配而设计的通用翻译编辑器。无需安装 — 完全在浏览器中运行。</p></div><div class="help-section"><h2>快速开始</h2><ul><li><span class="help-key">第一步</span><span>在上方选择文件格式（或保留"自动"）</span></li><li><span class="help-key">第二步</span><span>拖放翻译文件或点击📂按钮选择</span></li><li><span class="help-key">第三步</span><span>在右列编辑翻译内容</span></li><li><span class="help-key">第四步</span><span>按Ctrl+S下载修正后的文件</span></li></ul></div><div class="help-section"><h2>状态颜色</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>完成</span><span>翻译存在且长度合适</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>缺失</span><span>尚无翻译或与原文相同 — 需要翻译</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>过长</span><span>翻译超过原始字节长度 — 必须缩短</span></li></ul></div><div class="help-section"><h2>支持的格式</h2><ul><li><span class="help-key">SF3 / 自定义</span><span>OFFSET|字节长度|文本 — sf3_tool输出</span></li><li><span class="help-key">纯文本</span><span>每行一个文本块</span></li><li><span class="help-key">CSV</span><span>id,"原文","译文"</span></li><li><span class="help-key">PO</span><span>GNU gettext — 开源游戏</span></li><li><span class="help-key">XML</span><span><string id="...">样式</span></li><li><span class="help-key">JSON</span><span>平面对象或数组格式</span></li><li><span class="help-key">INI</span><span>key=value配置文件</span></li></ul></div><div class="help-section"><h2>键盘快捷键</h2><ul><li><span class="help-key">Ctrl+S</span><span>下载修正后的文件</span></li><li><span class="help-key">F3</span><span>跳转到下一个问题</span></li><li><span class="help-key">Shift+F3</span><span>跳转到上一个问题</span></li></ul></div><div class="help-section"><h2>关于SF3格式</h2><p>由sf3_tool生成的文件遵循OFFSET|字节长度|文本格式。只编辑文本部分。字符计数器显示剩余可用字符数。完全支持所有Unicode字符。</p></div><div class="help-footer-note">请将文件保存为UTF-8（无BOM）格式。记事本："另存为" → UTF-8 | VS Code：右下角 → UTF-8</div>` },
+  ur: { title: 'استعمال کی رہنمائی', html: `<div class="help-section"><h2>LoreScribe کیا ہے؟</h2><p>LoreScribe ایک عالمگیر ترجمہ ایڈیٹر ہے جو گیم ترجموں میں متن کی عدم مطابقت کا پتہ لگانے اور درست کرنے کے لیے بنایا گیا ہے۔ کوئی انسٹالیشن نہیں — صرف براؤزر میں چلتا ہے۔</p></div><div class="help-section"><h2>فوری آغاز</h2><ul><li><span class="help-key">مرحلہ 1</span><span>اوپر سے فائل فارمیٹ منتخب کریں</span></li><li><span class="help-key">مرحلہ 2</span><span>فائل یہاں ڈراپ کریں یا 📂 سے منتخب کریں</span></li><li><span class="help-key">مرحلہ 3</span><span>دائیں کالم میں ترجمہ ترمیم کریں</span></li><li><span class="help-key">مرحلہ 4</span><span>Ctrl+S سے فائل ڈاؤنلوڈ کریں</span></li></ul></div><div class="help-section"><h2>حالت کے رنگ</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>مکمل</span><span>ترجمہ موجود اور لمبائی مناسب</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>نامکمل</span><span>ترجمہ نہیں یا اصل جیسا — کام درکار</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>لمبا</span><span>ترجمہ اصل سے زیادہ لمبا — مختصر کریں</span></li></ul></div><div class="help-section"><h2>معاون فارمیٹس</h2><ul><li><span class="help-key">SF3</span><span>OFFSET|BYTE_LEN|TEXT</span></li><li><span class="help-key">سادہ TXT</span><span>ہر سطر ایک متن</span></li><li><span class="help-key">CSV</span><span>id,"اصل","ترجمہ"</span></li><li><span class="help-key">PO</span><span>GNU gettext</span></li><li><span class="help-key">XML</span><span><string id="..."></span></li><li><span class="help-key">JSON</span><span>آبجیکٹ یا ارے</span></li><li><span class="help-key">INI</span><span>key=value</span></li></ul></div><div class="help-section"><h2>کی بورڈ شارٹ کٹس</h2><ul><li><span class="help-key">Ctrl+S</span><span>فائل ڈاؤنلوڈ</span></li><li><span class="help-key">F3</span><span>اگلا مسئلہ</span></li><li><span class="help-key">Shift+F3</span><span>پچھلا مسئلہ</span></li></ul></div><div class="help-section"><h2>SF3 فارمیٹ</h2><p>sf3_tool کی فائلیں OFFSET|BYTE_LEN|TEXT فارمیٹ پر ہیں۔ صرف TEXT حصہ تبدیل کریں۔ کردار کاؤنٹر باقی حروف دکھاتا ہے۔</p></div><div class="help-footer-note">فائل UTF-8 (BOM کے بغیر) میں محفوظ کریں۔ نوٹ پیڈ: Save As → UTF-8 | VS Code: نیچے دائیں → UTF-8</div>` },
+  hi: { title: 'उपयोग मार्गदर्शिका', html: `<div class="help-section"><h2>LoreScribe क्या है?</h2><p>LoreScribe एक सार्वभौमिक अनुवाद संपादक है जो गेम अनुवादों में पाठ की असंगतियों को पहचानने और ठीक करने के लिए बनाया गया है। कोई इंस्टॉलेशन नहीं — केवल ब्राउज़र में चलता है।</p></div><div class="help-section"><h2>त्वरित प्रारंभ</h2><ul><li><span class="help-key">चरण 1</span><span>ऊपर से फ़ाइल प्रारूप चुनें</span></li><li><span class="help-key">चरण 2</span><span>फ़ाइल यहाँ खींचें-छोड़ें या 📂 से चुनें</span></li><li><span class="help-key">चरण 3</span><span>दाहिने कॉलम में अनुवाद संपादित करें</span></li><li><span class="help-key">चरण 4</span><span>Ctrl+S दबाकर फ़ाइल डाउनलोड करें</span></li></ul></div><div class="help-section"><h2>स्थिति रंग</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>पूर्ण</span><span>अनुवाद मौजूद और लंबाई उचित</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>शेष</span><span>अभी अनुवाद नहीं — काम ज़रूरी</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>लंबा</span><span>अनुवाद मूल से लंबा — छोटा करें</span></li></ul></div><div class="help-section"><h2>समर्थित प्रारूप</h2><ul><li><span class="help-key">SF3</span><span>OFFSET|BYTE_LEN|TEXT</span></li><li><span class="help-key">सादा TXT</span><span>प्रत्येक पंक्ति एक पाठ</span></li><li><span class="help-key">CSV</span><span>id,"मूल","अनुवाद"</span></li><li><span class="help-key">PO</span><span>GNU gettext</span></li><li><span class="help-key">XML</span><span><string id="..."></span></li><li><span class="help-key">JSON</span><span>ऑब्जेक्ट या ऐरे</span></li><li><span class="help-key">INI</span><span>key=value</span></li></ul></div><div class="help-section"><h2>कीबोर्ड शॉर्टकट</h2><ul><li><span class="help-key">Ctrl+S</span><span>फ़ाइल डाउनलोड</span></li><li><span class="help-key">F3</span><span>अगली समस्या</span></li><li><span class="help-key">Shift+F3</span><span>पिछली समस्या</span></li></ul></div><div class="help-section"><h2>SF3 प्रारूप</h2><p>sf3_tool की फ़ाइलें OFFSET|BYTE_LEN|TEXT प्रारूप में हैं। केवल TEXT भाग बदलें। कैरेक्टर काउंटर शेष अक्षर दिखाता है।</p></div><div class="help-footer-note">फ़ाइल UTF-8 (BOM रहित) में सहेजें। नोटपैड: Save As → UTF-8 | VS Code: दाहिना नीचे → UTF-8</div>` },
+  ar: { title: 'دليل الاستخدام', html: `<div class="help-section"><h2>ما هو LoreScribe؟</h2><p>LoreScribe محرر ترجمة عالمي مصمم للكشف عن عدم تطابق النصوص وإصلاحها في ترجمات الألعاب. لا يحتاج إلى تثبيت — يعمل في المتصفح مباشرة.</p></div><div class="help-section"><h2>البدء السريع</h2><ul><li><span class="help-key">الخطوة 1</span><span>اختر تنسيق الملف من الأعلى</span></li><li><span class="help-key">الخطوة 2</span><span>اسحب وأفلت الملف أو انقر 📂</span></li><li><span class="help-key">الخطوة 3</span><span>عدّل الترجمات في العمود الأيمن</span></li><li><span class="help-key">الخطوة 4</span><span>اضغط Ctrl+S لتنزيل الملف المُصحَّح</span></li></ul></div><div class="help-section"><h2>ألوان الحالة</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>مكتمل</span><span>الترجمة موجودة والطول مناسب</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>ناقص</span><span>لا توجد ترجمة أو مطابقة للأصل — يحتاج عمل</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>طويل</span><span>الترجمة تتجاوز الطول المسموح — يجب تقصيرها</span></li></ul></div><div class="help-section"><h2>الصيغ المدعومة</h2><ul><li><span class="help-key">SF3</span><span>OFFSET|BYTE_LEN|TEXT</span></li><li><span class="help-key">نص عادي</span><span>كل سطر كتلة نصية</span></li><li><span class="help-key">CSV</span><span>id,"أصلي","ترجمة"</span></li><li><span class="help-key">PO</span><span>GNU gettext</span></li><li><span class="help-key">XML</span><span><string id="..."></span></li><li><span class="help-key">JSON</span><span>كائن مسطح أو مصفوفة</span></li><li><span class="help-key">INI</span><span>key=value</span></li></ul></div><div class="help-section"><h2>اختصارات لوحة المفاتيح</h2><ul><li><span class="help-key">Ctrl+S</span><span>تنزيل الملف</span></li><li><span class="help-key">F3</span><span>المشكلة التالية</span></li><li><span class="help-key">Shift+F3</span><span>المشكلة السابقة</span></li></ul></div><div class="help-section"><h2>حول صيغة SF3</h2><p>تتبع ملفات sf3_tool صيغة OFFSET|BYTE_LEN|TEXT. قم بتحرير جزء TEXT فقط. يُظهر عداد الحروف المساحة المتبقية. تُدعم جميع حروف Unicode بالكامل.</p></div><div class="help-footer-note">احفظ الملف بترميز UTF-8 (بدون BOM). المفكرة: حفظ باسم → UTF-8 | VS Code: الزاوية اليمنى السفلى → UTF-8</div>` },
+};
+
+function openHelp() {
+  const ov = document.getElementById('help-overlay');
+  const c  = HELP_CONTENT[currentLang] || HELP_CONTENT.en;
+  document.getElementById('help-modal-title').textContent = c.title;
+  document.getElementById('help-body-content').innerHTML  = c.html;
+  document.getElementById('help-modal').dir = (currentLang==='ar'||currentLang==='ur')?'rtl':'ltr';
+  ov.classList.add('open');
+}
+function closeHelp() { document.getElementById('help-overlay').classList.remove('open'); }
+document.getElementById('help-overlay').addEventListener('click', function(e){ if(e.target===this) closeHelp(); });
+
+// Init with English
+setLang('en');
+// ESC key
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeHelp();if(e.ctrlKey&&e.key==='s'){e.preventDefault();if(rows.length)exportFile();}if(e.key==='F3'){e.preventDefault();jumpIssue(e.shiftKey?-1:1);}});
+// ESC key
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeHelp();if(e.ctrlKey&&e.key==='s'){e.preventDefault();if(rows.length)exportFile();}if(e.key==='F3'){e.preventDefault();jumpIssue(e.shiftKey?-1:1);}});
+</script>
+</body>
+</html>
