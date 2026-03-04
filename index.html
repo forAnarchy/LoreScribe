@@ -76,7 +76,7 @@
   .col-hdr:last-child{border-right:none;text-align:center;}
 
   /* TABLE */
-  .table-wrap{flex:1;overflow-y:auto;overflow-x:hidden; transition: box-shadow 0.2s;}
+  .table-wrap{flex:1;overflow-y:auto;overflow-x:hidden;}
   .table-wrap::-webkit-scrollbar{width:6px;}
   .table-wrap::-webkit-scrollbar-track{background:var(--bg);}
   .table-wrap::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
@@ -136,6 +136,66 @@
   *{scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
   .hidden{display:none!important;}
 
+  /* ─── DUAL LOAD MODE ─────────────────────────────── */
+  .load-mode-toggle {
+    display: flex; gap: 3px;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 3px;
+  }
+  .load-mode-btn {
+    font-family: var(--mono); font-size: 10px; padding: 3px 8px;
+    border: none; border-radius: 3px; background: transparent;
+    color: var(--txt3); cursor: pointer; transition: all .15s; white-space: nowrap;
+  }
+  .load-mode-btn.active { background: var(--border2); color: var(--accent); }
+
+  #dual-load-bar {
+    background: var(--bg2); border-bottom: 1px solid var(--border);
+    padding: 8px 16px; display: none;
+    align-items: center; gap: 10px; flex-shrink: 0; flex-wrap: wrap;
+  }
+  #dual-load-bar.visible { display: flex; }
+
+  .dual-slot {
+    display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 220px;
+  }
+  .dual-slot-label {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--txt3);
+  }
+  .dual-slot-btn {
+    font-family: var(--title); font-size: 12px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 7px 14px; border-radius: 4px; cursor: pointer;
+    transition: all .15s; white-space: nowrap; text-align: left;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .dual-slot-btn.orig {
+    background: var(--bg3); border: 1px solid var(--border2); color: var(--txt2);
+  }
+  .dual-slot-btn.orig:hover  { border-color: var(--accent); color: var(--accent); }
+  .dual-slot-btn.orig.loaded { border-color: var(--ok); color: var(--ok); }
+  .dual-slot-btn.trans {
+    background: var(--bg3); border: 1px solid var(--border2); color: var(--txt2);
+  }
+  .dual-slot-btn.trans:hover  { border-color: var(--gold); color: var(--gold); }
+  .dual-slot-btn.trans.loaded { border-color: var(--gold); color: var(--gold); }
+
+  .dual-merge-btn {
+    font-family: var(--title); font-size: 13px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 8px 18px; border-radius: 4px; cursor: pointer;
+    background: var(--accent2); border: 1px solid var(--accent); color: #fff;
+    transition: all .15s; align-self: flex-end;
+  }
+  .dual-merge-btn:hover { background: var(--accent); }
+  .dual-merge-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+  .dual-sep {
+    font-size: 20px; color: var(--txt3); align-self: center; padding-bottom: 4px;
+  }
+
+
   /* HELP MODAL */
   #help-overlay {
     position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
@@ -169,6 +229,42 @@
   .help-footer-note{margin-top:20px;padding:12px 16px;background:rgba(0,180,216,.06);border:1px solid rgba(0,180,216,.2);border-radius:6px;font-family:var(--mono);font-size:12px;color:var(--txt3);}
   .btn-help{font-family:var(--mono);font-size:14px;font-weight:700;width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);color:var(--txt3);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
   .btn-help:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,180,216,.1);}
+
+
+  /* HELP MODAL */
+  #help-overlay {
+    position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
+    display:flex;align-items:center;justify-content:center;
+    backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .2s;
+  }
+  #help-overlay.open{opacity:1;pointer-events:all;}
+  #help-modal {
+    background:var(--bg2);border:1px solid var(--border2);border-radius:10px;
+    width:min(780px,94vw);max-height:86vh;display:flex;flex-direction:column;
+    box-shadow:0 24px 80px rgba(0,0,0,.7);
+    transform:translateY(16px) scale(.98);transition:transform .2s;
+  }
+  #help-overlay.open #help-modal{transform:translateY(0) scale(1);}
+  .help-header{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border2);flex-shrink:0;}
+  .help-header-icon{font-size:22px;}
+  .help-title{font-family:var(--title);font-size:18px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);flex:1;}
+  .help-close{background:none;border:1px solid var(--border2);border-radius:4px;color:var(--txt3);cursor:pointer;padding:4px 10px;font-size:18px;line-height:1;transition:all .15s;}
+  .help-close:hover{border-color:var(--err);color:var(--err);}
+  .help-body{overflow-y:auto;padding:24px 28px;flex:1;line-height:1.8;}
+  .help-body::-webkit-scrollbar{width:5px;}
+  .help-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+  .help-section{margin-bottom:28px;}
+  .help-section h2{font-family:var(--title);font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+  .help-section p{color:var(--txt2);font-size:13px;margin-bottom:8px;}
+  .help-section ul{list-style:none;padding:0;}
+  .help-section ul li{font-size:13px;color:var(--txt2);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:10px;align-items:baseline;}
+  .help-section ul li:last-child{border-bottom:none;}
+  .help-key{font-family:var(--mono);font-size:11px;color:var(--accent);background:rgba(0,180,216,.1);border:1px solid rgba(0,180,216,.25);border-radius:3px;padding:1px 7px;white-space:nowrap;flex-shrink:0;}
+  .help-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle;}
+  .help-footer-note{margin-top:20px;padding:12px 16px;background:rgba(0,180,216,.06);border:1px solid rgba(0,180,216,.2);border-radius:6px;font-family:var(--mono);font-size:12px;color:var(--txt3);}
+  .btn-help{font-family:var(--mono);font-size:14px;font-weight:700;width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);color:var(--txt3);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .btn-help:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,180,216,.1);}
+
 </style>
 </head>
 <body>
@@ -187,6 +283,13 @@
   <div class="lang-switcher">
     <button class="lang-btn" onclick="setLang('tr')" title="Türkçe">🇹🇷<span class="lang-code">TR</span></button>
     <button class="lang-btn active" onclick="setLang('en')" title="English">🇬🇧<span class="lang-code">EN</span></button>
+    <button class="lang-btn" onclick="setLang('ja')" title="日本語">🇯🇵<span class="lang-code">JA</span></button>
+    <button class="lang-btn" onclick="setLang('zh')" title="中文">🇨🇳<span class="lang-code">ZH</span></button>
+    <button class="lang-btn" onclick="setLang('ur')" title="اردو">🇵🇰<span class="lang-code">UR</span></button>
+    <button class="lang-btn" onclick="setLang('hi')" title="हिन्दी">🇮🇳<span class="lang-code">HI</span></button>
+    <button class="lang-btn" onclick="setLang('ar')" title="العربية">🇸🇦<span class="lang-code">AR</span></button>
+    <button class="lang-btn" onclick="setLang('hi')" title="हिन्दी">🇮🇳<span class="lang-code">HI</span></button>
+    <button class="lang-btn" onclick="setLang('ar')" title="العربية">🇸🇦<span class="lang-code">AR</span></button>
   </div>
   <button class="btn-help" onclick="openHelp()" title="Help">?</button>
 </header>
@@ -219,11 +322,13 @@
 <div class="toolbar">
   <button class="btn primary" onclick="document.getElementById('file-input').click()" data-i18n="btn_load">📂 Load File</button>
   <input type="file" id="file-input" accept=".txt,.csv,.xml,.json,.po,.ini,.tsv">
-  
-  <div class="header-sep"></div>
-  <button class="btn gold" id="btn-load-trans" onclick="document.getElementById('file-trans-input').click()" disabled data-i18n="btn_load_trans">📂 Load Translation</button>
-  <input type="file" id="file-trans-input" accept=".txt,.csv,.xml,.json,.po,.ini,.tsv" style="display:none;">
+  <input type="file" id="file-input-orig"  accept=".txt,.csv,.xml,.json,.po,.ini,.tsv" style="display:none">
+  <input type="file" id="file-input-trans" accept=".txt,.csv,.xml,.json,.po,.ini,.tsv" style="display:none">
 
+  <div class="load-mode-toggle">
+    <button class="load-mode-btn active" onclick="setLoadMode('single',this)" data-i18n="mode_single">Single File</button>
+    <button class="load-mode-btn"        onclick="setLoadMode('dual',this)"   data-i18n="mode_dual">Orig + Trans</button>
+  </div>
   <div class="header-sep"></div>
   <div class="filter-group">
     <button class="filter-btn all active" onclick="setFilter('all',this)" data-i18n="filter_all">All</button>
@@ -240,6 +345,25 @@
     <span class="search-icon">🔍</span>
     <input type="text" id="search-box" data-i18n-placeholder="search_placeholder" placeholder="Search text..." oninput="onSearch(this.value)">
   </div>
+</div>
+
+
+<!-- DUAL LOAD BAR -->
+<div id="dual-load-bar">
+  <div class="dual-slot">
+    <span class="dual-slot-label" data-i18n="dual_orig_label">🌐 Original (English)</span>
+    <button class="dual-slot-btn orig" id="btn-load-orig" onclick="document.getElementById('file-input-orig').click()">
+      <span>📂</span><span id="orig-filename" data-i18n="dual_orig_btn">Choose original file...</span>
+    </button>
+  </div>
+  <div class="dual-sep">→</div>
+  <div class="dual-slot">
+    <span class="dual-slot-label" data-i18n="dual_trans_label">🖊 Translation (your language)</span>
+    <button class="dual-slot-btn trans" id="btn-load-trans" onclick="document.getElementById('file-input-trans').click()">
+      <span>📂</span><span id="trans-filename" data-i18n="dual_trans_btn">Choose translated file...</span>
+    </button>
+  </div>
+  <button class="dual-merge-btn" id="btn-merge" onclick="mergeFiles()" disabled data-i18n="dual_merge_btn">⚡ Merge &amp; Compare</button>
 </div>
 
 <div class="col-headers hidden" id="col-headers">
@@ -265,6 +389,19 @@
     <span class="drop-fmt-tag">.ini</span>
   </div>
 </div>
+
+
+<div id="help-overlay">
+  <div id="help-modal">
+    <div class="help-header">
+      <span class="help-header-icon">📖</span>
+      <span class="help-title" id="help-modal-title">USER GUIDE</span>
+      <button class="help-close" onclick="closeHelp()">&#x2715;</button>
+    </div>
+    <div class="help-body" id="help-body-content"></div>
+  </div>
+</div>
+
 
 <div id="help-overlay">
   <div id="help-modal">
@@ -300,7 +437,7 @@ const I18N = {
     format_label:'Format:',
     fmt_plain_name:'Sade TXT', fmt_plain_desc:'Her satır bir metin',
     fmt_auto_name:'Otomatik', fmt_auto_desc:'Formatı kendisi seçer',
-    btn_load:'📂 Dosya Yükle', btn_load_trans:'📂 Çeviri Yükle', btn_prev:'↑ Önceki Sorun', btn_next:'↓ Sonraki Sorun', btn_export:'⬇ Düzeltilmiş Dosyayı İndir',
+    btn_load:'📂 Dosya Yükle', btn_prev:'↑ Önceki Sorun', btn_next:'↓ Sonraki Sorun', btn_export:'⬇ Düzeltilmiş Dosyayı İndir',
     filter_all:'Tümü', filter_ok:'✓ Tamam', filter_warn:'⚠ Eksik', filter_err:'✗ Uzun',
     col_orig:'🌐 Orijinal', col_trans:'🖊 Çeviri — düzenlenebilir', col_status:'Durum',
     drop_title:'Çeviri Dosyasını Yükle',
@@ -309,7 +446,6 @@ const I18N = {
     badge_ok:'TAMAM', badge_warn:'EKSİK', badge_err:'UZUN',
     search_placeholder:'Metin ara...',
     toast_loaded:' satır yüklendi',
-    toast_trans_loaded:' satıra çeviri eklendi',
     toast_no_rows:'Geçerli satır bulunamadı!',
     toast_exported:'Dosya indirildi!',
     confirm_truncate:' satır çok uzun ve kırpılacak. Yine de dışa aktar?',
@@ -320,13 +456,23 @@ const I18N = {
     fmt_hint_plain:'Her satır tek bir metin bloğu. Uzunluk kontrolü yok.',
     fmt_hint_csv:'id,"orijinal","çeviri" — ilk satır başlık sayılır',
     fmt_hint_auto:'Format dosyaya bakılarak otomatik seçilir',
+    mode_single: "Tek Dosya",
+    mode_dual: "Orijinal + Çeviri",
+    dual_orig_label: "🌐 Orijinal (İngilizce)",
+    dual_trans_label: "🖊 Çeviri (Türkçe)",
+    dual_orig_btn: "Orijinal dosyayı seç...",
+    dual_trans_btn: "Çeviri dosyasını seç...",
+    dual_merge_btn: "⚡ Birleştir & Karşılaştır",
+    dual_no_match: "Eşleşen satır bulunamadı — formatlar aynı mı?",
+    dual_merged: " satır eşleştirildi",
+    dual_orig_missing: "Önce orijinal dosyayı yükleyin",
   },
   en: {
     stat_total:'Total', stat_ok:'OK', stat_missing:'Missing', stat_toolong:'Too Long', stat_progress:'Progress',
     format_label:'Format:',
     fmt_plain_name:'Plain TXT', fmt_plain_desc:'One line per text',
     fmt_auto_name:'Auto', fmt_auto_desc:'Auto-detect format',
-    btn_load:'📂 Load File', btn_load_trans:'📂 Load Translation', btn_prev:'↑ Prev Issue', btn_next:'↓ Next Issue', btn_export:'⬇ Export Fixed File',
+    btn_load:'📂 Load File', btn_prev:'↑ Prev Issue', btn_next:'↓ Next Issue', btn_export:'⬇ Export Fixed File',
     filter_all:'All', filter_ok:'✓ OK', filter_warn:'⚠ Missing', filter_err:'✗ Long',
     col_orig:'🌐 Original', col_trans:'🖊 Translation — editable', col_status:'Status',
     drop_title:'Load Translation File',
@@ -335,7 +481,6 @@ const I18N = {
     badge_ok:'OK', badge_warn:'MISSING', badge_err:'TOO LONG',
     search_placeholder:'Search text...',
     toast_loaded:' rows loaded',
-    toast_trans_loaded:' translations added',
     toast_no_rows:'No valid rows found!',
     toast_exported:'File downloaded!',
     confirm_truncate:' rows are too long and will be truncated. Export anyway?',
@@ -346,19 +491,222 @@ const I18N = {
     fmt_hint_plain:'Each line is one text block. No length check.',
     fmt_hint_csv:'id,"original","translation" — first row treated as header',
     fmt_hint_auto:'Format is auto-detected from file contents',
-  }
+    mode_single: "Single File",
+    mode_dual: "Orig + Trans",
+    dual_orig_label: "🌐 Original (English)",
+    dual_trans_label: "🖊 Translation (your language)",
+    dual_orig_btn: "Choose original file...",
+    dual_trans_btn: "Choose translated file...",
+    dual_merge_btn: "⚡ Merge & Compare",
+    dual_no_match: "No matching rows found — are the formats the same?",
+    dual_merged: " rows matched",
+    dual_orig_missing: "Load the original file first",
+  },
+  ja: {
+    stat_total:'合計', stat_ok:'完了', stat_missing:'未翻訳', stat_toolong:'長すぎ', stat_progress:'進捗',
+    format_label:'形式:',
+    fmt_plain_name:'プレーンTXT', fmt_plain_desc:'1行1テキスト',
+    fmt_auto_name:'自動', fmt_auto_desc:'形式を自動検出',
+    btn_load:'📂 ファイル読込', btn_prev:'↑ 前の問題', btn_next:'↓ 次の問題', btn_export:'⬇ 修正ファイルを保存',
+    filter_all:'すべて', filter_ok:'✓ 完了', filter_warn:'⚠ 未翻訳', filter_err:'✗ 長すぎ',
+    col_orig:'🌐 原文', col_trans:'🖊 翻訳 — 編集可', col_status:'状態',
+    drop_title:'翻訳ファイルを読み込む',
+    drop_sub:'ここにファイルをドロップ、またはクリックして選択<br>上で形式を選ぶか、自動検出を使用',
+    footer_no_file:'ファイル未読込',
+    badge_ok:'完了', badge_warn:'未翻訳', badge_err:'長過',
+    search_placeholder:'テキスト検索...',
+    toast_loaded:' 行を読み込みました',
+    toast_no_rows:'有効な行が見つかりません！',
+    toast_exported:'ファイルをダウンロードしました！',
+    confirm_truncate:' 行が長すぎて切り捨てられます。エクスポートしますか？',
+    footer_rows:' 行',
+    footer_unsaved:'● 未保存の変更',
+    footer_exported:'✓ エクスポート済み',
+    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_toolの出力',
+    fmt_hint_plain:'各行が1つのテキストブロック。長さチェックなし。',
+    fmt_hint_csv:'id,"原文","翻訳" — 最初の行はヘッダーとして扱います',
+    fmt_hint_auto:'ファイル内容から形式を自動検出します',
+    mode_single: "単一ファイル",
+    mode_dual: "原文 + 翻訳",
+    dual_orig_label: "🌐 原文（英語）",
+    dual_trans_label: "🖊 翻訳（あなたの言語）",
+    dual_orig_btn: "原文ファイルを選択...",
+    dual_trans_btn: "翻訳ファイルを選択...",
+    dual_merge_btn: "⚡ マージして比較",
+    dual_no_match: "一致する行が見つかりません",
+    dual_merged: " 行がマッチしました",
+    dual_orig_missing: "先に原文ファイルを読み込んでください",
+  },
+  zh: {
+    stat_total:'总计', stat_ok:'完成', stat_missing:'未翻译', stat_toolong:'过长', stat_progress:'进度',
+    format_label:'格式:',
+    fmt_plain_name:'纯文本', fmt_plain_desc:'每行一段文本',
+    fmt_auto_name:'自动', fmt_auto_desc:'自动检测格式',
+    btn_load:'📂 加载文件', btn_prev:'↑ 上一个问题', btn_next:'↓ 下一个问题', btn_export:'⬇ 导出修正文件',
+    filter_all:'全部', filter_ok:'✓ 完成', filter_warn:'⚠ 缺失', filter_err:'✗ 过长',
+    col_orig:'🌐 原文', col_trans:'🖊 译文 — 可编辑', col_status:'状态',
+    drop_title:'加载翻译文件',
+    drop_sub:'将文件拖放到此处或点击浏览<br>在上方选择格式，或使用自动检测',
+    footer_no_file:'未加载文件',
+    badge_ok:'完成', badge_warn:'缺失', badge_err:'过长',
+    search_placeholder:'搜索文本...',
+    toast_loaded:' 行已加载',
+    toast_no_rows:'未找到有效行！',
+    toast_exported:'文件已下载！',
+    confirm_truncate:' 行过长将被截断。仍要导出吗？',
+    footer_rows:' 行',
+    footer_unsaved:'● 有未保存的更改',
+    footer_exported:'✓ 已导出',
+    fmt_hint_sf3:'OFFSET|字节长度|文本 — sf3_tool输出',
+    fmt_hint_plain:'每行是一个文本块。不检查长度。',
+    fmt_hint_csv:'id,"原文","译文" — 第一行视为标题',
+    fmt_hint_auto:'从文件内容自动检测格式',
+    mode_single: "单文件",
+    mode_dual: "原文 + 译文",
+    dual_orig_label: "🌐 原文（英文）",
+    dual_trans_label: "🖊 译文（您的语言）",
+    dual_orig_btn: "选择原文文件...",
+    dual_trans_btn: "选择译文文件...",
+    dual_merge_btn: "⚡ 合并并比较",
+    dual_no_match: "未找到匹配行",
+    dual_merged: " 行已匹配",
+    dual_orig_missing: "请先加载原文文件",
+  },
+  ur: {
+    stat_total:'کل', stat_ok:'مکمل', stat_missing:'نامکمل', stat_toolong:'بہت لمبا', stat_progress:'پیش رفت',
+    format_label:'فارمیٹ:',
+    fmt_plain_name:'سادہ TXT', fmt_plain_desc:'ہر سطر ایک متن',
+    fmt_auto_name:'خودکار', fmt_auto_desc:'فارمیٹ خود شناخت کرے',
+    btn_load:'📂 فائل لوڈ کریں', btn_prev:'↑ پچھلا مسئلہ', btn_next:'↓ اگلا مسئلہ', btn_export:'⬇ درست فائل ڈاؤنلوڈ',
+    filter_all:'سب', filter_ok:'✓ مکمل', filter_warn:'⚠ نامکمل', filter_err:'✗ لمبا',
+    col_orig:'🌐 اصل', col_trans:'🖊 ترجمہ — قابل ترمیم', col_status:'حالت',
+    drop_title:'ترجمہ فائل لوڈ کریں',
+    drop_sub:'فائل یہاں ڈراپ کریں یا کلک کریں<br>اوپر فارمیٹ منتخب کریں یا خودکار استعمال کریں',
+    footer_no_file:'کوئی فائل لوڈ نہیں',
+    badge_ok:'مکمل', badge_warn:'نامکمل', badge_err:'لمبا',
+    search_placeholder:'متن تلاش کریں...',
+    toast_loaded:' سطریں لوڈ ہوئیں',
+    toast_no_rows:'کوئی درست سطر نہیں ملی!',
+    toast_exported:'فائل ڈاؤنلوڈ ہوئی!',
+    confirm_truncate:' سطریں بہت لمبی ہیں اور کٹ جائیں گی۔ پھر بھی برآمد کریں؟',
+    footer_rows:' سطریں',
+    footer_unsaved:'● غیر محفوظ تبدیلیاں',
+    footer_exported:'✓ برآمد ہوئی',
+    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_tool آؤٹ پٹ',
+    fmt_hint_plain:'ہر سطر ایک متن بلاک ہے۔ لمبائی کی جانچ نہیں۔',
+    fmt_hint_csv:'id,"اصل","ترجمہ" — پہلی سطر ہیڈر سمجھی جائے گی',
+    fmt_hint_auto:'فائل مواد سے فارمیٹ خودکار شناخت ہوگا',
+    mode_single: "ایک فائل",
+    mode_dual: "اصل + ترجمہ",
+    dual_orig_label: "🌐 اصل (انگریزی)",
+    dual_trans_label: "🖊 ترجمہ (آپ کی زبان)",
+    dual_orig_btn: "اصل فائل چنیں...",
+    dual_trans_btn: "ترجمہ فائل چنیں...",
+    dual_merge_btn: "⚡ ملائیں اور موازنہ کریں",
+    dual_no_match: "کوئی مماثل سطر نہیں ملی",
+    dual_merged: " سطریں ملائی گئیں",
+    dual_orig_missing: "پہلے اصل فائل لوڈ کریں",
+  },
+  hi: {
+    stat_total:'कुल', stat_ok:'पूर्ण', stat_missing:'शेष', stat_toolong:'बहुत लंबा', stat_progress:'प्रगति',
+    format_label:'प्रारूप:',
+    fmt_plain_name:'सादा TXT', fmt_plain_desc:'प्रत्येक पंक्ति एक पाठ',
+    fmt_auto_name:'स्वचालित', fmt_auto_desc:'प्रारूप स्वयं पहचाने',
+    btn_load:'📂 फ़ाइल लोड करें', btn_prev:'↑ पिछली समस्या', btn_next:'↓ अगली समस्या', btn_export:'⬇ सुधरी फ़ाइल डाउनलोड',
+    filter_all:'सभी', filter_ok:'✓ पूर्ण', filter_warn:'⚠ शेष', filter_err:'✗ लंबा',
+    col_orig:'🌐 मूल पाठ', col_trans:'🖊 अनुवाद — संपादन योग्य', col_status:'स्थिति',
+    drop_title:'अनुवाद फ़ाइल लोड करें',
+    drop_sub:'फ़ाइल यहाँ छोड़ें या क्लिक करके चुनें<br>ऊपर से प्रारूप चुनें या स्वचालित पहचान का उपयोग करें',
+    footer_no_file:'कोई फ़ाइल लोड नहीं',
+    badge_ok:'पूर्ण', badge_warn:'शेष', badge_err:'लंबा',
+    search_placeholder:'पाठ खोजें...',
+    toast_loaded:' पंक्तियाँ लोड हुईं',
+    toast_no_rows:'कोई मान्य पंक्ति नहीं मिली!',
+    toast_exported:'फ़ाइल डाउनलोड हुई!',
+    confirm_truncate:' पंक्तियाँ बहुत लंबी हैं और कट जाएंगी। फिर भी निर्यात करें?',
+    footer_rows:' पंक्तियाँ',
+    footer_unsaved:'● असहेजे परिवर्तन',
+    footer_exported:'✓ निर्यात हुआ',
+    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_tool आउटपुट',
+    fmt_hint_plain:'प्रत्येक पंक्ति एक पाठ खंड है। लंबाई जाँच नहीं।',
+    fmt_hint_csv:'id,"मूल","अनुवाद" — पहली पंक्ति शीर्षक मानी जाएगी',
+    fmt_hint_auto:'फ़ाइल सामग्री से प्रारूप स्वचालित पहचाना जाएगा',
+    mode_single: "एकल फ़ाइल",
+    mode_dual: "मूल + अनुवाद",
+    dual_orig_label: "🌐 मूल (अंग्रेज़ी)",
+    dual_trans_label: "🖊 अनुवाद (आपकी भाषा)",
+    dual_orig_btn: "मूल फ़ाइल चुनें...",
+    dual_trans_btn: "अनुवाद फ़ाइल चुनें...",
+    dual_merge_btn: "⚡ मर्ज और तुलना करें",
+    dual_no_match: "कोई मिलान नहीं मिला",
+    dual_merged: " पंक्तियाँ मिलान हुईं",
+    dual_orig_missing: "पहले मूल फ़ाइल लोड करें",
+  },
+  ar: {
+    stat_total:'الإجمالي', stat_ok:'مكتمل', stat_missing:'غير مترجم', stat_toolong:'طويل جداً', stat_progress:'التقدم',
+    format_label:'الصيغة:',
+    fmt_plain_name:'نص عادي', fmt_plain_desc:'سطر واحد لكل نص',
+    fmt_auto_name:'تلقائي', fmt_auto_desc:'اكتشاف الصيغة تلقائياً',
+    btn_load:'📂 تحميل ملف', btn_prev:'↑ المشكلة السابقة', btn_next:'↓ المشكلة التالية', btn_export:'⬇ تنزيل الملف المُصحَّح',
+    filter_all:'الكل', filter_ok:'✓ مكتمل', filter_warn:'⚠ ناقص', filter_err:'✗ طويل',
+    col_orig:'🌐 النص الأصلي', col_trans:'🖊 الترجمة — قابل للتعديل', col_status:'الحالة',
+    drop_title:'تحميل ملف الترجمة',
+    drop_sub:'اسحب الملف هنا أو انقر للتصفح<br>اختر الصيغة أعلاه أو استخدم الاكتشاف التلقائي',
+    footer_no_file:'لم يتم تحميل ملف',
+    badge_ok:'مكتمل', badge_warn:'ناقص', badge_err:'طويل',
+    search_placeholder:'ابحث عن نص...',
+    toast_loaded:' سطراً تم تحميله',
+    toast_no_rows:'لم يتم العثور على سطور صالحة!',
+    toast_exported:'تم تنزيل الملف!',
+    confirm_truncate:' سطور طويلة جداً وستُقطع. هل تريد التصدير؟',
+    footer_rows:' سطور',
+    footer_unsaved:'● تغييرات غير محفوظة',
+    footer_exported:'✓ تم التصدير',
+    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — مخرجات sf3_tool',
+    fmt_hint_plain:'كل سطر كتلة نصية واحدة. لا يوجد فحص للطول.',
+    fmt_hint_csv:'id,"أصلي","ترجمة" — يُعامَل السطر الأول كرأس',
+    fmt_hint_auto:'يتم اكتشاف الصيغة تلقائياً من محتوى الملف',
+    mode_single: "ملف واحد",
+    mode_dual: "أصلي + ترجمة",
+    dual_orig_label: "🌐 الأصلي (الإنجليزية)",
+    dual_trans_label: "🖊 الترجمة (لغتك)",
+    dual_orig_btn: "اختر الملف الأصلي...",
+    dual_trans_btn: "اختر ملف الترجمة...",
+    dual_merge_btn: "⚡ دمج ومقارنة",
+    dual_no_match: "لم يتم العثور على صفوف مطابقة",
+    dual_merged: " صفوف متطابقة",
+    dual_orig_missing: "حمّل الملف الأصلي أولاً",
+  },
 };
 
-const LANG_FONTS = { tr: '"Exo 2", sans-serif', en: '"Exo 2", sans-serif' };
+// Font families per language
+const LANG_FONTS = {
+  tr: '"Exo 2", sans-serif',
+  en: '"Exo 2", sans-serif',
+  ja: '"Noto Sans JP", "Exo 2", sans-serif',
+  zh: '"Noto Sans SC", "Exo 2", sans-serif',
+  ur: '"Noto Nastaliq Urdu", "Exo 2", sans-serif',
+  hi: '"Noto Sans Devanagari", "Exo 2", sans-serif',
+  ar: '"Noto Naskh Arabic", "Exo 2", sans-serif',
+  hi: '"Noto Sans Devanagari", "Exo 2", sans-serif',
+  ar: '"Noto Naskh Arabic", "Exo 2", sans-serif',
+};
 
 // ═══ APPLY LANGUAGE ═══════════════════════════════════
 function t(key) { return (I18N[currentLang] || I18N.en)[key] || key; }
 
 function setLang(lang) {
   currentLang = lang;
+
+  // Update html lang + dir
   document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ur' || lang === 'ar') ? 'rtl' : 'ltr';
+  document.body.classList.toggle('rtl', lang === 'ur' || lang === 'ar');
+
+  // Update UI font
   document.documentElement.style.setProperty('--ui-font', LANG_FONTS[lang]);
 
+  // Apply all data-i18n text nodes
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (I18N[lang] && I18N[lang][key]) {
@@ -367,39 +715,54 @@ function setLang(lang) {
     }
   });
 
+  // Placeholder special case
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
     if (I18N[lang] && I18N[lang][key]) el.placeholder = I18N[lang][key];
   });
 
+  // Update drop-sub (has HTML)
   const ds = document.querySelector('.drop-sub');
   if (ds) ds.innerHTML = t('drop_sub');
 
+  // Active lang button
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   const activeBtn = document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`);
   if (activeBtn) activeBtn.classList.add('active');
 
+  // Update format hint
   updateFormatHint();
 
+  // Update dynamic badges in rendered rows
   document.querySelectorAll('.status-badge').forEach(b => {
     if (b.classList.contains('badge-ok'))   b.textContent = t('badge_ok');
     if (b.classList.contains('badge-warn')) b.textContent = t('badge_warn');
     if (b.classList.contains('badge-err'))  b.textContent = t('badge_err');
   });
 
+  // Footer
   const ff = document.getElementById('footer-file');
-  if (ff && ff.textContent === (I18N.tr.footer_no_file || '') || ff && ff.textContent === (I18N.en.footer_no_file || '')) {
+  if (ff && ff.textContent === (I18N.tr.footer_no_file || '') ||
+      ff && ff.textContent === (I18N.en.footer_no_file || '') ||
+      ff && ff.textContent === (I18N.ja.footer_no_file || '') ||
+      ff && ff.textContent === (I18N.zh.footer_no_file || '') ||
+      ff && ff.textContent === (I18N.ur.footer_no_file || '')) {
     ff.textContent = t('footer_no_file');
   }
   const fv = document.getElementById('footer-visible');
-  if (fv && filtered.length > 0) fv.textContent = filtered.length + t('footer_rows');
+  if (fv) {
+    const n = filtered.length;
+    if (n > 0) fv.textContent = n + t('footer_rows');
+  }
 }
 
 // ═══ FORMAT SELECTION ═════════════════════════════════
 function updateFormatHint() {
   const hintMap = { sf3:'fmt_hint_sf3', plain:'fmt_hint_plain', csv:'fmt_hint_csv', auto:'fmt_hint_auto' };
-  document.getElementById('fmt-hint').textContent = t(hintMap[fmt] || 'fmt_hint_auto');
+  const key = hintMap[fmt] || 'fmt_hint_auto';
+  document.getElementById('fmt-hint').textContent = t(key);
 }
+
 function selectFormat(f, el) {
   fmt = f;
   document.querySelectorAll('.fmt-card').forEach(c => c.classList.remove('active'));
@@ -615,76 +978,22 @@ function loadText(text,name){
   document.getElementById('table-wrap').classList.remove('hidden');
   document.getElementById('col-headers').classList.remove('hidden');
   document.getElementById('footer-file').textContent=name;
-  
-  // Çeviri yükleme butonunu aktifleştir
-  document.getElementById('btn-load-trans').disabled = false;
-  
   render();
   showToast(rows.length+t('toast_loaded')+' ('+result.fmt.toUpperCase()+')','ok');
 }
 
-// Yeni: Çeviri Dosyasını Mevcut Tabloya Giydirme
-function loadTranslationText(text, name) {
-  const result = parseFile(text, 'auto');
-  if (!result.rows.length) { showToast(t('toast_no_rows'), 'err'); return; }
-
-  let updatedCount = 0;
-  const limit = Math.min(rows.length, result.rows.length);
-  for (let i = 0; i < limit; i++) {
-    const newTrans = result.rows[i].trans || result.rows[i].orig;
-    rows[i].trans = newTrans;
-    rows[i].status = getStatus(rows[i]);
-    updatedCount++;
-  }
-
-  render();
-  updateStats();
-  document.getElementById('footer-saved').textContent = t('footer_unsaved');
-  showToast(updatedCount + t('toast_trans_loaded'), 'ok');
-}
-
-
 // ═══ FILE INPUT + DND ═════════════════════════════════
-// Ana dosya yükleme
 document.getElementById('file-input').addEventListener('change',e=>{
   const file=e.target.files[0]; if(!file) return;
   const reader=new FileReader(); reader.onload=ev=>loadText(ev.target.result,file.name); reader.readAsText(file,'UTF-8');
-  e.target.value='';
 });
-
-// Çeviri dosyası yükleme (Buton ile)
-document.getElementById('file-trans-input').addEventListener('change',e=>{
-  const file=e.target.files[0]; if(!file) return;
-  const reader=new FileReader(); reader.onload=ev=>loadTranslationText(ev.target.result,file.name); reader.readAsText(file,'UTF-8');
-  e.target.value='';
-});
-
-// İlk ekran Drag & Drop (Ana dosya)
 const dz=document.getElementById('drop-zone');
 document.body.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over');});
 document.body.addEventListener('dragleave',e=>{if(!e.relatedTarget)dz.classList.remove('drag-over');});
 document.body.addEventListener('drop',e=>{
   e.preventDefault();dz.classList.remove('drag-over');
-  if(rows.length > 0) return; // Tablo açıksa burası çalışmasın
   const file=e.dataTransfer.files[0]; if(!file) return;
   const reader=new FileReader(); reader.onload=ev=>loadText(ev.target.result,file.name); reader.readAsText(file,'UTF-8');
-});
-
-// Tablo ekranı Drag & Drop (Çeviri dosyası)
-const tw = document.getElementById('table-wrap');
-tw.addEventListener('dragover', e => {
-  e.preventDefault();
-  if(rows.length > 0) tw.style.boxShadow = 'inset 0 0 0 2px var(--accent)';
-});
-tw.addEventListener('dragleave', e => { tw.style.boxShadow = 'none'; });
-tw.addEventListener('drop', e => {
-  e.preventDefault();
-  tw.style.boxShadow = 'none';
-  if(rows.length === 0) return; // Sadece ana dosya yüklüyken çalışsın
-  const file = e.dataTransfer.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => loadTranslationText(ev.target.result, file.name);
-  reader.readAsText(file, 'UTF-8');
 });
 
 // ═══ TOAST + KEYBOARD ═════════════════════════════════
@@ -693,20 +1002,167 @@ function showToast(msg,type=''){
   setTimeout(()=>el.className=type,2500);
 }
 
+
+
+
+
+
+
+
+// Init with English
+setLang('en');
+
+
+// ═══ DUAL LOAD ════════════════════════════════════════
+var loadMode   = 'single';
+var origRows   = null;   // parsed rows from original file
+var transRows  = null;   // parsed rows from translated file
+
+function setLoadMode(mode, el) {
+  loadMode = mode;
+  document.querySelectorAll('.load-mode-btn').forEach(function(b){ b.classList.remove('active'); });
+  el.classList.add('active');
+  var bar = document.getElementById('dual-load-bar');
+  var singleBtn = document.querySelector('[data-i18n="btn_load"]');
+  if (mode === 'dual') {
+    bar.classList.add('visible');
+    singleBtn.style.display = 'none';
+  } else {
+    bar.classList.remove('visible');
+    singleBtn.style.display = '';
+  }
+}
+
+// Original file input
+document.getElementById('file-input-orig').addEventListener('change', function(e) {
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var result = parseFile(ev.target.result, fmt);
+    origRows = result.rows;
+    var btn = document.getElementById('btn-load-orig');
+    btn.classList.add('loaded');
+    document.getElementById('orig-filename').textContent = '✓ ' + file.name;
+    checkMergeReady();
+    showToast(origRows.length + ' original rows loaded', 'ok');
+  };
+  reader.readAsText(file, 'UTF-8');
+});
+
+// Translated file input
+document.getElementById('file-input-trans').addEventListener('change', function(e) {
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var result = parseFile(ev.target.result, fmt);
+    transRows = result.rows;
+    var btn = document.getElementById('btn-load-trans');
+    btn.classList.add('loaded');
+    document.getElementById('trans-filename').textContent = '✓ ' + file.name;
+    checkMergeReady();
+    showToast(transRows.length + ' translated rows loaded', 'ok');
+  };
+  reader.readAsText(file, 'UTF-8');
+});
+
+function checkMergeReady() {
+  var btn = document.getElementById('btn-merge');
+  btn.disabled = !(origRows && origRows.length > 0);
+  // Auto-merge if both loaded
+  if (origRows && transRows) mergeFiles();
+}
+
+function mergeFiles() {
+  if (!origRows || !origRows.length) {
+    showToast(t('dual_orig_missing'), 'err'); return;
+  }
+
+  var merged = [];
+
+  if (transRows && transRows.length > 0) {
+    // ── Strategy 1: match by offset (SF3 format) ────────────────
+    var transByOffset = {};
+    transRows.forEach(function(r) {
+      if (r.offset >= 0) transByOffset[r.offset] = r.trans;
+    });
+
+    var hasSF3Offsets = origRows.some(function(r){ return r.offset >= 0; }) &&
+                        transRows.some(function(r){ return r.offset >= 0; });
+
+    if (hasSF3Offsets) {
+      // SF3 mode — match by offset
+      origRows.forEach(function(r) {
+        var trans = transByOffset[r.offset];
+        merged.push({
+          offset:  r.offset,
+          byteLen: r.byteLen,
+          orig:    r.orig,
+          trans:   (trans !== undefined && trans !== r.orig) ? trans : r.orig
+        });
+      });
+    } else {
+      // ── Strategy 2: match by line index (plain/csv/po etc.) ──
+      origRows.forEach(function(r, i) {
+        var tRow = transRows[i];
+        var trans = (tRow && tRow.trans && tRow.trans !== tRow.orig) ? tRow.trans : r.orig;
+        merged.push({
+          offset:  r.offset,
+          byteLen: r.byteLen,
+          orig:    r.orig,
+          trans:   trans
+        });
+      });
+    }
+
+    if (!merged.length) {
+      showToast(t('dual_no_match'), 'err'); return;
+    }
+  } else {
+    // Only original loaded — use orig as both sides
+    merged = origRows.map(function(r) {
+      return { offset: r.offset, byteLen: r.byteLen, orig: r.orig, trans: r.orig };
+    });
+  }
+
+  rows     = merged;
+  issueIdx = -1;
+  fileName = document.getElementById('orig-filename').textContent.replace('✓ ','') || 'merged';
+
+  document.getElementById('drop-zone').classList.add('hidden');
+  document.getElementById('table-wrap').classList.remove('hidden');
+  document.getElementById('col-headers').classList.remove('hidden');
+  document.getElementById('footer-file').textContent = fileName;
+
+  render();
+
+  var matched = merged.filter(function(r){ return r.trans !== r.orig; }).length;
+  showToast(merged.length + t('dual_merged') + ' (' + matched + ' translated)', 'ok');
+}
+
 const HELP_CONTENT = {
-  tr: { title: "KULLANIM KILAVUZU", html: "..." }, // (Kısalttım, içeriği aynı)
-  en: { title: "USER GUIDE", html: "..." }
+  tr: { title: "KULLANIM KILAVUZU", html: "<div class=\"help-section\"><h2>LoreScribe Nedir?</h2><p>LoreScribe, oyun çevirilerindeki metin uyumsuzluklarını tespit etmek ve düzeltmek için tasarlanmış ücretsiz, tarayıcı tabanlı bir çeviri editörüdür. Kurulum yok, kayıt yok.</p></div><div class=\"help-section\"><h2>Hızlı Başlangıç</h2><ul><li><span class=\"help-key\">1. Adım</span><span>Yukarıdan dosya formatını seçin veya Otomatik bırakın</span></li><li><span class=\"help-key\">2. Adım</span><span>Çeviri dosyanızı sürükle-bırak yapın ya da 📂 ile seçin</span></li><li><span class=\"help-key\">3. Adım</span><span>Sağ sütundaki çevirileri düzenleyin</span></li><li><span class=\"help-key\">4. Adım</span><span>Ctrl+S ile düzeltilmiş dosyayı indirin</span></li></ul></div><div class=\"help-section\"><h2>Durum Renkleri</h2><ul><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--ok)\"></span>TAMAM</span><span>Çeviri mevcut ve uzunluk uygun</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--warn)\"></span>EKSİK</span><span>Çeviri yok veya orijinalle aynı</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--err)\"></span>UZUN</span><span>Metin orijinalden uzun, kısaltılmalı</span></li></ul></div><div class=\"help-section\"><h2>Desteklenen Formatlar</h2><ul><li><span class=\"help-key\">SF3 / Özel</span><span>OFFSET|BYTE|METIN — sf3_tool çıktısı</span></li><li><span class=\"help-key\">Sade TXT</span><span>Her satır bir metin bloğu</span></li><li><span class=\"help-key\">CSV</span><span>id,\"orijinal\",\"çeviri\"</span></li><li><span class=\"help-key\">PO</span><span>GNU gettext</span></li><li><span class=\"help-key\">XML</span><span>string id stili</span></li><li><span class=\"help-key\">JSON</span><span>Düz obje veya dizi</span></li><li><span class=\"help-key\">INI</span><span>key=value</span></li></ul></div><div class=\"help-section\"><h2>Klavye Kısayolları</h2><ul><li><span class=\"help-key\">Ctrl+S</span><span>Dosyayı indir</span></li><li><span class=\"help-key\">F3</span><span>Sonraki soruna git</span></li><li><span class=\"help-key\">Shift+F3</span><span>Önceki soruna git</span></li></ul></div><div class=\"help-section\"><h2>SF3 Formatı Hakkında</h2><p>Her satır OFFSET|BYTE_UZUNLUGU|METIN şeklindedir. Yalnızca METİN kısmını çevirin. Karakter sayacı kalan alanı gösterir. Türkçe karakterler tam desteklidir.</p></div><div class=\"help-footer-note\">Dosyayı UTF-8 BOM olmadan kaydedin. Notepad: Farklı Kaydet - UTF-8 | VS Code: sağ alt - UTF-8</div>" },
+  en: { title: "USER GUIDE", html: "<div class=\"help-section\"><h2>What is LoreScribe?</h2><p>LoreScribe is a free, browser-based translation editor for detecting and fixing text mismatches in game translations. No installation or sign-up required.</p></div><div class=\"help-section\"><h2>Quick Start</h2><ul><li><span class=\"help-key\">Step 1</span><span>Select file format above or leave on Auto</span></li><li><span class=\"help-key\">Step 2</span><span>Drag and drop your file or click 📂 to browse</span></li><li><span class=\"help-key\">Step 3</span><span>Edit translations in the right column</span></li><li><span class=\"help-key\">Step 4</span><span>Press Ctrl+S to download the corrected file</span></li></ul></div><div class=\"help-section\"><h2>Status Colors</h2><ul><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--ok)\"></span>OK</span><span>Translation exists and fits the allowed length</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--warn)\"></span>MISSING</span><span>No translation or same as original</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--err)\"></span>TOO LONG</span><span>Translation exceeds original length, shorten it</span></li></ul></div><div class=\"help-section\"><h2>Supported Formats</h2><ul><li><span class=\"help-key\">SF3 / Custom</span><span>OFFSET|BYTE_LEN|TEXT — sf3_tool output</span></li><li><span class=\"help-key\">Plain TXT</span><span>Each line is one text block</span></li><li><span class=\"help-key\">CSV</span><span>id,\"original\",\"translation\"</span></li><li><span class=\"help-key\">PO</span><span>GNU gettext</span></li><li><span class=\"help-key\">XML</span><span>string id style</span></li><li><span class=\"help-key\">JSON</span><span>Flat object or array</span></li><li><span class=\"help-key\">INI</span><span>key=value config</span></li></ul></div><div class=\"help-section\"><h2>Keyboard Shortcuts</h2><ul><li><span class=\"help-key\">Ctrl+S</span><span>Download corrected file</span></li><li><span class=\"help-key\">F3</span><span>Jump to next issue</span></li><li><span class=\"help-key\">Shift+F3</span><span>Jump to previous issue</span></li></ul></div><div class=\"help-section\"><h2>About SF3 Format</h2><p>Files from sf3_tool use OFFSET|BYTE_LEN|TEXT format. Only edit the TEXT part. The character counter shows remaining space. All Unicode characters including Turkish, Japanese, Arabic are fully supported.</p></div><div class=\"help-footer-note\">Save your file as UTF-8 without BOM. Notepad: Save As - UTF-8 | VS Code: bottom-right - UTF-8</div>" },
+  ja: { title: "使用ガイド", html: "<div class=\"help-section\"><h2>LoreScribeとは?</h2><p>ゲーム翻訳のテキスト不一致を検出・修正するための無料ブラウザ翻訳エディターです。インストール不要。</p></div><div class=\"help-section\"><h2>クイックスタート</h2><ul><li><span class=\"help-key\">ステップ1</span><span>上部でファイル形式を選択（自動でも可）</span></li><li><span class=\"help-key\">ステップ2</span><span>ファイルをドラッグ＆ドロップまたは📂で選択</span></li><li><span class=\"help-key\">ステップ3</span><span>右列の翻訳を編集</span></li><li><span class=\"help-key\">ステップ4</span><span>Ctrl+Sで修正済みファイルをダウンロード</span></li></ul></div><div class=\"help-section\"><h2>ステータスの色</h2><ul><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--ok)\"></span>完了</span><span>翻訳があり長さも適切</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--warn)\"></span>未翻訳</span><span>翻訳がないか原文と同じ</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--err)\"></span>長過ぎ</span><span>翻訳が長すぎる、短くする必要あり</span></li></ul></div><div class=\"help-section\"><h2>対応フォーマット</h2><ul><li><span class=\"help-key\">SF3</span><span>OFFSET|BYTE_LEN|TEXT</span></li><li><span class=\"help-key\">プレーンTXT</span><span>1行1テキスト</span></li><li><span class=\"help-key\">CSV</span><span>id,\"原文\",\"翻訳\"</span></li><li><span class=\"help-key\">PO</span><span>GNU gettext</span></li><li><span class=\"help-key\">XML</span><span>string idスタイル</span></li><li><span class=\"help-key\">JSON</span><span>オブジェクトまたは配列</span></li><li><span class=\"help-key\">INI</span><span>key=value</span></li></ul></div><div class=\"help-section\"><h2>キーボードショートカット</h2><ul><li><span class=\"help-key\">Ctrl+S</span><span>ダウンロード</span></li><li><span class=\"help-key\">F3</span><span>次の問題</span></li><li><span class=\"help-key\">Shift+F3</span><span>前の問題</span></li></ul></div><div class=\"help-section\"><h2>SF3フォーマットについて</h2><p>OFFSET|BYTE_LEN|TEXT形式です。TEXTのみ編集してください。文字カウンターが残り文字数を表示します。</p></div><div class=\"help-footer-note\">ファイルはBOMなしUTF-8で保存してください。</div>" },
+  zh: { title: "使用指南", html: "<div class=\"help-section\"><h2>什么是LoreScribe?</h2><p>专为检测和修复游戏翻译文本不匹配而设计的免费浏览器翻译编辑器。无需安装。</p></div><div class=\"help-section\"><h2>快速开始</h2><ul><li><span class=\"help-key\">第一步</span><span>选择文件格式或保留自动</span></li><li><span class=\"help-key\">第二步</span><span>拖放文件或点击📂选择</span></li><li><span class=\"help-key\">第三步</span><span>在右列编辑翻译</span></li><li><span class=\"help-key\">第四步</span><span>Ctrl+S下载修正文件</span></li></ul></div><div class=\"help-section\"><h2>状态颜色</h2><ul><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--ok)\"></span>完成</span><span>翻译存在且长度合适</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--warn)\"></span>缺失</span><span>尚无翻译或与原文相同</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--err)\"></span>过长</span><span>翻译超过允许长度</span></li></ul></div><div class=\"help-section\"><h2>支持格式</h2><ul><li><span class=\"help-key\">SF3</span><span>OFFSET|字节|文本</span></li><li><span class=\"help-key\">纯文本</span><span>每行一块</span></li><li><span class=\"help-key\">CSV</span><span>id,\"原文\",\"译文\"</span></li><li><span class=\"help-key\">PO</span><span>GNU gettext</span></li><li><span class=\"help-key\">XML</span><span>string id样式</span></li><li><span class=\"help-key\">JSON</span><span>对象或数组</span></li><li><span class=\"help-key\">INI</span><span>key=value</span></li></ul></div><div class=\"help-section\"><h2>键盘快捷键</h2><ul><li><span class=\"help-key\">Ctrl+S</span><span>下载文件</span></li><li><span class=\"help-key\">F3</span><span>下一个问题</span></li><li><span class=\"help-key\">Shift+F3</span><span>上一个问题</span></li></ul></div><div class=\"help-section\"><h2>关于SF3格式</h2><p>仅编辑TEXT部分。字符计数器显示剩余可用字符。完全支持所有Unicode字符。</p></div><div class=\"help-footer-note\">请将文件保存为UTF-8无BOM格式。</div>" },
+  ur: { title: "استعمال کی رہنمائی", html: "<div class=\"help-section\"><h2>LoreScribe کیا ہے؟</h2><p>گیم ترجموں میں متن کی عدم مطابقت کو درست کرنے کا مفت براؤزر ایڈیٹر۔ کوئی انسٹالیشن نہیں۔</p></div><div class=\"help-section\"><h2>فوری آغاز</h2><ul><li><span class=\"help-key\">مرحلہ 1</span><span>فائل فارمیٹ منتخب کریں</span></li><li><span class=\"help-key\">مرحلہ 2</span><span>فائل ڈراپ کریں یا 📂 سے چنیں</span></li><li><span class=\"help-key\">مرحلہ 3</span><span>دائیں کالم میں ترجمہ کریں</span></li><li><span class=\"help-key\">مرحلہ 4</span><span>Ctrl+S سے فائل محفوظ کریں</span></li></ul></div><div class=\"help-section\"><h2>حالت کے رنگ</h2><ul><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--ok)\"></span>مکمل</span><span>ترجمہ موجود اور لمبائی مناسب</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--warn)\"></span>نامکمل</span><span>ترجمہ نہیں یا اصل جیسا</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--err)\"></span>لمبا</span><span>بہت لمبا، مختصر کریں</span></li></ul></div><div class=\"help-section\"><h2>معاون فارمیٹس</h2><ul><li><span class=\"help-key\">SF3</span><span>OFFSET|BYTE_LEN|TEXT</span></li><li><span class=\"help-key\">سادہ TXT</span><span>ہر سطر ایک متن</span></li><li><span class=\"help-key\">CSV</span><span>id,\"اصل\",\"ترجمہ\"</span></li><li><span class=\"help-key\">PO</span><span>GNU gettext</span></li><li><span class=\"help-key\">XML</span><span>string id</span></li><li><span class=\"help-key\">JSON</span><span>آبجیکٹ یا ارے</span></li><li><span class=\"help-key\">INI</span><span>key=value</span></li></ul></div><div class=\"help-section\"><h2>کی بورڈ شارٹ کٹس</h2><ul><li><span class=\"help-key\">Ctrl+S</span><span>فائل ڈاؤنلوڈ</span></li><li><span class=\"help-key\">F3</span><span>اگلا مسئلہ</span></li><li><span class=\"help-key\">Shift+F3</span><span>پچھلا مسئلہ</span></li></ul></div><div class=\"help-section\"><h2>SF3 فارمیٹ</h2><p>صرف TEXT حصہ تبدیل کریں۔ کردار کاؤنٹر باقی حروف دکھاتا ہے۔</p></div><div class=\"help-footer-note\">فائل UTF-8 بغیر BOM کے محفوظ کریں۔</div>" },
+  hi: { title: "उपयोग मार्गदर्शिका", html: "<div class=\"help-section\"><h2>LoreScribe क्या है?</h2><p>गेम अनुवादों में पाठ असंगतियों को ठीक करने के लिए निःशुल्क ब्राउज़र संपादक। कोई इंस्टॉलेशन नहीं।</p></div><div class=\"help-section\"><h2>त्वरित प्रारंभ</h2><ul><li><span class=\"help-key\">चरण 1</span><span>फ़ाइल प्रारूप चुनें</span></li><li><span class=\"help-key\">चरण 2</span><span>फ़ाइल खींचें-छोड़ें या 📂 से चुनें</span></li><li><span class=\"help-key\">चरण 3</span><span>दाहिने कॉलम में अनुवाद संपादित करें</span></li><li><span class=\"help-key\">चरण 4</span><span>Ctrl+S से फ़ाइल डाउनलोड करें</span></li></ul></div><div class=\"help-section\"><h2>स्थिति रंग</h2><ul><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--ok)\"></span>पूर्ण</span><span>अनुवाद मौजूद और उचित</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--warn)\"></span>शेष</span><span>अनुवाद नहीं या मूल जैसा</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--err)\"></span>लंबा</span><span>बहुत लंबा, छोटा करें</span></li></ul></div><div class=\"help-section\"><h2>समर्थित प्रारूप</h2><ul><li><span class=\"help-key\">SF3</span><span>OFFSET|BYTE_LEN|TEXT</span></li><li><span class=\"help-key\">सादा TXT</span><span>प्रत्येक पंक्ति एक पाठ</span></li><li><span class=\"help-key\">CSV</span><span>id,\"मूल\",\"अनुवाद\"</span></li><li><span class=\"help-key\">PO</span><span>GNU gettext</span></li><li><span class=\"help-key\">XML</span><span>string id</span></li><li><span class=\"help-key\">JSON</span><span>ऑब्जेक्ट या ऐरे</span></li><li><span class=\"help-key\">INI</span><span>key=value</span></li></ul></div><div class=\"help-section\"><h2>कीबोर्ड शॉर्टकट</h2><ul><li><span class=\"help-key\">Ctrl+S</span><span>फ़ाइल डाउनलोड</span></li><li><span class=\"help-key\">F3</span><span>अगली समस्या</span></li><li><span class=\"help-key\">Shift+F3</span><span>पिछली समस्या</span></li></ul></div><div class=\"help-section\"><h2>SF3 प्रारूप</h2><p>केवल TEXT भाग बदलें। काउंटर शेष अक्षर दिखाता है।</p></div><div class=\"help-footer-note\">फ़ाइल UTF-8 बिना BOM के सहेजें।</div>" },
+  ar: { title: "دليل الاستخدام", html: "<div class=\"help-section\"><h2>ما هو LoreScribe؟</h2><p>محرر ترجمة مجاني في المتصفح لإصلاح عدم تطابق النصوص في ترجمات الألعاب. بدون تثبيت.</p></div><div class=\"help-section\"><h2>البدء السريع</h2><ul><li><span class=\"help-key\">الخطوة 1</span><span>اختر تنسيق الملف</span></li><li><span class=\"help-key\">الخطوة 2</span><span>اسحب الملف أو انقر 📂</span></li><li><span class=\"help-key\">الخطوة 3</span><span>عدّل الترجمات في العمود الأيمن</span></li><li><span class=\"help-key\">الخطوة 4</span><span>Ctrl+S لتنزيل الملف</span></li></ul></div><div class=\"help-section\"><h2>ألوان الحالة</h2><ul><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--ok)\"></span>مكتمل</span><span>الترجمة موجودة والطول مناسب</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--warn)\"></span>ناقص</span><span>لا توجد ترجمة أو مطابقة للأصل</span></li><li><span class=\"help-key\"><span class=\"help-dot\" style=\"background:var(--err)\"></span>طويل</span><span>يتجاوز الطول المسموح، قصّره</span></li></ul></div><div class=\"help-section\"><h2>الصيغ المدعومة</h2><ul><li><span class=\"help-key\">SF3</span><span>OFFSET|BYTE_LEN|TEXT</span></li><li><span class=\"help-key\">نص عادي</span><span>كل سطر كتلة</span></li><li><span class=\"help-key\">CSV</span><span>id,\"أصلي\",\"ترجمة\"</span></li><li><span class=\"help-key\">PO</span><span>GNU gettext</span></li><li><span class=\"help-key\">XML</span><span>string id</span></li><li><span class=\"help-key\">JSON</span><span>كائن أو مصفوفة</span></li><li><span class=\"help-key\">INI</span><span>key=value</span></li></ul></div><div class=\"help-section\"><h2>اختصارات لوحة المفاتيح</h2><ul><li><span class=\"help-key\">Ctrl+S</span><span>تنزيل الملف</span></li><li><span class=\"help-key\">F3</span><span>المشكلة التالية</span></li><li><span class=\"help-key\">Shift+F3</span><span>المشكلة السابقة</span></li></ul></div><div class=\"help-section\"><h2>حول SF3</h2><p>قم بتحرير جزء TEXT فقط. يُظهر العداد المساحة المتبقية.</p></div><div class=\"help-footer-note\">احفظ الملف بترميز UTF-8 بدون BOM.</div>" }
 };
 
 function openHelp() {
   var ov = document.getElementById('help-overlay');
   var c  = HELP_CONTENT[currentLang] || HELP_CONTENT['en'];
   document.getElementById('help-modal-title').textContent = c.title;
-  // document.getElementById('help-body-content').innerHTML  = c.html; (Kısa tuttum)
+  document.getElementById('help-body-content').innerHTML  = c.html;
+  document.getElementById('help-modal').dir = (currentLang==='ar'||currentLang==='ur') ? 'rtl' : 'ltr';
   ov.classList.add('open');
 }
-function closeHelp() { document.getElementById('help-overlay').classList.remove('open'); }
-document.getElementById('help-overlay').addEventListener('click', function(e) { if (e.target === this) closeHelp(); });
+function closeHelp() {
+  document.getElementById('help-overlay').classList.remove('open');
+}
+document.getElementById('help-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeHelp();
+});
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') { closeHelp(); return; }
   if (e.ctrlKey && e.key === 's') { e.preventDefault(); if (rows.length) exportFile(); return; }
@@ -715,6 +1171,7 @@ document.addEventListener('keydown', function(e) {
 
 // Init
 setLang('en');
+
 </script>
 </body>
 </html>
