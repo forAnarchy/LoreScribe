@@ -670,7 +670,7 @@ async function geminiRequest(prompt,timeoutMs=30000){
   try{
     const res=await fetch(endpoint,{method:'POST',signal:controller.signal,
       headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},
-      body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.1,responseMimeType:'application/json'}})});
+      body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.1}})});
     clearTimeout(timer);
     const data=await res.json();
     if(data.error){
@@ -773,7 +773,7 @@ Return ONLY a JSON object, no markdown: {"trans": "shortened text here"}`;
       return;
     }
 
-    if(!raw){totalFailed++;continue;}
+    if(!raw){totalFailed++;console.warn('[LoreScribe] null response for row',idx);continue;}
 
     try{
       const obj=parseTransJSON(raw);
