@@ -239,10 +239,10 @@ body.rtl .footer-status{margin-left:0;margin-right:auto;}
   <div class="api-wrap">
     <input type="password" id="api-key-input" placeholder="Gemini API Key..." title="Google Gemini API Key">
     <select id="api-model-select" class="api-model-select" title="Gemini Model">
-      <option value="gemini-2.0-flash">gemini-2.0-flash ⚡</option>
-      <option value="gemini-2.0-flash-lite">gemini-2.0-flash-lite 🪶</option>
+      <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite ⚡</option>
+      <option value="gemini-2.5-flash">gemini-2.5-flash 🧠</option>
+      <option value="gemini-2.0-flash">gemini-2.0-flash</option>
       <option value="gemini-1.5-flash-latest">gemini-1.5-flash-latest</option>
-      <option value="gemini-1.5-pro-latest">gemini-1.5-pro-latest 🧠</option>
     </select>
   </div>
   <button class="btn gold" id="btn-autofix" onclick="fixAllLongRows()" data-i18n="btn_autofix">✨ Auto-Fix Long</button>
@@ -669,7 +669,6 @@ function getAPIModel(){return document.getElementById('api-model-select').value;
 async function geminiRequest(prompt,timeoutMs=30000){
   const apiKey=getAPIKey();
   if(!apiKey){showToast('Missing Gemini API Key!','err');return null;}
-  // Key artık header olarak gönderiliyor (Google'ın güncel yöntemi)
   const endpoint=`https://generativelanguage.googleapis.com/v1beta/models/${getAPIModel()}:generateContent`;
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),timeoutMs);
@@ -677,25 +676,21 @@ async function geminiRequest(prompt,timeoutMs=30000){
     const res=await fetch(endpoint,{
       method:'POST',
       signal:controller.signal,
-      headers:{
-        'Content-Type':'application/json',
-        'x-goog-api-key': apiKey
-      },
+      headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},
       body:JSON.stringify({
         contents:[{parts:[{text:prompt}]}],
-        generationConfig:{temperature:0.1, responseMimeType:'application/json'}
+        generationConfig:{temperature:0.1,responseMimeType:'application/json'}
       })
     });
     clearTimeout(timer);
     const data=await res.json();
     if(data.error){
-      const code=data.error.code, msg=data.error.message||'Unknown error';
-      console.error('[LoreScribe] API error full response:',JSON.stringify(data.error));
-      if(code===429||msg.toLowerCase().includes('quota')||msg.toLowerCase().includes('rate'))return'RATE_LIMIT';
+      const code=data.error.code, msg=data.error.message||'';
+      console.error('[LoreScribe] API error:',data.error);
+      if(code===429||msg.includes('quota')||msg.includes('RESOURCE_EXHAUSTED'))return'RATE_LIMIT';
       if(code===404)showToast('Model bulunamadı: '+getAPIModel(),'err');
-      else if(code===400)showToast('API Hata 400: '+msg,'err');
-      else if(code===403)showToast('API Key geçersiz veya yetkisiz (403)','err');
-      else showToast('API Hata '+code+': '+msg,'err');
+      else if(code===403)showToast('Yetkisiz (403): '+msg.substring(0,80),'err');
+      else showToast('API Hata '+code+': '+msg.substring(0,80),'err');
       return null;
     }
     return data.candidates?.[0]?.content?.parts?.[0]?.text??null;
