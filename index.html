@@ -204,7 +204,6 @@
     font-size: 20px; color: var(--txt3); align-self: center; padding-bottom: 4px;
   }
 
-
   /* HELP MODAL */
   #help-overlay {
     position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
@@ -366,7 +365,6 @@
     <span class="drop-fmt-tag">.ini</span>
   </div>
 </div>
-
 
 <div id="help-overlay">
   <div id="help-modal">
@@ -851,7 +849,7 @@ function render() {
     badge.textContent=r.status==='ok'?t('badge_ok'):r.status==='warn'?t('badge_warn'):t('badge_err');
     statusCell.appendChild(badge);
     
-    // Geliştirilmiş Karakter Sayacı ve API Butonu
+    // Karakter Sayacı ve API Butonu
     if(max>0){
       const counter=document.createElement('span'); 
       counter.className=`char-counter${over?' over':tight?' tight':''}`;
@@ -876,6 +874,51 @@ function render() {
   document.getElementById('footer-visible').textContent=filtered.length+t('footer_rows');
 }
 
+// YENİ YARDIMCI FONKSİYON: Tüm tabloyu baştan çizmek yerine SADECE tek satırı günceller
+function updateRowDOM(idx) {
+  const rowEl = document.querySelector(`.row[data-idx="${idx}"]`);
+  if (!rowEl) return;
+
+  const r = rows[idx];
+  const max = maxChars(r);
+  const cur = [...r.trans].length;
+  const over = max > 0 && cur > max;
+  const tight = max > 0 && !over && max - cur <= 5;
+
+  rowEl.className = `row status-${r.status}`;
+
+  const textarea = rowEl.querySelector('.trans-input');
+  if (textarea) {
+    textarea.value = r.trans;
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
+
+  const badge = rowEl.querySelector('.status-badge');
+  if (badge) {
+    badge.className = `status-badge badge-${r.status}`;
+    badge.textContent = r.status === 'ok' ? t('badge_ok') : r.status === 'warn' ? t('badge_warn') : t('badge_err');
+  }
+
+  const counter = rowEl.querySelector('.char-counter');
+  if (counter) {
+    counter.className = `char-counter${over ? ' over' : tight ? ' tight' : ''}`;
+    counter.textContent = `${cur} / ${max}`;
+  }
+
+  let magicBtn = rowEl.querySelector('.btn-magic');
+  if (over && !magicBtn) {
+    magicBtn = document.createElement('button');
+    magicBtn.className = 'btn-magic';
+    magicBtn.textContent = '✨';
+    magicBtn.title = currentLang === 'tr' ? 'Gemini API ile Kısalt' : 'Auto-Fix with Gemini API';
+    magicBtn.onclick = () => fixSingleRow(idx, magicBtn);
+    rowEl.querySelector('.status-cell').appendChild(magicBtn);
+  } else if (!over && magicBtn) {
+    magicBtn.remove();
+  }
+}
+
 // ═══ HANDLERS ═════════════════════════════════════════
 function onTransInput(e) {
   const i=parseInt(e.target.dataset.idx,10); rows[i].trans=e.target.value; rows[i].status=getStatus(rows[i]);
@@ -893,7 +936,7 @@ function onTransInput(e) {
       magicBtn = document.createElement('button');
       magicBtn.className = 'btn-magic';
       magicBtn.textContent = '✨';
-      magicBtn.title = 'API ile kısalt';
+      magicBtn.title = currentLang === 'tr' ? 'Gemini API ile Kısalt' : 'Auto-Fix with Gemini API';
       magicBtn.onclick = () => fixSingleRow(i, magicBtn);
       rowEl.querySelector('.status-cell').appendChild(magicBtn);
     } else if (!over && magicBtn) {
@@ -1204,6 +1247,50 @@ async function callGeminiAPI(orig, trans, maxChars) {
   }
 }
 
+function updateRowDOM(idx) {
+  const rowEl = document.querySelector(`.row[data-idx="${idx}"]`);
+  if (!rowEl) return;
+
+  const r = rows[idx];
+  const max = maxChars(r);
+  const cur = [...r.trans].length;
+  const over = max > 0 && cur > max;
+  const tight = max > 0 && !over && max - cur <= 5;
+
+  rowEl.className = `row status-${r.status}`;
+
+  const textarea = rowEl.querySelector('.trans-input');
+  if (textarea) {
+    textarea.value = r.trans;
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
+
+  const badge = rowEl.querySelector('.status-badge');
+  if (badge) {
+    badge.className = `status-badge badge-${r.status}`;
+    badge.textContent = r.status === 'ok' ? t('badge_ok') : r.status === 'warn' ? t('badge_warn') : t('badge_err');
+  }
+
+  const counter = rowEl.querySelector('.char-counter');
+  if (counter) {
+    counter.className = `char-counter${over ? ' over' : tight ? ' tight' : ''}`;
+    counter.textContent = `${cur} / ${max}`;
+  }
+
+  let magicBtn = rowEl.querySelector('.btn-magic');
+  if (over && !magicBtn) {
+    magicBtn = document.createElement('button');
+    magicBtn.className = 'btn-magic';
+    magicBtn.textContent = '✨';
+    magicBtn.title = currentLang === 'tr' ? 'Gemini API ile Kısalt' : 'Auto-Fix with Gemini API';
+    magicBtn.onclick = () => fixSingleRow(idx, magicBtn);
+    rowEl.querySelector('.status-cell').appendChild(magicBtn);
+  } else if (!over && magicBtn) {
+    magicBtn.remove();
+  }
+}
+
 async function fixSingleRow(idx, btnEl) {
   const r = rows[idx];
   const max = maxChars(r);
@@ -1218,7 +1305,10 @@ async function fixSingleRow(idx, btnEl) {
   if (newText) {
     rows[idx].trans = newText;
     rows[idx].status = getStatus(rows[idx]);
-    render();
+    
+    updateRowDOM(idx);
+    updateStats();
+    
     document.getElementById('footer-saved').textContent = t('footer_unsaved');
     showToast(currentLang === 'tr' ? 'Çeviri başarıyla kısaltıldı!' : 'Translation shortened successfully!', 'ok');
   }
@@ -1251,16 +1341,26 @@ async function fixAllLongRows() {
 
   for (const item of longRows) {
     const max = maxChars(item.r);
+    
+    const rowEl = document.querySelector(`.row[data-idx="${item.i}"]`);
+    const magicBtn = rowEl ? rowEl.querySelector('.btn-magic') : null;
+    if(magicBtn) magicBtn.classList.add('loading');
+
     const newText = await callGeminiAPI(item.r.orig, item.r.trans, max);
+    
+    if(magicBtn) magicBtn.classList.remove('loading');
+
     if (newText) {
       rows[item.i].trans = newText;
       rows[item.i].status = getStatus(rows[item.i]);
       successCount++;
-      render();
+      
+      updateRowDOM(item.i);
     }
-    // Limitlere takılmamak için 1 saniye bekleme süresi eklendi
     await new Promise(res => setTimeout(res, 1000)); 
   }
+
+  updateStats();
 
   autoFixBtn.disabled = false;
   autoFixBtn.textContent = origText;
