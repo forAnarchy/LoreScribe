@@ -95,10 +95,12 @@ header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;ba
 .col-headers{display:grid;grid-template-columns:48px 1fr 1fr 110px;background:var(--bg2);border-bottom:1px solid var(--border2);flex-shrink:0;}
 .col-hdr{font-family:var(--title);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);padding:6px 12px;border-right:1px solid var(--border);}
 .col-hdr:last-child{border-right:none;text-align:center;}
-.table-wrap{flex:1;overflow-y:auto;overflow-x:hidden;}
+.table-wrap{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;}
 .table-wrap::-webkit-scrollbar{width:6px;}
 .table-wrap::-webkit-scrollbar-track{background:var(--bg);}
 .table-wrap::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+/* Virtual scroll: spacer divs above/below visible rows */
+#vs-spacer-top,#vs-spacer-bot{width:100%;background:transparent;flex-shrink:0;}
 .row{display:grid;grid-template-columns:48px 1fr 1fr 110px;border-bottom:1px solid var(--border);transition:background .1s;min-height:44px;}
 .row:hover{background:rgba(255,255,255,.02);}
 .row.status-ok{border-left:3px solid var(--ok);}
@@ -184,11 +186,6 @@ body.rtl .footer-status{margin-left:0;margin-right:auto;}
   <div class="lang-switcher">
     <button class="lang-btn" onclick="setLang('tr')" title="Türkçe">🇹🇷<span class="lang-code">TR</span></button>
     <button class="lang-btn active" onclick="setLang('en')" title="English">🇬🇧<span class="lang-code">EN</span></button>
-    <button class="lang-btn" onclick="setLang('ja')" title="日本語">🇯🇵<span class="lang-code">JA</span></button>
-    <button class="lang-btn" onclick="setLang('zh')" title="中文">🇨🇳<span class="lang-code">ZH</span></button>
-    <button class="lang-btn" onclick="setLang('ur')" title="اردو">🇵🇰<span class="lang-code">UR</span></button>
-    <button class="lang-btn" onclick="setLang('hi')" title="हिन्दी">🇮🇳<span class="lang-code">HI</span></button>
-    <button class="lang-btn" onclick="setLang('ar')" title="العربية">🇸🇦<span class="lang-code">AR</span></button>
   </div>
   <button class="btn-help" onclick="openHelp()" title="Help">?</button>
 </header>
@@ -447,45 +444,105 @@ function getStatus(row){
   return'ok';
 }
 
-// ═══ RENDER ═══════════════════════════════════════════
+// ═══ VIRTUAL SCROLL ═══════════════════════════════════
+// Sabit satır yüksekliği varsayımı — textarea'lar için yeterli
+const ROW_H = 48;
+const OVERSCAN = 8; // Görünen alanın üstünde/altında ekstra render
+let vsStart = 0, vsEnd = 0;
+const rowElCache = new Map();
+
+function getWrap(){ return document.getElementById('table-wrap'); }
+
 function render(){
-  filtered=rows.map((r,i)=>i).filter(i=>{
-    const r=rows[i];r.status=getStatus(r);
-    if(filter!=='all'&&r.status!==filter)return false;
-    if(searchQ){const q=searchQ.toLowerCase();return r.orig.toLowerCase().includes(q)||r.trans.toLowerCase().includes(q);}
+  // Filtered listesini hesapla
+  filtered = rows.map((r,i)=>i).filter(i=>{
+    const r=rows[i]; r.status=getStatus(r);
+    if(filter!=='all'&&r.status!==filter) return false;
+    if(searchQ){ const q=searchQ.toLowerCase(); return r.orig.toLowerCase().includes(q)||r.trans.toLowerCase().includes(q); }
     return true;
   });
-  const wrap=document.getElementById('table-wrap');wrap.innerHTML='';
-  const frag=document.createDocumentFragment();
-  for(const i of filtered){
-    const r=rows[i],max=maxChars(r),olen=origChars(r),tlen=transChars(r);
-    const over=max>0&&tlen>max,tight=max>0&&!over&&max-tlen<=5;
-    const div=document.createElement('div');div.className=`row status-${r.status}`;div.dataset.idx=i;
-    const numCell=document.createElement('div');numCell.className='cell row-num';numCell.textContent=i+1;
-    const origCell=document.createElement('div');origCell.className='cell';
-    const origSpan=document.createElement('span');origSpan.className='orig-text';origSpan.textContent=r.orig;origCell.appendChild(origSpan);
-    const transCell=document.createElement('div');transCell.className='cell trans-cell';
-    const ta=document.createElement('textarea');ta.className='trans-input';ta.value=r.trans;ta.rows=1;ta.spellcheck=true;ta.dataset.idx=i;
-    ta.addEventListener('input',onTransInput);ta.addEventListener('focus',onTransFocus);transCell.appendChild(ta);
-    const statusCell=document.createElement('div');statusCell.className='cell status-cell';
-    const badge=document.createElement('span');badge.className=`status-badge badge-${r.status}`;
-    badge.textContent=r.status==='ok'?t('badge_ok'):r.status==='warn'?t('badge_warn'):t('badge_err');
-    statusCell.appendChild(badge);
-    if(max>0){
-      const charInfo=document.createElement('div');charInfo.className='char-info';
-      const counter=document.createElement('span');counter.className=`char-counter${over?' over':tight?' tight':''}`;counter.textContent=`${tlen} / ${max}`;
-      const origEl=document.createElement('span');origEl.className='char-orig';origEl.textContent=`orig: ${olen}`;
-      charInfo.appendChild(counter);charInfo.appendChild(origEl);statusCell.appendChild(charInfo);
-      if(over){
-        const mb=document.createElement('button');mb.className='btn-magic';mb.textContent='✨';mb.title='Auto-Fix with Gemini API';
-        mb.onclick=()=>fixSingleRow(i,mb);statusCell.appendChild(mb);
-      }
-    }
-    div.appendChild(numCell);div.appendChild(origCell);div.appendChild(transCell);div.appendChild(statusCell);
+  rowElCache.clear();
+  updateStats();
+  document.getElementById('footer-visible').textContent=filtered.length+t('footer_rows');
+
+  const wrap = getWrap();
+  wrap.innerHTML = '<div id="vs-spacer-top"></div><div id="vs-content"></div><div id="vs-spacer-bot"></div>';
+  vsRender();
+}
+
+function vsRender(){
+  const wrap = getWrap();
+  const spacerTop = document.getElementById('vs-spacer-top');
+  const content   = document.getElementById('vs-content');
+  const spacerBot = document.getElementById('vs-spacer-bot');
+  if(!spacerTop||!content||!spacerBot) return;
+
+  const scrollTop = wrap.scrollTop;
+  const viewH     = wrap.clientHeight || 600;
+  const total     = filtered.length;
+
+  // Görünen satır aralığı
+  const start = Math.max(0, Math.floor(scrollTop / ROW_H) - OVERSCAN);
+  const end   = Math.min(total, Math.ceil((scrollTop + viewH) / ROW_H) + OVERSCAN);
+
+  // Eğer aralık değişmediyse yeniden render etme
+  if(start === vsStart && end === vsEnd && content.childElementCount > 0) return;
+  vsStart = start; vsEnd = end;
+
+  spacerTop.style.height = (start * ROW_H) + 'px';
+  spacerBot.style.height = Math.max(0, (total - end) * ROW_H) + 'px';
+
+  // Sadece görünen satırları oluştur
+  const frag = document.createDocumentFragment();
+  rowElCache.clear();
+  for(let fi = start; fi < end; fi++){
+    const i = filtered[fi];
+    const div = buildRowEl(i);
+    rowElCache.set(i, div);
     frag.appendChild(div);
   }
-  wrap.appendChild(frag);updateStats();
-  document.getElementById('footer-visible').textContent=filtered.length+t('footer_rows');
+  content.innerHTML = '';
+  content.appendChild(frag);
+}
+
+function buildRowEl(i){
+  const r=rows[i], max=maxChars(r), olen=origChars(r), tlen=transChars(r);
+  const over=max>0&&tlen>max, tight=max>0&&!over&&max-tlen<=5;
+  const div=document.createElement('div');
+  div.className=`row status-${r.status}`;
+  div.dataset.idx=i;
+  div.style.minHeight=ROW_H+'px';
+
+  const numCell=document.createElement('div');numCell.className='cell row-num';numCell.textContent=i+1;
+  const origCell=document.createElement('div');origCell.className='cell';
+  const origSpan=document.createElement('span');origSpan.className='orig-text';origSpan.textContent=r.orig;origCell.appendChild(origSpan);
+  const transCell=document.createElement('div');transCell.className='cell trans-cell';
+  const ta=document.createElement('textarea');ta.className='trans-input';ta.value=r.trans;ta.rows=1;ta.spellcheck=true;ta.dataset.idx=i;
+  ta.addEventListener('input',onTransInput);ta.addEventListener('focus',onTransFocus);transCell.appendChild(ta);
+  const statusCell=document.createElement('div');statusCell.className='cell status-cell';
+  const badge=document.createElement('span');badge.className=`status-badge badge-${r.status}`;
+  badge.textContent=r.status==='ok'?t('badge_ok'):r.status==='warn'?t('badge_warn'):t('badge_err');
+  statusCell.appendChild(badge);
+  if(max>0){
+    const charInfo=document.createElement('div');charInfo.className='char-info';
+    const counter=document.createElement('span');counter.className=`char-counter${over?' over':tight?' tight':''}`;counter.textContent=`${tlen} / ${max}`;
+    const origEl=document.createElement('span');origEl.className='char-orig';origEl.textContent=`orig: ${olen}`;
+    charInfo.appendChild(counter);charInfo.appendChild(origEl);statusCell.appendChild(charInfo);
+    if(over){
+      const mb=document.createElement('button');mb.className='btn-magic';mb.textContent='✨';mb.title='Auto-Fix with Gemini API';
+      mb.onclick=()=>fixSingleRow(i,mb);statusCell.appendChild(mb);
+    }
+  }
+  div.appendChild(numCell);div.appendChild(origCell);div.appendChild(transCell);div.appendChild(statusCell);
+  return div;
+}
+
+// Scroll event — throttled with rAF
+let vsRafPending = false;
+function onVsScroll(){
+  if(vsRafPending) return;
+  vsRafPending = true;
+  requestAnimationFrame(()=>{ vsRafPending=false; vsRender(); });
 }
 
 // ═══ INPUT HANDLERS ═══════════════════════════════════
@@ -497,12 +554,14 @@ function onTransFocus(e){e.target.style.height='auto';e.target.style.height=e.ta
 
 // ═══ DOM ROW UPDATE ═══════════════════════════════════
 function updateRowDOM(idx){
-  const rowEl=document.querySelector(`.row[data-idx="${idx}"]`);if(!rowEl)return;
+  // Satır görünür alanda değilse cache'de olmaz — vsRender scroll'da zaten güncelleyecek
+  const rowEl = rowElCache.get(idx);
+  if(!rowEl) return;
   const r=rows[idx],max=maxChars(r),olen=origChars(r),tlen=transChars(r);
   const over=max>0&&tlen>max,tight=max>0&&!over&&max-tlen<=5;
   rowEl.className=`row status-${r.status}`;
   const textarea=rowEl.querySelector('.trans-input');
-  if(textarea){textarea.value=r.trans;textarea.style.height='auto';textarea.style.height=textarea.scrollHeight+'px';}
+  if(textarea&&textarea!==document.activeElement){textarea.value=r.trans;}
   const badge=rowEl.querySelector('.status-badge');
   if(badge){badge.className=`status-badge badge-${r.status}`;badge.textContent=r.status==='ok'?t('badge_ok'):r.status==='warn'?t('badge_warn'):t('badge_err');}
   if(max>0){
@@ -518,10 +577,8 @@ function updateRowDOM(idx){
     counter.className=`char-counter${over?' over':tight?' tight':''}`;counter.textContent=`${tlen} / ${max}`;
     const origEl=charInfo.querySelector('.char-orig');if(origEl)origEl.textContent=`orig: ${olen}`;
     let mb=rowEl.querySelector('.btn-magic');
-    if(over&&!mb){
-      mb=document.createElement('button');mb.className='btn-magic';mb.textContent='✨';mb.title='Auto-Fix with Gemini API';
-      mb.onclick=()=>fixSingleRow(idx,mb);rowEl.querySelector('.status-cell').appendChild(mb);
-    }else if(!over&&mb){mb.remove();}
+    if(over&&!mb){mb=document.createElement('button');mb.className='btn-magic';mb.textContent='✨';mb.title='Auto-Fix with Gemini API';mb.onclick=()=>fixSingleRow(idx,mb);rowEl.querySelector('.status-cell').appendChild(mb);}
+    else if(!over&&mb){mb.remove();}
   }
 }
 
@@ -549,8 +606,18 @@ function jumpIssue(dir){
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   document.querySelector('.filter-btn.all').classList.add('active');
   render();
-  const el=document.querySelector(`.row[data-idx="${target}"]`);
-  if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.outline='2px solid var(--accent)';setTimeout(()=>el.style.outline='',1200);el.querySelector('.trans-input').focus();}
+  // Virtual scroll: hedef satırın pozisyonuna scroll et
+  const fi = filtered.indexOf(target);
+  if(fi>=0){
+    const wrap=getWrap();
+    wrap.scrollTop = Math.max(0, fi*ROW_H - wrap.clientHeight/2);
+    // Scroll sonrası satır DOM'a gelecek, sonra highlight uygula
+    setTimeout(()=>{
+      vsRender();
+      const el=rowElCache.get(target);
+      if(el){el.style.outline='2px solid var(--accent)';setTimeout(()=>el.style.outline='',1200);el.querySelector('.trans-input')?.focus();}
+    },50);
+  }
 }
 
 // ═══ EXPORT ═══════════════════════════════════════════
@@ -585,9 +652,12 @@ function loadText(text,name){
   const result=parseFile(text,fmt);if(!result.rows.length){showToast(t('toast_no_rows'),'err');return;}
   rows=result.rows;fileName=name;issueIdx=-1;
   document.getElementById('drop-zone').classList.add('hidden');
-  document.getElementById('table-wrap').classList.remove('hidden');
+  const wrap=document.getElementById('table-wrap');
+  wrap.classList.remove('hidden');
   document.getElementById('col-headers').classList.remove('hidden');
   document.getElementById('footer-file').textContent=name;
+  // Scroll listener — bir kez bağla
+  wrap.onscroll = onVsScroll;
   render();showToast(rows.length+t('toast_loaded')+' ('+result.fmt.toUpperCase()+')','ok');
 }
 document.getElementById('file-input').addEventListener('change',e=>{
@@ -703,8 +773,8 @@ Return ONLY a JSON object, no markdown: {"trans": "shortened text here"}`;
   if(raw==='RATE_LIMIT'){showToast('Rate limit — wait ~60s then try again','err');return;}
   if(!raw)return;
   try{
-    const obj=parseTransJSON(raw);
-    if(obj&&obj.trans.trim()){
+    const obj=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    if(typeof obj.trans==='string'&&obj.trans.trim()){
       rows[idx].trans=obj.trans;rows[idx].status=getStatus(rows[idx]);
       updateRowDOM(idx);updateStats();document.getElementById('footer-saved').textContent=t('footer_unsaved');
       const newLen=transChars(rows[idx]);
@@ -760,8 +830,8 @@ Return ONLY a JSON object, no markdown: {"trans": "shortened text here"}`;
     if(!raw){totalFailed++;continue;}
 
     try{
-      const obj=parseTransJSON(raw);
-      if(obj&&obj.trans.trim()){
+      const obj=JSON.parse(raw.replace(/```json|```/g,'').trim());
+      if(typeof obj.trans==='string'&&obj.trans.trim()){
         rows[idx].trans=obj.trans;rows[idx].status=getStatus(rows[idx]);
         updateRowDOM(idx);totalFixed++;
       }else{totalFailed++;}
@@ -779,23 +849,6 @@ Return ONLY a JSON object, no markdown: {"trans": "shortened text here"}`;
 }
 
 function sleep(ms){return new Promise(res=>setTimeout(res,ms));}
-
-// Gemini bazen geçerli JSON'ın altına çöp satırlar ekliyor.
-// Bu fonksiyon sadece ilk geçerli {"trans":...} bloğunu alır.
-function parseTransJSON(raw){
-  if(!raw)return null;
-  const cleaned=raw.replace(/```json|```/g,'');
-  // Önce satır satır dene — geçerli JSON genelde ilk satırda
-  for(const line of cleaned.split('\n')){
-    const t=line.trim();
-    if(!t.startsWith('{'))continue;
-    try{const o=JSON.parse(t);if(typeof o.trans==='string')return o;}catch{}
-  }
-  // Fallback: regex ile ilk {...} bloğunu çıkar
-  const m=cleaned.match(/\{[^{}]*"trans"\s*:\s*"(?:[^"\\]|\\.)*"[^{}]*\}/);
-  if(m){try{const o=JSON.parse(m[0]);if(typeof o.trans==='string')return o;}catch{}}
-  return null;
-}
 
 // ═══ HELP MODAL ═══════════════════════════════════════
 const HELP_CONTENT={
