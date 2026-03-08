@@ -232,7 +232,7 @@ body.rtl .footer-status{margin-left:0;margin-right:auto;}
   <button class="btn gold" id="btn-export" onclick="exportFile()" disabled data-i18n="btn_export">⬇ Export Fixed File</button>
   <div class="header-sep"></div>
   <div class="api-wrap">
-    <input type="password" id="api-key-input" placeholder="Gemini API Key..." title="Google Gemini API Key">
+    <input type="password" id="api-key-input" placeholder="Gemini API Key..." title="Google Gemini API Key" autocomplete="off" data-lpignore="true" data-form-type="other">
     <select id="api-model-select" class="api-model-select" title="Gemini Model">
       <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite ⚡</option>
       <option value="gemini-2.5-flash">gemini-2.5-flash 🧠</option>
@@ -243,7 +243,7 @@ body.rtl .footer-status{margin-left:0;margin-right:auto;}
   <button class="btn gold" id="btn-autofix" onclick="fixAllLongRows()" data-i18n="btn_autofix">✨ Auto-Fix Long</button>
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
-    <input type="text" id="search-box" placeholder="Search text..." oninput="onSearch(this.value)" data-i18n-placeholder="search_placeholder">
+    <input type="text" id="search-box" placeholder="Search text..." oninput="onSearch(this.value)" autocomplete="off" data-i18n-placeholder="search_placeholder">
   </div>
 </div>
 
@@ -462,7 +462,9 @@ function render(){
     const origSpan=document.createElement('span');origSpan.className='orig-text';origSpan.textContent=r.orig;origCell.appendChild(origSpan);
     const transCell=document.createElement('div');transCell.className='cell trans-cell';
     const ta=document.createElement('textarea');ta.className='trans-input';ta.value=r.trans;ta.rows=1;ta.spellcheck=true;ta.dataset.idx=i;
-    ta.addEventListener('input',onTransInput);ta.addEventListener('focus',onTransFocus);transCell.appendChild(ta);
+    ta.addEventListener('input',onTransInput);ta.addEventListener('focus',onTransFocus);
+    ta.autocomplete='off';ta.setAttribute('data-lpignore','true');ta.setAttribute('data-form-type','other');
+    transCell.appendChild(ta);
     const statusCell=document.createElement('div');statusCell.className='cell status-cell';
     const badge=document.createElement('span');badge.className=`status-badge badge-${r.status}`;
     badge.textContent=r.status==='ok'?t('badge_ok'):r.status==='warn'?t('badge_warn'):t('badge_err');
@@ -661,29 +663,39 @@ function getAPIModel(){return document.getElementById('api-model-select').value;
  * Core Gemini request.
  * Returns: response text | "RATE_LIMIT" | null
  */
-async function geminiRequest(prompt,timeoutMs=30000){
+async function geminiRequest(prompt,timeoutMs=20000){
   const apiKey=getAPIKey();
   if(!apiKey){showToast('Missing Gemini API Key!','err');return null;}
-  const endpoint=`https://generativelanguage.googleapis.com/v1beta/models/${getAPIModel()}:generateContent`;
+  const model=getAPIModel();
+  const endpoint=`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+  console.log('[LoreScribe] → Request to',model);
   const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),timeoutMs);
+  const timer=setTimeout(()=>{
+    console.warn('[LoreScribe] ⏰ Timeout fired — aborting fetch');
+    controller.abort();
+  },timeoutMs);
   try{
     const res=await fetch(endpoint,{method:'POST',signal:controller.signal,
       headers:{'Content-Type':'application/json','x-goog-api-key':apiKey},
       body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.1}})});
     clearTimeout(timer);
+    console.log('[LoreScribe] ← HTTP',res.status);
     const data=await res.json();
     if(data.error){
       const code=data.error.code,msg=data.error.message||'';
+      console.error('[LoreScribe] API error',code,msg);
       if(code===429||msg.includes('quota'))return'RATE_LIMIT';
       showToast('API Hata '+code+': '+msg.substring(0,80),'err');
-      console.error('[LoreScribe]',data.error);return null;
+      return null;
     }
-    return data.candidates?.[0]?.content?.parts?.[0]?.text??null;
+    const text=data.candidates?.[0]?.content?.parts?.[0]?.text??null;
+    console.log('[LoreScribe] ✓ Response length:',text?.length);
+    return text;
   }catch(err){
     clearTimeout(timer);
-    if(err.name==='AbortError')showToast(`Timeout (${timeoutMs/1000}s)`,'err');
-    else{showToast('Ağ hatası — F12 konsoluna bakın','err');console.error('[LoreScribe] fetch error:',err);}
+    console.error('[LoreScribe] fetch catch:',err.name,err.message);
+    if(err.name==='AbortError')showToast(`Timeout (${timeoutMs/1000}s) — model çok yavaş veya bağlantı yok`,'err');
+    else showToast('Ağ hatası: '+err.message,'err');
     return null;
   }
 }
