@@ -467,7 +467,9 @@ function render(){
 
   const wrap = getWrap();
   wrap.innerHTML = '<div id="vs-spacer-top"></div><div id="vs-content"></div><div id="vs-spacer-bot"></div>';
-  vsRender();
+  vsStart = -1; vsEnd = -1; // Sıfırla, zorunlu re-render için
+  // Layout tamamlandıktan sonra render — clientHeight'in doğru gelmesi için
+  requestAnimationFrame(()=>requestAnimationFrame(()=>vsRender()));
 }
 
 function vsRender(){
@@ -478,21 +480,19 @@ function vsRender(){
   if(!spacerTop||!content||!spacerBot) return;
 
   const scrollTop = wrap.scrollTop;
-  const viewH     = wrap.clientHeight || 600;
-  const total     = filtered.length;
+  // clientHeight bazen 0 dönebilir (layout hazır değil) — window.innerHeight fallback
+  const viewH = wrap.clientHeight || window.innerHeight || 600;
+  const total = filtered.length;
 
-  // Görünen satır aralığı
   const start = Math.max(0, Math.floor(scrollTop / ROW_H) - OVERSCAN);
   const end   = Math.min(total, Math.ceil((scrollTop + viewH) / ROW_H) + OVERSCAN);
 
-  // Eğer aralık değişmediyse yeniden render etme
   if(start === vsStart && end === vsEnd && content.childElementCount > 0) return;
   vsStart = start; vsEnd = end;
 
   spacerTop.style.height = (start * ROW_H) + 'px';
   spacerBot.style.height = Math.max(0, (total - end) * ROW_H) + 'px';
 
-  // Sadece görünen satırları oluştur
   const frag = document.createDocumentFragment();
   rowElCache.clear();
   for(let fi = start; fi < end; fi++){
