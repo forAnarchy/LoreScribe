@@ -16,15 +16,12 @@
   --err:#ef4444; --err-bg:rgba(239,68,68,0.10);
   --txt:#c8d8e8; --txt2:#7a99b8; --txt3:#4a6888;
   --mono:"Share Tech Mono",monospace;
-  --sans:"Exo 2",sans-serif;
   --title:"Rajdhani",sans-serif;
   --ui-font:"Exo 2",sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
 body{background:var(--bg);color:var(--txt);font-family:var(--ui-font);font-size:14px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
-
-/* ── HEADER ─────────────────────────────────────── */
 header{background:linear-gradient(90deg,#0a0e18,#101828,#0a0e18);border-bottom:1px solid var(--border2);padding:0 16px;height:52px;display:flex;align-items:center;gap:12px;flex-shrink:0;position:relative;}
 header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.4;}
 .logo{font-family:var(--title);font-size:22px;font-weight:700;color:var(--txt);letter-spacing:3px;text-transform:uppercase;white-space:nowrap;}
@@ -36,17 +33,13 @@ header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;ba
 .stat-label{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--txt3);font-family:var(--mono);}
 .stat-val{font-family:var(--mono);font-size:14px;font-weight:600;}
 .stat-val.ok{color:var(--ok);}.stat-val.warn{color:var(--warn);}.stat-val.err{color:var(--err);}.stat-val.total{color:var(--txt);}
-
-/* ── LANG SWITCHER ───────────────────────────────── */
 .lang-switcher{display:flex;gap:4px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:4px;}
-.lang-btn{border:none;background:transparent;cursor:pointer;padding:3px 6px;border-radius:4px;font-size:16px;line-height:1;transition:all .15s;opacity:.5;position:relative;}
+.lang-btn{border:none;background:transparent;cursor:pointer;padding:3px 6px;border-radius:4px;font-size:16px;line-height:1;transition:all .15s;opacity:.5;}
 .lang-btn:hover{opacity:.85;background:var(--border);}
 .lang-btn.active{opacity:1;background:var(--border2);box-shadow:0 0 8px rgba(0,180,216,.2);}
 .lang-btn .lang-code{font-family:var(--mono);font-size:8px;color:var(--txt3);display:block;text-align:center;letter-spacing:.5px;line-height:1;margin-top:1px;}
 .btn-help{font-family:var(--mono);font-size:14px;font-weight:700;width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);color:var(--txt3);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .btn-help:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,180,216,.1);}
-
-/* ── FORMAT BAR ──────────────────────────────────── */
 #format-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .format-label{font-family:var(--mono);font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;}
 .format-cards{display:flex;gap:6px;flex-wrap:wrap;}
@@ -56,8 +49,6 @@ header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;ba
 .fmt-name{font-family:var(--title);font-size:12px;font-weight:700;letter-spacing:1px;color:var(--txt);}
 .fmt-card.active .fmt-name{color:var(--accent);}
 .fmt-desc{font-family:var(--mono);font-size:9px;color:var(--txt3);}
-
-/* ── TOOLBAR ─────────────────────────────────────── */
 .toolbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:7px 16px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;}
 .btn{font-family:var(--title);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border:1px solid var(--border2);border-radius:4px;background:var(--bg3);color:var(--txt2);cursor:pointer;transition:all .15s;white-space:nowrap;}
 .btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,180,216,.08);}
@@ -74,8 +65,6 @@ header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;ba
 .search-wrap input{background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--txt);font-family:var(--mono);font-size:12px;padding:5px 10px 5px 28px;width:190px;outline:none;transition:border-color .15s;}
 .search-wrap input:focus{border-color:var(--accent);}
 .search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:12px;pointer-events:none;}
-
-/* ── API / AUTOFIX ───────────────────────────────── */
 .api-wrap{display:flex;align-items:center;gap:6px;}
 .api-wrap input{background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--txt);font-family:var(--mono);font-size:11px;padding:5px 8px;width:170px;outline:none;transition:border-color .15s;}
 .api-wrap input:focus{border-color:var(--gold);}
@@ -85,13 +74,9 @@ header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;ba
 .btn-magic:hover{opacity:1;transform:scale(1.15);text-shadow:0 0 8px var(--gold);}
 .btn-magic.loading{animation:pulse 1s infinite;cursor:wait;pointer-events:none;}
 @keyframes pulse{0%{opacity:.3;}50%{opacity:1;}100%{opacity:.3;}}
-
-/* ── LOAD MODE TOGGLE ────────────────────────────── */
 .load-mode-toggle{display:flex;gap:3px;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:3px;}
 .load-mode-btn{font-family:var(--mono);font-size:10px;padding:3px 8px;border:none;border-radius:3px;background:transparent;color:var(--txt3);cursor:pointer;transition:all .15s;white-space:nowrap;}
 .load-mode-btn.active{background:var(--border2);color:var(--accent);}
-
-/* ── DUAL LOAD BAR ───────────────────────────────── */
 #dual-load-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 16px;display:none;align-items:center;gap:10px;flex-shrink:0;flex-wrap:wrap;}
 #dual-load-bar.visible{display:flex;}
 .dual-slot{display:flex;flex-direction:column;gap:4px;flex:1;min-width:220px;}
@@ -107,13 +92,9 @@ header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;ba
 .dual-merge-btn:hover{background:var(--accent);}
 .dual-merge-btn:disabled{opacity:.35;cursor:not-allowed;}
 .dual-sep{font-size:20px;color:var(--txt3);align-self:center;padding-bottom:4px;}
-
-/* ── COL HEADERS ─────────────────────────────────── */
 .col-headers{display:grid;grid-template-columns:48px 1fr 1fr 110px;background:var(--bg2);border-bottom:1px solid var(--border2);flex-shrink:0;}
 .col-hdr{font-family:var(--title);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);padding:6px 12px;border-right:1px solid var(--border);}
 .col-hdr:last-child{border-right:none;text-align:center;}
-
-/* ── TABLE ───────────────────────────────────────── */
 .table-wrap{flex:1;overflow-y:auto;overflow-x:hidden;}
 .table-wrap::-webkit-scrollbar{width:6px;}
 .table-wrap::-webkit-scrollbar-track{background:var(--bg);}
@@ -132,8 +113,6 @@ header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;ba
 .trans-input:focus{border-bottom-color:var(--accent);}
 .row.status-warn .trans-input{color:var(--warn);}
 .row.status-err .trans-input{color:var(--err);}
-
-/* ── STATUS CELL ─────────────────────────────────── */
 .status-cell{flex-direction:column;justify-content:center;align-items:center;gap:4px;padding:6px 4px;}
 .status-badge{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:.5px;}
 .badge-ok{background:rgba(34,197,94,.15);color:var(--ok);border:1px solid rgba(34,197,94,.3);}
@@ -144,8 +123,6 @@ header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;ba
 .char-counter.tight{color:var(--warn);}
 .char-counter.over{color:var(--err);font-weight:700;}
 .char-orig{font-family:var(--mono);font-size:9px;color:var(--txt3);opacity:.6;}
-
-/* ── DROP ZONE ───────────────────────────────────── */
 #drop-zone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;border:2px dashed var(--border2);margin:24px;border-radius:8px;transition:all .2s;cursor:pointer;}
 #drop-zone.drag-over{border-color:var(--accent);background:rgba(0,180,216,.05);}
 .drop-icon{font-size:52px;opacity:.25;}
@@ -153,23 +130,15 @@ header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;ba
 .drop-sub{font-family:var(--mono);font-size:12px;color:var(--txt3);text-align:center;line-height:2;}
 .drop-formats{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;justify-content:center;}
 .drop-fmt-tag{font-family:var(--mono);font-size:11px;padding:3px 10px;border:1px solid var(--border2);border-radius:3px;color:var(--txt3);}
-
-/* ── PROGRESS ────────────────────────────────────── */
 .progress-bar-wrap{height:2px;background:var(--border);flex-shrink:0;overflow:hidden;}
 #progress-bar{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%;transition:width .3s;}
-
-/* ── FOOTER ──────────────────────────────────────── */
 footer{background:var(--bg2);border-top:1px solid var(--border);padding:6px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;font-family:var(--mono);font-size:11px;color:var(--txt3);}
 .footer-status{margin-left:auto;}
-
-/* ── TOAST ───────────────────────────────────────── */
-#toast{position:fixed;bottom:60px;right:24px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:12px 20px;font-family:var(--mono);font-size:13px;color:var(--txt);box-shadow:0 8px 32px rgba(0,0,0,.6);transform:translateY(20px);opacity:0;transition:all .25s;z-index:100;pointer-events:none;max-width:340px;}
+#toast{position:fixed;bottom:60px;right:24px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:12px 20px;font-family:var(--mono);font-size:13px;color:var(--txt);box-shadow:0 8px 32px rgba(0,0,0,.6);transform:translateY(20px);opacity:0;transition:all .25s;z-index:100;pointer-events:none;max-width:400px;}
 #toast.show{transform:translateY(0);opacity:1;}
 #toast.ok{border-color:var(--ok);color:var(--ok);}
 #toast.err{border-color:var(--err);color:var(--err);}
 #toast.warn{border-color:var(--warn);color:var(--warn);}
-
-/* ── HELP MODAL ──────────────────────────────────── */
 #help-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .2s;}
 #help-overlay.open{opacity:1;pointer-events:all;}
 #help-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;width:min(780px,94vw);max-height:86vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.7);transform:translateY(16px) scale(.98);transition:transform .2s;}
@@ -191,13 +160,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:6px 16px
 .help-key{font-family:var(--mono);font-size:11px;color:var(--accent);background:rgba(0,180,216,.1);border:1px solid rgba(0,180,216,.25);border-radius:3px;padding:1px 7px;white-space:nowrap;flex-shrink:0;}
 .help-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle;}
 .help-footer-note{margin-top:20px;padding:12px 16px;background:rgba(0,180,216,.06);border:1px solid rgba(0,180,216,.2);border-radius:6px;font-family:var(--mono);font-size:12px;color:var(--txt3);}
-
-/* ── RTL ─────────────────────────────────────────── */
 body.rtl .stats-bar{flex-direction:row-reverse;}
 body.rtl .search-wrap{margin-left:0;margin-right:auto;}
 body.rtl .toolbar{flex-direction:row-reverse;}
 body.rtl .footer-status{margin-left:0;margin-right:auto;}
-
 *{scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
 .hidden{display:none!important;}
 </style>
@@ -233,20 +199,16 @@ body.rtl .footer-status{margin-left:0;margin-right:auto;}
   <span class="format-label" data-i18n="format_label">Format:</span>
   <div class="format-cards">
     <div class="fmt-card active" data-fmt="sf3" onclick="selectFormat('sf3',this)">
-      <span class="fmt-name">SF3 / Custom</span>
-      <span class="fmt-desc">OFFSET|BYTES|TEXT</span>
+      <span class="fmt-name">SF3 / Custom</span><span class="fmt-desc">OFFSET|BYTES|TEXT</span>
     </div>
     <div class="fmt-card" data-fmt="plain" onclick="selectFormat('plain',this)">
-      <span class="fmt-name" data-i18n="fmt_plain_name">Plain TXT</span>
-      <span class="fmt-desc" data-i18n="fmt_plain_desc">One line per text</span>
+      <span class="fmt-name" data-i18n="fmt_plain_name">Plain TXT</span><span class="fmt-desc" data-i18n="fmt_plain_desc">One line per text</span>
     </div>
     <div class="fmt-card" data-fmt="csv" onclick="selectFormat('csv',this)">
-      <span class="fmt-name">CSV</span>
-      <span class="fmt-desc">id,"orig","trans"</span>
+      <span class="fmt-name">CSV</span><span class="fmt-desc">id,"orig","trans"</span>
     </div>
     <div class="fmt-card" data-fmt="auto" onclick="selectFormat('auto',this)">
-      <span class="fmt-name" data-i18n="fmt_auto_name">Auto</span>
-      <span class="fmt-desc" data-i18n="fmt_auto_desc">Auto-detect format</span>
+      <span class="fmt-name" data-i18n="fmt_auto_name">Auto</span><span class="fmt-desc" data-i18n="fmt_auto_desc">Auto-detect format</span>
     </div>
   </div>
   <span class="format-label" id="fmt-hint" style="margin-left:12px;color:var(--accent);font-size:12px;"></span>
@@ -257,43 +219,32 @@ body.rtl .footer-status{margin-left:0;margin-right:auto;}
   <input type="file" id="file-input"       accept=".txt,.csv,.xml,.json,.po,.ini,.tsv" style="display:none">
   <input type="file" id="file-input-orig"  accept=".txt,.csv,.xml,.json,.po,.ini,.tsv" style="display:none">
   <input type="file" id="file-input-trans" accept=".txt,.csv,.xml,.json,.po,.ini,.tsv" style="display:none">
-
   <div class="load-mode-toggle">
     <button class="load-mode-btn active" onclick="setLoadMode('single',this)" data-i18n="mode_single">Single File</button>
     <button class="load-mode-btn"        onclick="setLoadMode('dual',this)"   data-i18n="mode_dual">Orig + Trans</button>
   </div>
-
   <div class="header-sep"></div>
-
   <div class="filter-group">
     <button class="filter-btn all active" onclick="setFilter('all',this)"  data-i18n="filter_all">All</button>
     <button class="filter-btn ok"         onclick="setFilter('ok',this)"   data-i18n="filter_ok">✓ OK</button>
     <button class="filter-btn warn"       onclick="setFilter('warn',this)" data-i18n="filter_warn">⚠ Missing</button>
     <button class="filter-btn err"        onclick="setFilter('err',this)"  data-i18n="filter_err">✗ Long</button>
   </div>
-
   <div class="header-sep"></div>
-
   <button class="btn" id="btn-prev-issue" onclick="jumpIssue(-1)" disabled data-i18n="btn_prev">↑ Prev Issue</button>
   <button class="btn" id="btn-next-issue" onclick="jumpIssue(1)"  disabled data-i18n="btn_next">↓ Next Issue</button>
-
   <div class="header-sep"></div>
-
   <button class="btn gold" id="btn-export" onclick="exportFile()" disabled data-i18n="btn_export">⬇ Export Fixed File</button>
-
   <div class="header-sep"></div>
-
-  <!-- API Key + Model Selector + Auto-Fix -->
   <div class="api-wrap">
     <input type="password" id="api-key-input" placeholder="Gemini API Key..." title="Google Gemini API Key">
-    <select id="api-model-select" class="api-model-select" title="Model">
+    <select id="api-model-select" class="api-model-select" title="Gemini Model">
       <option value="gemini-2.0-flash">2.0-flash ⚡</option>
       <option value="gemini-1.5-flash">1.5-flash</option>
       <option value="gemini-2.5-flash">2.5-flash 🧠</option>
     </select>
   </div>
   <button class="btn gold" id="btn-autofix" onclick="fixAllLongRows()" data-i18n="btn_autofix">✨ Auto-Fix Long</button>
-
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
     <input type="text" id="search-box" placeholder="Search text..." oninput="onSearch(this.value)" data-i18n-placeholder="search_placeholder">
@@ -331,17 +282,12 @@ body.rtl .footer-status{margin-left:0;margin-right:auto;}
   <div class="drop-title" data-i18n="drop_title">Load Translation File</div>
   <div class="drop-sub" data-i18n="drop_sub">Drop file here or click to browse<br>Select format above, or use Auto-detect</div>
   <div class="drop-formats">
-    <span class="drop-fmt-tag">SF3 .txt</span>
-    <span class="drop-fmt-tag">Plain .txt</span>
-    <span class="drop-fmt-tag">.csv</span>
-    <span class="drop-fmt-tag">.po</span>
-    <span class="drop-fmt-tag">.xml</span>
-    <span class="drop-fmt-tag">.json</span>
-    <span class="drop-fmt-tag">.ini</span>
+    <span class="drop-fmt-tag">SF3 .txt</span><span class="drop-fmt-tag">Plain .txt</span>
+    <span class="drop-fmt-tag">.csv</span><span class="drop-fmt-tag">.po</span>
+    <span class="drop-fmt-tag">.xml</span><span class="drop-fmt-tag">.json</span><span class="drop-fmt-tag">.ini</span>
   </div>
 </div>
 
-<!-- HELP MODAL -->
 <div id="help-overlay">
   <div id="help-modal">
     <div class="help-header">
@@ -355,1113 +301,506 @@ body.rtl .footer-status{margin-left:0;margin-right:auto;}
 
 <footer>
   <span id="footer-file" data-i18n="footer_no_file">No file loaded</span>
-  <span>|</span>
-  <span id="footer-fmt">Format: —</span>
-  <span>|</span>
-  <span id="footer-visible">—</span>
+  <span>|</span><span id="footer-fmt">Format: —</span>
+  <span>|</span><span id="footer-visible">—</span>
   <span class="footer-status" id="footer-saved"></span>
 </footer>
 
 <div id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-//  STATE
-// ═══════════════════════════════════════════════════════
-let rows = [], filtered = [], filter = 'all', searchQ = '', fileName = '', fmt = 'sf3', issueIdx = -1;
-let currentLang = 'en';
-let origRows = null, transRows = null, loadMode = 'single';
+// ═══ STATE ════════════════════════════════════════════
+let rows=[], filtered=[], filter='all', searchQ='', fileName='', fmt='sf3', issueIdx=-1;
+let currentLang='en', origRows=null, transRows=null, loadMode='single';
 
-// ═══════════════════════════════════════════════════════
-//  i18n
-// ═══════════════════════════════════════════════════════
+// ═══ i18n ═════════════════════════════════════════════
 const I18N = {
-  tr:{
-    stat_total:'Toplam',stat_ok:'Tamam',stat_missing:'Çevrilmemiş',stat_toolong:'Çok Uzun',stat_progress:'İlerleme',
-    format_label:'Format:',fmt_plain_name:'Sade TXT',fmt_plain_desc:'Her satır bir metin',
-    fmt_auto_name:'Otomatik',fmt_auto_desc:'Formatı kendisi seçer',
-    btn_load:'📂 Dosya Yükle',btn_prev:'↑ Önceki Sorun',btn_next:'↓ Sonraki Sorun',btn_export:'⬇ Düzeltilmiş Dosyayı İndir',
-    btn_autofix:'✨ Uzunları Kısalt',
-    filter_all:'Tümü',filter_ok:'✓ Tamam',filter_warn:'⚠ Eksik',filter_err:'✗ Uzun',
-    col_orig:'🌐 Orijinal',col_trans:'🖊 Çeviri — düzenlenebilir',col_status:'Durum',
-    drop_title:'Çeviri Dosyasını Yükle',
-    drop_sub:'Dosyayı buraya sürükle bırak ya da tıkla ve seç<br>Yukarıdan formatını seç, otomatik algılama da çalışır',
-    footer_no_file:'Dosya yüklenmedi',
-    badge_ok:'TAMAM',badge_warn:'EKSİK',badge_err:'UZUN',
-    search_placeholder:'Metin ara...',
-    toast_loaded:' satır yüklendi',toast_no_rows:'Geçerli satır bulunamadı!',
-    toast_exported:'Dosya indirildi!',
-    confirm_truncate:' satır çok uzun ve kırpılacak. Yine de dışa aktar?',
-    footer_rows:' satır',footer_unsaved:'● kaydedilmemiş değişiklik',footer_exported:'✓ dışa aktarıldı',
-    fmt_hint_sf3:'OFFSET|BYTE_UZUNLUGU|METIN — sf3_tool çıktısı',
-    fmt_hint_plain:'Her satır tek bir metin bloğu. Uzunluk kontrolü yok.',
-    fmt_hint_csv:'id,"orijinal","çeviri" — ilk satır başlık',
-    fmt_hint_auto:'Format dosyaya bakılarak otomatik seçilir',
-    mode_single:'Tek Dosya',mode_dual:'Orijinal + Çeviri',
-    dual_orig_label:'🌐 Orijinal (İngilizce)',dual_trans_label:'🖊 Çeviri (Türkçe)',
-    dual_orig_btn:'Orijinal dosyayı seç...',dual_trans_btn:'Çeviri dosyasını seç...',
-    dual_merge_btn:'⚡ Birleştir & Karşılaştır',
-    dual_no_match:'Eşleşen satır bulunamadı — formatlar aynı mı?',
-    dual_merged:' satır eşleştirildi',dual_orig_missing:'Önce orijinal dosyayı yükleyin',
-    col_orig_chars:'Orijinal karakter',
-  },
-  en:{
-    stat_total:'Total',stat_ok:'OK',stat_missing:'Missing',stat_toolong:'Too Long',stat_progress:'Progress',
-    format_label:'Format:',fmt_plain_name:'Plain TXT',fmt_plain_desc:'One line per text',
-    fmt_auto_name:'Auto',fmt_auto_desc:'Auto-detect format',
-    btn_load:'📂 Load File',btn_prev:'↑ Prev Issue',btn_next:'↓ Next Issue',btn_export:'⬇ Export Fixed File',
-    btn_autofix:'✨ Auto-Fix Long',
-    filter_all:'All',filter_ok:'✓ OK',filter_warn:'⚠ Missing',filter_err:'✗ Long',
-    col_orig:'🌐 Original',col_trans:'🖊 Translation — editable',col_status:'Status',
-    drop_title:'Load Translation File',
-    drop_sub:'Drop file here or click to browse<br>Select format above, or use Auto-detect',
-    footer_no_file:'No file loaded',
-    badge_ok:'OK',badge_warn:'MISSING',badge_err:'TOO LONG',
-    search_placeholder:'Search text...',
-    toast_loaded:' rows loaded',toast_no_rows:'No valid rows found!',
-    toast_exported:'File downloaded!',
-    confirm_truncate:' rows are too long and will be truncated. Export anyway?',
-    footer_rows:' rows',footer_unsaved:'● unsaved changes',footer_exported:'✓ exported',
-    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_tool output',
-    fmt_hint_plain:'Each line is one text block. No length check.',
-    fmt_hint_csv:'id,"original","translation" — first row is header',
-    fmt_hint_auto:'Format is auto-detected from file contents',
-    mode_single:'Single File',mode_dual:'Orig + Trans',
-    dual_orig_label:'🌐 Original (English)',dual_trans_label:'🖊 Translation (your language)',
-    dual_orig_btn:'Choose original file...',dual_trans_btn:'Choose translated file...',
-    dual_merge_btn:'⚡ Merge & Compare',
-    dual_no_match:'No matching rows found — are the formats the same?',
-    dual_merged:' rows matched',dual_orig_missing:'Load the original file first',
-    col_orig_chars:'Orig chars',
-  },
-  ja:{
-    stat_total:'合計',stat_ok:'完了',stat_missing:'未翻訳',stat_toolong:'長すぎ',stat_progress:'進捗',
-    format_label:'形式:',fmt_plain_name:'プレーンTXT',fmt_plain_desc:'1行1テキスト',
-    fmt_auto_name:'自動',fmt_auto_desc:'形式を自動検出',
-    btn_load:'📂 ファイル読込',btn_prev:'↑ 前の問題',btn_next:'↓ 次の問題',btn_export:'⬇ 修正ファイルを保存',
-    btn_autofix:'✨ 自動修正',
-    filter_all:'すべて',filter_ok:'✓ 完了',filter_warn:'⚠ 未翻訳',filter_err:'✗ 長すぎ',
-    col_orig:'🌐 原文',col_trans:'🖊 翻訳 — 編集可',col_status:'状態',
-    drop_title:'翻訳ファイルを読み込む',
-    drop_sub:'ここにファイルをドロップ、またはクリックして選択<br>上で形式を選ぶか、自動検出を使用',
-    footer_no_file:'ファイル未読込',badge_ok:'完了',badge_warn:'未翻訳',badge_err:'長過',
-    search_placeholder:'テキスト検索...',
-    toast_loaded:' 行を読み込みました',toast_no_rows:'有効な行が見つかりません！',
-    toast_exported:'ファイルをダウンロードしました！',
-    confirm_truncate:' 行が長すぎて切り捨てられます。エクスポートしますか？',
-    footer_rows:' 行',footer_unsaved:'● 未保存の変更',footer_exported:'✓ エクスポート済み',
-    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_toolの出力',
-    fmt_hint_plain:'各行が1つのテキストブロック。長さチェックなし。',
-    fmt_hint_csv:'id,"原文","翻訳" — 最初の行はヘッダー',
-    fmt_hint_auto:'ファイル内容から形式を自動検出します',
-    mode_single:'単一ファイル',mode_dual:'原文 + 翻訳',
-    dual_orig_label:'🌐 原文（英語）',dual_trans_label:'🖊 翻訳（あなたの言語）',
-    dual_orig_btn:'原文ファイルを選択...',dual_trans_btn:'翻訳ファイルを選択...',
-    dual_merge_btn:'⚡ マージして比較',
-    dual_no_match:'一致する行が見つかりません',dual_merged:' 行がマッチしました',dual_orig_missing:'先に原文ファイルを読み込んでください',
-    col_orig_chars:'原文文字数',
-  },
-  zh:{
-    stat_total:'总计',stat_ok:'完成',stat_missing:'未翻译',stat_toolong:'过长',stat_progress:'进度',
-    format_label:'格式:',fmt_plain_name:'纯文本',fmt_plain_desc:'每行一段文本',
-    fmt_auto_name:'自动',fmt_auto_desc:'自动检测格式',
-    btn_load:'📂 加载文件',btn_prev:'↑ 上一个问题',btn_next:'↓ 下一个问题',btn_export:'⬇ 导出修正文件',
-    btn_autofix:'✨ 自动修复过长',
-    filter_all:'全部',filter_ok:'✓ 完成',filter_warn:'⚠ 缺失',filter_err:'✗ 过长',
-    col_orig:'🌐 原文',col_trans:'🖊 译文 — 可编辑',col_status:'状态',
-    drop_title:'加载翻译文件',
-    drop_sub:'将文件拖放到此处或点击浏览<br>在上方选择格式，或使用自动检测',
-    footer_no_file:'未加载文件',badge_ok:'完成',badge_warn:'缺失',badge_err:'过长',
-    search_placeholder:'搜索文本...',
-    toast_loaded:' 行已加载',toast_no_rows:'未找到有效行！',
-    toast_exported:'文件已下载！',
-    confirm_truncate:' 行过长将被截断。仍要导出吗？',
-    footer_rows:' 行',footer_unsaved:'● 有未保存的更改',footer_exported:'✓ 已导出',
-    fmt_hint_sf3:'OFFSET|字节长度|文本 — sf3_tool输出',
-    fmt_hint_plain:'每行是一个文本块。不检查长度。',
-    fmt_hint_csv:'id,"原文","译文" — 第一行视为标题',
-    fmt_hint_auto:'从文件内容自动检测格式',
-    mode_single:'单文件',mode_dual:'原文 + 译文',
-    dual_orig_label:'🌐 原文（英文）',dual_trans_label:'🖊 译文（您的语言）',
-    dual_orig_btn:'选择原文文件...',dual_trans_btn:'选择译文文件...',
-    dual_merge_btn:'⚡ 合并并比较',
-    dual_no_match:'未找到匹配行',dual_merged:' 行已匹配',dual_orig_missing:'请先加载原文文件',
-    col_orig_chars:'原文字符',
-  },
-  ur:{
-    stat_total:'کل',stat_ok:'مکمل',stat_missing:'نامکمل',stat_toolong:'بہت لمبا',stat_progress:'پیش رفت',
-    format_label:'فارمیٹ:',fmt_plain_name:'سادہ TXT',fmt_plain_desc:'ہر سطر ایک متن',
-    fmt_auto_name:'خودکار',fmt_auto_desc:'فارمیٹ خود شناخت کرے',
-    btn_load:'📂 فائل لوڈ کریں',btn_prev:'↑ پچھلا مسئلہ',btn_next:'↓ اگلا مسئلہ',btn_export:'⬇ درست فائل ڈاؤنلوڈ',
-    btn_autofix:'✨ خودکار درستی',
-    filter_all:'سب',filter_ok:'✓ مکمل',filter_warn:'⚠ نامکمل',filter_err:'✗ لمبا',
-    col_orig:'🌐 اصل',col_trans:'🖊 ترجمہ — قابل ترمیم',col_status:'حالت',
-    drop_title:'ترجمہ فائل لوڈ کریں',
-    drop_sub:'فائل یہاں ڈراپ کریں یا کلک کریں<br>اوپر فارمیٹ منتخب کریں یا خودکار استعمال کریں',
-    footer_no_file:'کوئی فائل لوڈ نہیں',badge_ok:'مکمل',badge_warn:'نامکمل',badge_err:'لمبا',
-    search_placeholder:'متن تلاش کریں...',
-    toast_loaded:' سطریں لوڈ ہوئیں',toast_no_rows:'کوئی درست سطر نہیں ملی!',
-    toast_exported:'فائل ڈاؤنلوڈ ہوئی!',
-    confirm_truncate:' سطریں بہت لمبی ہیں اور کٹ جائیں گی۔ پھر بھی برآمد کریں؟',
-    footer_rows:' سطریں',footer_unsaved:'● غیر محفوظ تبدیلیاں',footer_exported:'✓ برآمد ہوئی',
-    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_tool آؤٹ پٹ',
-    fmt_hint_plain:'ہر سطر ایک متن بلاک ہے۔ لمبائی کی جانچ نہیں۔',
-    fmt_hint_csv:'id,"اصل","ترجمہ" — پہلی سطر ہیڈر',
-    fmt_hint_auto:'فائل مواد سے فارمیٹ خودکار شناخت ہوگا',
-    mode_single:'ایک فائل',mode_dual:'اصل + ترجمہ',
-    dual_orig_label:'🌐 اصل (انگریزی)',dual_trans_label:'🖊 ترجمہ (آپ کی زبان)',
-    dual_orig_btn:'اصل فائل چنیں...',dual_trans_btn:'ترجمہ فائل چنیں...',
-    dual_merge_btn:'⚡ ملائیں اور موازنہ کریں',
-    dual_no_match:'کوئی مماثل سطر نہیں ملی',dual_merged:' سطریں ملائی گئیں',dual_orig_missing:'پہلے اصل فائل لوڈ کریں',
-    col_orig_chars:'اصل حروف',
-  },
-  hi:{
-    stat_total:'कुल',stat_ok:'पूर्ण',stat_missing:'शेष',stat_toolong:'बहुत लंबा',stat_progress:'प्रगति',
-    format_label:'प्रारूप:',fmt_plain_name:'सादा TXT',fmt_plain_desc:'प्रत्येक पंक्ति एक पाठ',
-    fmt_auto_name:'स्वचालित',fmt_auto_desc:'प्रारूप स्वयं पहचाने',
-    btn_load:'📂 फ़ाइल लोड करें',btn_prev:'↑ पिछली समस्या',btn_next:'↓ अगली समस्या',btn_export:'⬇ सुधरी फ़ाइल डाउनलोड',
-    btn_autofix:'✨ स्वचालित सुधार',
-    filter_all:'सभी',filter_ok:'✓ पूर्ण',filter_warn:'⚠ शेष',filter_err:'✗ लंबा',
-    col_orig:'🌐 मूल पाठ',col_trans:'🖊 अनुवाद — संपादन योग्य',col_status:'स्थिति',
-    drop_title:'अनुवाद फ़ाइल लोड करें',
-    drop_sub:'फ़ाइल यहाँ छोड़ें या क्लिक करके चुनें<br>ऊपर से प्रारूप चुनें या स्वचालित पहचान का उपयोग करें',
-    footer_no_file:'कोई फ़ाइल लोड नहीं',badge_ok:'पूर्ण',badge_warn:'शेष',badge_err:'लंबा',
-    search_placeholder:'पाठ खोजें...',
-    toast_loaded:' पंक्तियाँ लोड हुईं',toast_no_rows:'कोई मान्य पंक्ति नहीं मिली!',
-    toast_exported:'फ़ाइल डाउनलोड हुई!',
-    confirm_truncate:' पंक्तियाँ बहुत लंबी हैं और कट जाएंगी। फिर भी निर्यात करें?',
-    footer_rows:' पंक्तियाँ',footer_unsaved:'● असहेजे परिवर्तन',footer_exported:'✓ निर्यात हुआ',
-    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_tool आउटपुट',
-    fmt_hint_plain:'प्रत्येक पंक्ति एक पाठ खंड है। लंबाई जाँच नहीं।',
-    fmt_hint_csv:'id,"मूल","अनुवाद" — पहली पंक्ति शीर्षक',
-    fmt_hint_auto:'फ़ाइल सामग्री से प्रारूप स्वचालित पहचाना जाएगा',
-    mode_single:'एकल फ़ाइल',mode_dual:'मूल + अनुवाद',
-    dual_orig_label:'🌐 मूल (अंग्रेज़ी)',dual_trans_label:'🖊 अनुवाद (आपकी भाषा)',
-    dual_orig_btn:'मूल फ़ाइल चुनें...',dual_trans_btn:'अनुवाद फ़ाइल चुनें...',
-    dual_merge_btn:'⚡ मर्ज और तुलना करें',
-    dual_no_match:'कोई मिलान नहीं मिला',dual_merged:' पंक्तियाँ मिलान हुईं',dual_orig_missing:'पहले मूल फ़ाइल लोड करें',
-    col_orig_chars:'मूल वर्ण',
-  },
-  ar:{
-    stat_total:'الإجمالي',stat_ok:'مكتمل',stat_missing:'غير مترجم',stat_toolong:'طويل جداً',stat_progress:'التقدم',
-    format_label:'الصيغة:',fmt_plain_name:'نص عادي',fmt_plain_desc:'سطر واحد لكل نص',
-    fmt_auto_name:'تلقائي',fmt_auto_desc:'اكتشاف الصيغة تلقائياً',
-    btn_load:'📂 تحميل ملف',btn_prev:'↑ المشكلة السابقة',btn_next:'↓ المشكلة التالية',btn_export:'⬇ تنزيل الملف المُصحَّح',
-    btn_autofix:'✨ إصلاح تلقائي',
-    filter_all:'الكل',filter_ok:'✓ مكتمل',filter_warn:'⚠ ناقص',filter_err:'✗ طويل',
-    col_orig:'🌐 النص الأصلي',col_trans:'🖊 الترجمة — قابل للتعديل',col_status:'الحالة',
-    drop_title:'تحميل ملف الترجمة',
-    drop_sub:'اسحب الملف هنا أو انقر للتصفح<br>اختر الصيغة أعلاه أو استخدم الاكتشاف التلقائي',
-    footer_no_file:'لم يتم تحميل ملف',badge_ok:'مكتمل',badge_warn:'ناقص',badge_err:'طويل',
-    search_placeholder:'ابحث عن نص...',
-    toast_loaded:' سطراً تم تحميله',toast_no_rows:'لم يتم العثور على سطور صالحة!',
-    toast_exported:'تم تنزيل الملف!',
-    confirm_truncate:' سطور طويلة جداً وستُقطع. هل تريد التصدير؟',
-    footer_rows:' سطور',footer_unsaved:'● تغييرات غير محفوظة',footer_exported:'✓ تم التصدير',
-    fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — مخرجات sf3_tool',
-    fmt_hint_plain:'كل سطر كتلة نصية واحدة. لا يوجد فحص للطول.',
-    fmt_hint_csv:'id,"أصلي","ترجمة" — يُعامَل السطر الأول كرأس',
-    fmt_hint_auto:'يتم اكتشاف الصيغة تلقائياً من محتوى الملف',
-    mode_single:'ملف واحد',mode_dual:'أصلي + ترجمة',
-    dual_orig_label:'🌐 الأصلي (الإنجليزية)',dual_trans_label:'🖊 الترجمة (لغتك)',
-    dual_orig_btn:'اختر الملف الأصلي...',dual_trans_btn:'اختر ملف الترجمة...',
-    dual_merge_btn:'⚡ دمج ومقارنة',
-    dual_no_match:'لم يتم العثور على صفوف مطابقة',dual_merged:' صفوف متطابقة',dual_orig_missing:'حمّل الملف الأصلي أولاً',
-    col_orig_chars:'أحرف الأصل',
-  }
+  tr:{stat_total:'Toplam',stat_ok:'Tamam',stat_missing:'Çevrilmemiş',stat_toolong:'Çok Uzun',stat_progress:'İlerleme',format_label:'Format:',fmt_plain_name:'Sade TXT',fmt_plain_desc:'Her satır bir metin',fmt_auto_name:'Otomatik',fmt_auto_desc:'Formatı kendisi seçer',btn_load:'📂 Dosya Yükle',btn_prev:'↑ Önceki Sorun',btn_next:'↓ Sonraki Sorun',btn_export:'⬇ Düzeltilmiş Dosyayı İndir',btn_autofix:'✨ Uzunları Kısalt',filter_all:'Tümü',filter_ok:'✓ Tamam',filter_warn:'⚠ Eksik',filter_err:'✗ Uzun',col_orig:'🌐 Orijinal',col_trans:'🖊 Çeviri — düzenlenebilir',col_status:'Durum',drop_title:'Çeviri Dosyasını Yükle',drop_sub:'Dosyayı buraya sürükle bırak ya da tıkla ve seç<br>Yukarıdan formatını seç, otomatik algılama da çalışır',footer_no_file:'Dosya yüklenmedi',badge_ok:'TAMAM',badge_warn:'EKSİK',badge_err:'UZUN',search_placeholder:'Metin ara...',toast_loaded:' satır yüklendi',toast_no_rows:'Geçerli satır bulunamadı!',toast_exported:'Dosya indirildi!',confirm_truncate:' satır çok uzun ve kırpılacak. Yine de dışa aktar?',footer_rows:' satır',footer_unsaved:'● kaydedilmemiş değişiklik',footer_exported:'✓ dışa aktarıldı',fmt_hint_sf3:'OFFSET|BYTE_UZUNLUGU|METIN — sf3_tool çıktısı',fmt_hint_plain:'Her satır tek bir metin bloğu. Uzunluk kontrolü yok.',fmt_hint_csv:'id,"orijinal","çeviri" — ilk satır başlık',fmt_hint_auto:'Format dosyaya bakılarak otomatik seçilir',mode_single:'Tek Dosya',mode_dual:'Orijinal + Çeviri',dual_orig_label:'🌐 Orijinal (İngilizce)',dual_trans_label:'🖊 Çeviri (Türkçe)',dual_orig_btn:'Orijinal dosyayı seç...',dual_trans_btn:'Çeviri dosyasını seç...',dual_merge_btn:'⚡ Birleştir & Karşılaştır',dual_no_match:'Eşleşen satır bulunamadı — formatlar aynı mı?',dual_merged:' satır eşleştirildi',dual_orig_missing:'Önce orijinal dosyayı yükleyin'},
+  en:{stat_total:'Total',stat_ok:'OK',stat_missing:'Missing',stat_toolong:'Too Long',stat_progress:'Progress',format_label:'Format:',fmt_plain_name:'Plain TXT',fmt_plain_desc:'One line per text',fmt_auto_name:'Auto',fmt_auto_desc:'Auto-detect format',btn_load:'📂 Load File',btn_prev:'↑ Prev Issue',btn_next:'↓ Next Issue',btn_export:'⬇ Export Fixed File',btn_autofix:'✨ Auto-Fix Long',filter_all:'All',filter_ok:'✓ OK',filter_warn:'⚠ Missing',filter_err:'✗ Long',col_orig:'🌐 Original',col_trans:'🖊 Translation — editable',col_status:'Status',drop_title:'Load Translation File',drop_sub:'Drop file here or click to browse<br>Select format above, or use Auto-detect',footer_no_file:'No file loaded',badge_ok:'OK',badge_warn:'MISSING',badge_err:'TOO LONG',search_placeholder:'Search text...',toast_loaded:' rows loaded',toast_no_rows:'No valid rows found!',toast_exported:'File downloaded!',confirm_truncate:' rows are too long and will be truncated. Export anyway?',footer_rows:' rows',footer_unsaved:'● unsaved changes',footer_exported:'✓ exported',fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_tool output',fmt_hint_plain:'Each line is one text block. No length check.',fmt_hint_csv:'id,"original","translation" — first row is header',fmt_hint_auto:'Format is auto-detected from file contents',mode_single:'Single File',mode_dual:'Orig + Trans',dual_orig_label:'🌐 Original (English)',dual_trans_label:'🖊 Translation (your language)',dual_orig_btn:'Choose original file...',dual_trans_btn:'Choose translated file...',dual_merge_btn:'⚡ Merge & Compare',dual_no_match:'No matching rows found — are the formats the same?',dual_merged:' rows matched',dual_orig_missing:'Load the original file first'},
+  ja:{stat_total:'合計',stat_ok:'完了',stat_missing:'未翻訳',stat_toolong:'長すぎ',stat_progress:'進捗',format_label:'形式:',fmt_plain_name:'プレーンTXT',fmt_plain_desc:'1行1テキスト',fmt_auto_name:'自動',fmt_auto_desc:'形式を自動検出',btn_load:'📂 ファイル読込',btn_prev:'↑ 前の問題',btn_next:'↓ 次の問題',btn_export:'⬇ 修正ファイルを保存',btn_autofix:'✨ 自動修正',filter_all:'すべて',filter_ok:'✓ 完了',filter_warn:'⚠ 未翻訳',filter_err:'✗ 長すぎ',col_orig:'🌐 原文',col_trans:'🖊 翻訳 — 編集可',col_status:'状態',drop_title:'翻訳ファイルを読み込む',drop_sub:'ここにファイルをドロップ、またはクリックして選択<br>上で形式を選ぶか、自動検出を使用',footer_no_file:'ファイル未読込',badge_ok:'完了',badge_warn:'未翻訳',badge_err:'長過',search_placeholder:'テキスト検索...',toast_loaded:' 行を読み込みました',toast_no_rows:'有効な行が見つかりません！',toast_exported:'ファイルをダウンロードしました！',confirm_truncate:' 行が長すぎて切り捨てられます。エクスポートしますか？',footer_rows:' 行',footer_unsaved:'● 未保存の変更',footer_exported:'✓ エクスポート済み',fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT — sf3_toolの出力',fmt_hint_plain:'各行が1つのテキストブロック。長さチェックなし。',fmt_hint_csv:'id,"原文","翻訳" — 最初の行はヘッダー',fmt_hint_auto:'ファイル内容から形式を自動検出します',mode_single:'単一ファイル',mode_dual:'原文 + 翻訳',dual_orig_label:'🌐 原文（英語）',dual_trans_label:'🖊 翻訳（あなたの言語）',dual_orig_btn:'原文ファイルを選択...',dual_trans_btn:'翻訳ファイルを選択...',dual_merge_btn:'⚡ マージして比較',dual_no_match:'一致する行が見つかりません',dual_merged:' 行がマッチしました',dual_orig_missing:'先に原文ファイルを読み込んでください'},
+  zh:{stat_total:'总计',stat_ok:'完成',stat_missing:'未翻译',stat_toolong:'过长',stat_progress:'进度',format_label:'格式:',fmt_plain_name:'纯文本',fmt_plain_desc:'每行一段文本',fmt_auto_name:'自动',fmt_auto_desc:'自动检测格式',btn_load:'📂 加载文件',btn_prev:'↑ 上一个问题',btn_next:'↓ 下一个问题',btn_export:'⬇ 导出修正文件',btn_autofix:'✨ 自动修复过长',filter_all:'全部',filter_ok:'✓ 完成',filter_warn:'⚠ 缺失',filter_err:'✗ 过长',col_orig:'🌐 原文',col_trans:'🖊 译文 — 可编辑',col_status:'状态',drop_title:'加载翻译文件',drop_sub:'将文件拖放到此处或点击浏览<br>在上方选择格式，或使用自动检测',footer_no_file:'未加载文件',badge_ok:'完成',badge_warn:'缺失',badge_err:'过长',search_placeholder:'搜索文本...',toast_loaded:' 行已加载',toast_no_rows:'未找到有效行！',toast_exported:'文件已下载！',confirm_truncate:' 行过长将被截断。仍要导出吗？',footer_rows:' 行',footer_unsaved:'● 有未保存的更改',footer_exported:'✓ 已导出',fmt_hint_sf3:'OFFSET|字节长度|文本 — sf3_tool输出',fmt_hint_plain:'每行是一个文本块。不检查长度。',fmt_hint_csv:'id,"原文","译文" — 第一行视为标题',fmt_hint_auto:'从文件内容自动检测格式',mode_single:'单文件',mode_dual:'原文 + 译文',dual_orig_label:'🌐 原文（英文）',dual_trans_label:'🖊 译文（您的语言）',dual_orig_btn:'选择原文文件...',dual_trans_btn:'选择译文文件...',dual_merge_btn:'⚡ 合并并比较',dual_no_match:'未找到匹配行',dual_merged:' 行已匹配',dual_orig_missing:'请先加载原文文件'},
+  ur:{stat_total:'کل',stat_ok:'مکمل',stat_missing:'نامکمل',stat_toolong:'بہت لمبا',stat_progress:'پیش رفت',format_label:'فارمیٹ:',fmt_plain_name:'سادہ TXT',fmt_plain_desc:'ہر سطر ایک متن',fmt_auto_name:'خودکار',fmt_auto_desc:'فارمیٹ خود شناخت کرے',btn_load:'📂 فائل لوڈ کریں',btn_prev:'↑ پچھلا مسئلہ',btn_next:'↓ اگلا مسئلہ',btn_export:'⬇ درست فائل ڈاؤنلوڈ',btn_autofix:'✨ خودکار درستی',filter_all:'سب',filter_ok:'✓ مکمل',filter_warn:'⚠ نامکمل',filter_err:'✗ لمبا',col_orig:'🌐 اصل',col_trans:'🖊 ترجمہ — قابل ترمیم',col_status:'حالت',drop_title:'ترجمہ فائل لوڈ کریں',drop_sub:'فائل یہاں ڈراپ کریں یا کلک کریں<br>اوپر فارمیٹ منتخب کریں یا خودکار استعمال کریں',footer_no_file:'کوئی فائل لوڈ نہیں',badge_ok:'مکمل',badge_warn:'نامکمل',badge_err:'لمبا',search_placeholder:'متن تلاش کریں...',toast_loaded:' سطریں لوڈ ہوئیں',toast_no_rows:'کوئی درست سطر نہیں ملی!',toast_exported:'فائل ڈاؤنلوڈ ہوئی!',confirm_truncate:' سطریں بہت لمبی ہیں اور کٹ جائیں گی۔ پھر بھی برآمد کریں؟',footer_rows:' سطریں',footer_unsaved:'● غیر محفوظ تبدیلیاں',footer_exported:'✓ برآمد ہوئی',fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT',fmt_hint_plain:'ہر سطر ایک متن بلاک۔',fmt_hint_csv:'id,"اصل","ترجمہ"',fmt_hint_auto:'خودکار شناخت',mode_single:'ایک فائل',mode_dual:'اصل + ترجمہ',dual_orig_label:'🌐 اصل (انگریزی)',dual_trans_label:'🖊 ترجمہ (آپ کی زبان)',dual_orig_btn:'اصل فائل چنیں...',dual_trans_btn:'ترجمہ فائل چنیں...',dual_merge_btn:'⚡ ملائیں اور موازنہ کریں',dual_no_match:'کوئی مماثل سطر نہیں ملی',dual_merged:' سطریں ملائی گئیں',dual_orig_missing:'پہلے اصل فائل لوڈ کریں'},
+  hi:{stat_total:'कुल',stat_ok:'पूर्ण',stat_missing:'शेष',stat_toolong:'बहुत लंबा',stat_progress:'प्रगति',format_label:'प्रारूप:',fmt_plain_name:'सादा TXT',fmt_plain_desc:'प्रत्येक पंक्ति एक पाठ',fmt_auto_name:'स्वचालित',fmt_auto_desc:'प्रारूप स्वयं पहचाने',btn_load:'📂 फ़ाइल लोड करें',btn_prev:'↑ पिछली समस्या',btn_next:'↓ अगली समस्या',btn_export:'⬇ सुधरी फ़ाइल डाउनलोड',btn_autofix:'✨ स्वचालित सुधार',filter_all:'सभी',filter_ok:'✓ पूर्ण',filter_warn:'⚠ शेष',filter_err:'✗ लंबा',col_orig:'🌐 मूल पाठ',col_trans:'🖊 अनुवाद — संपादन योग्य',col_status:'स्थिति',drop_title:'अनुवाद फ़ाइल लोड करें',drop_sub:'फ़ाइल यहाँ छोड़ें या क्लिक करके चुनें<br>ऊपर से प्रारूप चुनें',footer_no_file:'कोई फ़ाइल लोड नहीं',badge_ok:'पूर्ण',badge_warn:'शेष',badge_err:'लंबा',search_placeholder:'पाठ खोजें...',toast_loaded:' पंक्तियाँ लोड हुईं',toast_no_rows:'कोई मान्य पंक्ति नहीं मिली!',toast_exported:'फ़ाइल डाउनलोड हुई!',confirm_truncate:' पंक्तियाँ बहुत लंबी हैं। फिर भी निर्यात करें?',footer_rows:' पंक्तियाँ',footer_unsaved:'● असहेजे परिवर्तन',footer_exported:'✓ निर्यात हुआ',fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT',fmt_hint_plain:'एक पंक्ति = एक पाठ',fmt_hint_csv:'id,"मूल","अनुवाद"',fmt_hint_auto:'स्वचालित',mode_single:'एकल फ़ाइल',mode_dual:'मूल + अनुवाद',dual_orig_label:'🌐 मूल (अंग्रेज़ी)',dual_trans_label:'🖊 अनुवाद (आपकी भाषा)',dual_orig_btn:'मूल फ़ाइल चुनें...',dual_trans_btn:'अनुवाद फ़ाइल चुनें...',dual_merge_btn:'⚡ मर्ज और तुलना करें',dual_no_match:'कोई मिलान नहीं मिला',dual_merged:' पंक्तियाँ मिलान हुईं',dual_orig_missing:'पहले मूल फ़ाइल लोड करें'},
+  ar:{stat_total:'الإجمالي',stat_ok:'مكتمل',stat_missing:'غير مترجم',stat_toolong:'طويل جداً',stat_progress:'التقدم',format_label:'الصيغة:',fmt_plain_name:'نص عادي',fmt_plain_desc:'سطر واحد لكل نص',fmt_auto_name:'تلقائي',fmt_auto_desc:'اكتشاف الصيغة تلقائياً',btn_load:'📂 تحميل ملف',btn_prev:'↑ المشكلة السابقة',btn_next:'↓ المشكلة التالية',btn_export:'⬇ تنزيل الملف المُصحَّح',btn_autofix:'✨ إصلاح تلقائي',filter_all:'الكل',filter_ok:'✓ مكتمل',filter_warn:'⚠ ناقص',filter_err:'✗ طويل',col_orig:'🌐 النص الأصلي',col_trans:'🖊 الترجمة — قابل للتعديل',col_status:'الحالة',drop_title:'تحميل ملف الترجمة',drop_sub:'اسحب الملف هنا أو انقر للتصفح<br>اختر الصيغة أعلاه',footer_no_file:'لم يتم تحميل ملف',badge_ok:'مكتمل',badge_warn:'ناقص',badge_err:'طويل',search_placeholder:'ابحث عن نص...',toast_loaded:' سطراً تم تحميله',toast_no_rows:'لم يتم العثور على سطور صالحة!',toast_exported:'تم تنزيل الملف!',confirm_truncate:' سطور طويلة جداً وستُقطع. هل تريد التصدير؟',footer_rows:' سطور',footer_unsaved:'● تغييرات غير محفوظة',footer_exported:'✓ تم التصدير',fmt_hint_sf3:'OFFSET|BYTE_LEN|TEXT',fmt_hint_plain:'كل سطر كتلة نصية',fmt_hint_csv:'id,"أصلي","ترجمة"',fmt_hint_auto:'اكتشاف تلقائي',mode_single:'ملف واحد',mode_dual:'أصلي + ترجمة',dual_orig_label:'🌐 الأصلي (الإنجليزية)',dual_trans_label:'🖊 الترجمة (لغتك)',dual_orig_btn:'اختر الملف الأصلي...',dual_trans_btn:'اختر ملف الترجمة...',dual_merge_btn:'⚡ دمج ومقارنة',dual_no_match:'لم يتم العثور على صفوف مطابقة',dual_merged:' صفوف متطابقة',dual_orig_missing:'حمّل الملف الأصلي أولاً'}
 };
+const LANG_FONTS={tr:'"Exo 2",sans-serif',en:'"Exo 2",sans-serif',ja:'"Noto Sans JP","Exo 2",sans-serif',zh:'"Noto Sans SC","Exo 2",sans-serif',ur:'"Noto Nastaliq Urdu","Exo 2",sans-serif',hi:'"Noto Sans Devanagari","Exo 2",sans-serif',ar:'"Noto Naskh Arabic","Exo 2",sans-serif'};
 
-const LANG_FONTS = {
-  tr:'"Exo 2",sans-serif', en:'"Exo 2",sans-serif',
-  ja:'"Noto Sans JP","Exo 2",sans-serif', zh:'"Noto Sans SC","Exo 2",sans-serif',
-  ur:'"Noto Nastaliq Urdu","Exo 2",sans-serif', hi:'"Noto Sans Devanagari","Exo 2",sans-serif',
-  ar:'"Noto Naskh Arabic","Exo 2",sans-serif'
-};
+function t(key){return(I18N[currentLang]||I18N.en)[key]||key;}
 
-// ── translate helper ──────────────────────────────────
-function t(key) { return (I18N[currentLang] || I18N.en)[key] || key; }
-
-function setLang(lang) {
-  currentLang = lang;
-  document.documentElement.lang = lang;
-  const rtl = lang === 'ur' || lang === 'ar';
-  document.documentElement.dir = rtl ? 'rtl' : 'ltr';
-  document.body.classList.toggle('rtl', rtl);
-  document.documentElement.style.setProperty('--ui-font', LANG_FONTS[lang] || LANG_FONTS.en);
-
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const k = el.getAttribute('data-i18n');
-    const v = I18N[lang] && I18N[lang][k];
-    if (!v) return;
-    if (el.tagName === 'INPUT') el.placeholder = v; else el.textContent = v;
+function setLang(lang){
+  currentLang=lang;
+  document.documentElement.lang=lang;
+  const rtl=lang==='ur'||lang==='ar';
+  document.documentElement.dir=rtl?'rtl':'ltr';
+  document.body.classList.toggle('rtl',rtl);
+  document.documentElement.style.setProperty('--ui-font',LANG_FONTS[lang]||LANG_FONTS.en);
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n'),v=I18N[lang]?.[k];
+    if(!v)return;
+    if(el.tagName==='INPUT')el.placeholder=v;else el.textContent=v;
   });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const k = el.getAttribute('data-i18n-placeholder');
-    if (I18N[lang] && I18N[lang][k]) el.placeholder = I18N[lang][k];
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const k=el.getAttribute('data-i18n-placeholder');
+    if(I18N[lang]?.[k])el.placeholder=I18N[lang][k];
   });
-
-  const ds = document.querySelector('.drop-sub');
-  if (ds) ds.innerHTML = t('drop_sub');
-
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  const ab = document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`);
-  if (ab) ab.classList.add('active');
-
+  const ds=document.querySelector('.drop-sub');if(ds)ds.innerHTML=t('drop_sub');
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`)?.classList.add('active');
   updateFormatHint();
-
-  // Re-render badges & footer text without full table rebuild
-  document.querySelectorAll('.status-badge').forEach(b => {
-    if (b.classList.contains('badge-ok'))   b.textContent = t('badge_ok');
-    if (b.classList.contains('badge-warn')) b.textContent = t('badge_warn');
-    if (b.classList.contains('badge-err'))  b.textContent = t('badge_err');
+  document.querySelectorAll('.status-badge').forEach(b=>{
+    if(b.classList.contains('badge-ok'))b.textContent=t('badge_ok');
+    if(b.classList.contains('badge-warn'))b.textContent=t('badge_warn');
+    if(b.classList.contains('badge-err'))b.textContent=t('badge_err');
   });
-
-  const ff = document.getElementById('footer-file');
-  if (ff && !fileName) ff.textContent = t('footer_no_file');
-  const fv = document.getElementById('footer-visible');
-  if (fv && filtered.length > 0) fv.textContent = filtered.length + t('footer_rows');
+  const ff=document.getElementById('footer-file');if(ff&&!fileName)ff.textContent=t('footer_no_file');
+  const fv=document.getElementById('footer-visible');if(fv&&filtered.length>0)fv.textContent=filtered.length+t('footer_rows');
 }
 
-// ═══════════════════════════════════════════════════════
-//  FORMAT
-// ═══════════════════════════════════════════════════════
-function updateFormatHint() {
-  const map = { sf3:'fmt_hint_sf3', plain:'fmt_hint_plain', csv:'fmt_hint_csv', auto:'fmt_hint_auto' };
-  document.getElementById('fmt-hint').textContent = t(map[fmt] || 'fmt_hint_auto');
+// ═══ FORMAT ═══════════════════════════════════════════
+function updateFormatHint(){
+  const map={sf3:'fmt_hint_sf3',plain:'fmt_hint_plain',csv:'fmt_hint_csv',auto:'fmt_hint_auto'};
+  document.getElementById('fmt-hint').textContent=t(map[fmt]||'fmt_hint_auto');
 }
-function selectFormat(f, el) {
-  fmt = f;
-  document.querySelectorAll('.fmt-card').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  updateFormatHint();
+function selectFormat(f,el){
+  fmt=f;
+  document.querySelectorAll('.fmt-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');updateFormatHint();
 }
 updateFormatHint();
 
-// ═══════════════════════════════════════════════════════
-//  PARSERS
-// ═══════════════════════════════════════════════════════
-function detectFormat(text) {
-  const lines = text.split('\n').filter(l => l && !l.startsWith('#'));
-  if (lines.slice(0, 10).filter(l => /^\d+\|\d+\|/.test(l)).length >= 3) return 'sf3';
-  if (text.includes('msgid ') && text.includes('msgstr ')) return 'po';
-  try { JSON.parse(text); return 'json'; } catch {}
-  if (text.trimStart().startsWith('<')) return 'xml';
-  const first = lines.find(l => l.trim());
-  if (first) {
-    if ((first.match(/,/g)||[]).length >= 1) return 'csv';
-    if ((first.match(/\t/g)||[]).length >= 1) return 'tsv';
-  }
-  if (/^[^\[#]+=.+/m.test(text)) return 'ini';
-  return 'plain';
+// ═══ PARSERS ══════════════════════════════════════════
+function detectFormat(text){
+  const lines=text.split('\n').filter(l=>l&&!l.startsWith('#'));
+  if(lines.slice(0,10).filter(l=>/^\d+\|\d+\|/.test(l)).length>=3)return'sf3';
+  if(text.includes('msgid ')&&text.includes('msgstr '))return'po';
+  try{JSON.parse(text);return'json';}catch{}
+  if(text.trimStart().startsWith('<'))return'xml';
+  const first=lines.find(l=>l.trim());
+  if(first){if((first.match(/,/g)||[]).length>=1)return'csv';if((first.match(/\t/g)||[]).length>=1)return'tsv';}
+  if(/^[^\[#]+=.+/m.test(text))return'ini';
+  return'plain';
+}
+function parseSF3(text){
+  const result=[];
+  for(const raw of text.split('\n')){
+    const line=raw.trimEnd();if(!line||line.startsWith('#'))continue;
+    const p1=line.indexOf('|'),p2=p1!==-1?line.indexOf('|',p1+1):-1;if(p1===-1||p2===-1)continue;
+    const offset=parseInt(line.slice(0,p1),10),byteLen=parseInt(line.slice(p1+1,p2),10),txt=line.slice(p2+1);
+    if(isNaN(offset)||isNaN(byteLen))continue;
+    result.push({offset,byteLen,orig:txt,trans:txt});
+  }return result;
+}
+function parsePlain(text){return text.split('\n').map(l=>l.trimEnd()).filter(l=>l&&!l.startsWith('#')).map(txt=>({offset:-1,byteLen:-1,orig:txt,trans:txt}));}
+function parseCSV(text){
+  const lines=text.split('\n').filter(l=>l.trim());let skip=false;
+  if(lines.length>0){const h=lines[0].toLowerCase();if(h.includes('id')||h.includes('original')||h.includes('source')||h.includes('key'))skip=true;}
+  const result=[];
+  for(let i=skip?1:0;i<lines.length;i++){
+    const p=splitCSVLine(lines[i]);if(p.length<2)continue;
+    const orig=(p.length>=3?p[1]:p[0]).trim(),trans=(p.length>=3?p[2]:p[1]).trim();
+    result.push({offset:-1,byteLen:-1,orig,trans});
+  }return result;
+}
+function splitCSVLine(line){const r=[];let cur='',inQ=false;for(const c of line){if(c==='"'){inQ=!inQ;continue;}if((c===','||c==='\t')&&!inQ){r.push(cur);cur='';continue;}cur+=c;}r.push(cur);return r;}
+function parseTSV(text){return text.split('\n').filter(l=>l.trim()&&!l.startsWith('#')).map(l=>{const p=l.split('\t');return{offset:-1,byteLen:-1,orig:(p[1]||p[0]||'').trim(),trans:(p[2]||p[1]||'').trim()};}).filter(r=>r.orig);}
+function parsePO(text){
+  const result=[];
+  for(const block of text.split('\n\n')){
+    const mid=block.match(/^msgid\s+"(.*)"/m),mstr=block.match(/^msgstr\s+"(.*)"/m);
+    if(!mid||mid[1]==='')continue;
+    const orig=mid[1].replace(/\\n/g,'\n').replace(/\\"/g,'"');
+    const trans=mstr?mstr[1].replace(/\\n/g,'\n').replace(/\\"/g,'"'):'';
+    result.push({offset:-1,byteLen:-1,orig,trans:trans||orig});
+  }return result;
+}
+function parseXML(text){
+  const result=[],re=/<(?:string|entry|text|translation)[^>]*?(?:id|key|name)="([^"]*)"[^>]*>([\s\S]*?)<\/(?:string|entry|text|translation)>/gi;let m;
+  while((m=re.exec(text))!==null){const orig=m[2].trim().replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');if(orig)result.push({offset:-1,byteLen:-1,orig,trans:orig});}
+  return result;
+}
+function parseJSON(text){
+  const result=[];
+  try{const data=JSON.parse(text);
+    if(Array.isArray(data)){for(const item of data){if(typeof item==='object'){const orig=item.original||item.source||item.text||item.value||'';const trans=item.translation||item.target||item.translated||orig;if(orig)result.push({offset:-1,byteLen:-1,orig:String(orig),trans:String(trans)});}}}
+    else if(typeof data==='object'){for(const[,v]of Object.entries(data)){if(typeof v==='string')result.push({offset:-1,byteLen:-1,orig:v,trans:v});else if(typeof v==='object'&&v.original)result.push({offset:-1,byteLen:-1,orig:v.original,trans:v.translation||v.original});}}
+  }catch{}return result;
+}
+function parseINI(text){return text.split('\n').filter(l=>l.trim()&&!l.startsWith(';')&&!l.startsWith('#')&&!l.startsWith('[')).map(l=>{const eq=l.indexOf('=');if(eq===-1)return null;return{offset:-1,byteLen:-1,orig:l.slice(eq+1).trim(),trans:l.slice(eq+1).trim()};}).filter(Boolean);}
+function parseFile(text,forceFmt){
+  const f=forceFmt==='auto'?detectFormat(text):forceFmt;
+  document.getElementById('footer-fmt').textContent='Format: '+f.toUpperCase();
+  const parsers={sf3:parseSF3,plain:parsePlain,csv:parseCSV,tsv:parseTSV,po:parsePO,xml:parseXML,json:parseJSON,ini:parseINI};
+  return{rows:(parsers[f]||parsePlain)(text),fmt:f};
 }
 
-function parseSF3(text) {
-  const result = [];
-  for (const raw of text.split('\n')) {
-    const line = raw.trimEnd();
-    if (!line || line.startsWith('#')) continue;
-    const p1 = line.indexOf('|'), p2 = p1 !== -1 ? line.indexOf('|', p1 + 1) : -1;
-    if (p1 === -1 || p2 === -1) continue;
-    const offset = parseInt(line.slice(0, p1), 10);
-    const byteLen = parseInt(line.slice(p1 + 1, p2), 10);
-    const txt = line.slice(p2 + 1);
-    if (isNaN(offset) || isNaN(byteLen)) continue;
-    result.push({ offset, byteLen, orig: txt, trans: txt });
-  }
-  return result;
-}
-function parsePlain(text) {
-  return text.split('\n').map(l => l.trimEnd()).filter(l => l && !l.startsWith('#'))
-    .map(txt => ({ offset: -1, byteLen: -1, orig: txt, trans: txt }));
-}
-function parseCSV(text) {
-  const lines = text.split('\n').filter(l => l.trim());
-  const result = [];
-  let skip = false;
-  if (lines.length > 0) {
-    const h = lines[0].toLowerCase();
-    if (h.includes('id') || h.includes('original') || h.includes('source') || h.includes('key')) skip = true;
-  }
-  for (let i = skip ? 1 : 0; i < lines.length; i++) {
-    const p = splitCSVLine(lines[i]);
-    if (p.length < 2) continue;
-    const orig = (p.length >= 3 ? p[1] : p[0]).trim();
-    const trans = (p.length >= 3 ? p[2] : p[1]).trim();
-    result.push({ offset: -1, byteLen: -1, orig, trans });
-  }
-  return result;
-}
-function splitCSVLine(line) {
-  const r = []; let cur = '', inQ = false;
-  for (const c of line) {
-    if (c === '"') { inQ = !inQ; continue; }
-    if ((c === ',' || c === '\t') && !inQ) { r.push(cur); cur = ''; continue; }
-    cur += c;
-  }
-  r.push(cur); return r;
-}
-function parseTSV(text) {
-  return text.split('\n').filter(l => l.trim() && !l.startsWith('#')).map(l => {
-    const p = l.split('\t');
-    return { offset: -1, byteLen: -1, orig: (p[1] || p[0] || '').trim(), trans: (p[2] || p[1] || '').trim() };
-  }).filter(r => r.orig);
-}
-function parsePO(text) {
-  const result = [];
-  for (const block of text.split('\n\n')) {
-    const mid = block.match(/^msgid\s+"(.*)"/m), mstr = block.match(/^msgstr\s+"(.*)"/m);
-    if (!mid || mid[1] === '') continue;
-    const orig = mid[1].replace(/\\n/g, '\n').replace(/\\"/g, '"');
-    const trans = mstr ? mstr[1].replace(/\\n/g, '\n').replace(/\\"/g, '"') : '';
-    result.push({ offset: -1, byteLen: -1, orig, trans: trans || orig });
-  }
-  return result;
-}
-function parseXML(text) {
-  const result = [];
-  const re = /<(?:string|entry|text|translation)[^>]*?(?:id|key|name)="([^"]*)"[^>]*>([\s\S]*?)<\/(?:string|entry|text|translation)>/gi;
-  let m;
-  while ((m = re.exec(text)) !== null) {
-    const orig = m[2].trim().replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-    if (orig) result.push({ offset: -1, byteLen: -1, orig, trans: orig });
-  }
-  return result;
-}
-function parseJSON(text) {
-  const result = [];
-  try {
-    const data = JSON.parse(text);
-    if (Array.isArray(data)) {
-      for (const item of data) {
-        if (typeof item === 'object') {
-          const orig = item.original || item.source || item.text || item.value || '';
-          const trans = item.translation || item.target || item.translated || orig;
-          if (orig) result.push({ offset: -1, byteLen: -1, orig: String(orig), trans: String(trans) });
-        }
-      }
-    } else if (typeof data === 'object') {
-      for (const [, v] of Object.entries(data)) {
-        if (typeof v === 'string') result.push({ offset: -1, byteLen: -1, orig: v, trans: v });
-        else if (typeof v === 'object' && v.original)
-          result.push({ offset: -1, byteLen: -1, orig: v.original, trans: v.translation || v.original });
-      }
-    }
-  } catch {}
-  return result;
-}
-function parseINI(text) {
-  return text.split('\n').filter(l => l.trim() && !l.startsWith(';') && !l.startsWith('#') && !l.startsWith('['))
-    .map(l => { const eq = l.indexOf('='); if (eq === -1) return null; const val = l.slice(eq + 1).trim(); return { offset: -1, byteLen: -1, orig: val, trans: val }; })
-    .filter(Boolean);
-}
-function parseFile(text, forceFmt) {
-  const f = forceFmt === 'auto' ? detectFormat(text) : forceFmt;
-  document.getElementById('footer-fmt').textContent = 'Format: ' + f.toUpperCase();
-  const parsers = { sf3: parseSF3, plain: parsePlain, csv: parseCSV, tsv: parseTSV, po: parsePO, xml: parseXML, json: parseJSON, ini: parseINI };
-  return { rows: (parsers[f] || parsePlain)(text), fmt: f };
+// ═══ CHAR / STATUS HELPERS ═══════════════════════════
+// SF3 byteLen = raw byte budget. maxChars = byteLen/2 (2 bytes per char).
+// We count codepoints via [...str].length for full Unicode accuracy.
+function maxChars(row)  {return row.byteLen>0?Math.floor(row.byteLen/2):-1;}
+function origChars(row) {return[...row.orig].length;}
+function transChars(row){return[...row.trans].length;}
+function getStatus(row){
+  const tr=row.trans.trim();
+  if(!tr||tr===row.orig)return'warn';
+  const max=maxChars(row);
+  if(max>0&&transChars(row)>max)return'err';
+  return'ok';
 }
 
-// ═══════════════════════════════════════════════════════
-//  STATUS & CHAR HELPERS
-// ═══════════════════════════════════════════════════════
-// byteLen is the raw byte budget from the SF3 file.
-// Character limit = byteLen / 2  (UTF-16 assumption, same as original tool).
-// We count codepoints with [...str].length for accuracy.
-function maxChars(row) { return row.byteLen > 0 ? Math.floor(row.byteLen / 2) : -1; }
-function origChars(row) { return [...row.orig].length; }
-function transChars(row) { return [...row.trans].length; }
-
-function getStatus(row) {
-  const tr = row.trans.trim();
-  if (!tr || tr === row.orig) return 'warn';
-  const max = maxChars(row);
-  if (max > 0 && transChars(row) > max) return 'err';
-  return 'ok';
-}
-
-// ═══════════════════════════════════════════════════════
-//  RENDER
-// ═══════════════════════════════════════════════════════
-function render() {
-  filtered = rows.map((r, i) => i).filter(i => {
-    const r = rows[i];
-    r.status = getStatus(r);
-    if (filter !== 'all' && r.status !== filter) return false;
-    if (searchQ) {
-      const q = searchQ.toLowerCase();
-      return r.orig.toLowerCase().includes(q) || r.trans.toLowerCase().includes(q);
-    }
+// ═══ RENDER ═══════════════════════════════════════════
+function render(){
+  filtered=rows.map((r,i)=>i).filter(i=>{
+    const r=rows[i];r.status=getStatus(r);
+    if(filter!=='all'&&r.status!==filter)return false;
+    if(searchQ){const q=searchQ.toLowerCase();return r.orig.toLowerCase().includes(q)||r.trans.toLowerCase().includes(q);}
     return true;
   });
-
-  const wrap = document.getElementById('table-wrap');
-  wrap.innerHTML = '';
-  const frag = document.createDocumentFragment();
-
-  for (const i of filtered) {
-    const r = rows[i];
-    const max  = maxChars(r);
-    const olen = origChars(r);
-    const tlen = transChars(r);
-    const over  = max > 0 && tlen > max;
-    const tight = max > 0 && !over && max - tlen <= 5;
-
-    const div = document.createElement('div');
-    div.className = `row status-${r.status}`;
-    div.dataset.idx = i;
-
-    // # cell
-    const numCell = document.createElement('div');
-    numCell.className = 'cell row-num';
-    numCell.textContent = i + 1;
-
-    // Original cell
-    const origCell = document.createElement('div');
-    origCell.className = 'cell';
-    const origSpan = document.createElement('span');
-    origSpan.className = 'orig-text';
-    origSpan.textContent = r.orig;
-    origCell.appendChild(origSpan);
-
-    // Translation cell
-    const transCell = document.createElement('div');
-    transCell.className = 'cell trans-cell';
-    const ta = document.createElement('textarea');
-    ta.className = 'trans-input';
-    ta.value = r.trans;
-    ta.rows = 1;
-    ta.spellcheck = true;
-    ta.dataset.idx = i;
-    ta.addEventListener('input', onTransInput);
-    ta.addEventListener('focus', onTransFocus);
-    transCell.appendChild(ta);
-
-    // Status cell
-    const statusCell = document.createElement('div');
-    statusCell.className = 'cell status-cell';
-
-    const badge = document.createElement('span');
-    badge.className = `status-badge badge-${r.status}`;
-    badge.textContent = r.status === 'ok' ? t('badge_ok') : r.status === 'warn' ? t('badge_warn') : t('badge_err');
+  const wrap=document.getElementById('table-wrap');wrap.innerHTML='';
+  const frag=document.createDocumentFragment();
+  for(const i of filtered){
+    const r=rows[i],max=maxChars(r),olen=origChars(r),tlen=transChars(r);
+    const over=max>0&&tlen>max,tight=max>0&&!over&&max-tlen<=5;
+    const div=document.createElement('div');div.className=`row status-${r.status}`;div.dataset.idx=i;
+    const numCell=document.createElement('div');numCell.className='cell row-num';numCell.textContent=i+1;
+    const origCell=document.createElement('div');origCell.className='cell';
+    const origSpan=document.createElement('span');origSpan.className='orig-text';origSpan.textContent=r.orig;origCell.appendChild(origSpan);
+    const transCell=document.createElement('div');transCell.className='cell trans-cell';
+    const ta=document.createElement('textarea');ta.className='trans-input';ta.value=r.trans;ta.rows=1;ta.spellcheck=true;ta.dataset.idx=i;
+    ta.addEventListener('input',onTransInput);ta.addEventListener('focus',onTransFocus);transCell.appendChild(ta);
+    const statusCell=document.createElement('div');statusCell.className='cell status-cell';
+    const badge=document.createElement('span');badge.className=`status-badge badge-${r.status}`;
+    badge.textContent=r.status==='ok'?t('badge_ok'):r.status==='warn'?t('badge_warn'):t('badge_err');
     statusCell.appendChild(badge);
-
-    if (max > 0) {
-      // Character info block: trans count / max  +  orig char count below
-      const charInfo = document.createElement('div');
-      charInfo.className = 'char-info';
-
-      const counter = document.createElement('span');
-      counter.className = `char-counter${over ? ' over' : tight ? ' tight' : ''}`;
-      counter.textContent = `${tlen} / ${max}`;
-
-      const origCountEl = document.createElement('span');
-      origCountEl.className = 'char-orig';
-      origCountEl.textContent = `orig: ${olen}`;
-
-      charInfo.appendChild(counter);
-      charInfo.appendChild(origCountEl);
-      statusCell.appendChild(charInfo);
-
-      // ✨ fix button only when over limit
-      if (over) {
-        const mb = document.createElement('button');
-        mb.className = 'btn-magic';
-        mb.textContent = '✨';
-        mb.title = 'Auto-Fix with Gemini API';
-        mb.onclick = () => fixSingleRow(i, mb);
-        statusCell.appendChild(mb);
+    if(max>0){
+      const charInfo=document.createElement('div');charInfo.className='char-info';
+      const counter=document.createElement('span');counter.className=`char-counter${over?' over':tight?' tight':''}`;counter.textContent=`${tlen} / ${max}`;
+      const origEl=document.createElement('span');origEl.className='char-orig';origEl.textContent=`orig: ${olen}`;
+      charInfo.appendChild(counter);charInfo.appendChild(origEl);statusCell.appendChild(charInfo);
+      if(over){
+        const mb=document.createElement('button');mb.className='btn-magic';mb.textContent='✨';mb.title='Auto-Fix with Gemini API';
+        mb.onclick=()=>fixSingleRow(i,mb);statusCell.appendChild(mb);
       }
     }
-
-    div.appendChild(numCell);
-    div.appendChild(origCell);
-    div.appendChild(transCell);
-    div.appendChild(statusCell);
+    div.appendChild(numCell);div.appendChild(origCell);div.appendChild(transCell);div.appendChild(statusCell);
     frag.appendChild(div);
   }
-
-  wrap.appendChild(frag);
-  updateStats();
-  document.getElementById('footer-visible').textContent = filtered.length + t('footer_rows');
+  wrap.appendChild(frag);updateStats();
+  document.getElementById('footer-visible').textContent=filtered.length+t('footer_rows');
 }
 
-// ═══════════════════════════════════════════════════════
-//  INPUT HANDLERS
-// ═══════════════════════════════════════════════════════
-function onTransInput(e) {
-  const i = parseInt(e.target.dataset.idx, 10);
-  rows[i].trans = e.target.value;
-  rows[i].status = getStatus(rows[i]);
-  updateRowDOM(i);
-  updateStats();
-  document.getElementById('footer-saved').textContent = t('footer_unsaved');
+// ═══ INPUT HANDLERS ═══════════════════════════════════
+function onTransInput(e){
+  const i=parseInt(e.target.dataset.idx,10);rows[i].trans=e.target.value;rows[i].status=getStatus(rows[i]);
+  updateRowDOM(i);updateStats();document.getElementById('footer-saved').textContent=t('footer_unsaved');
 }
-function onTransFocus(e) {
-  e.target.style.height = 'auto';
-  e.target.style.height = e.target.scrollHeight + 'px';
-}
+function onTransFocus(e){e.target.style.height='auto';e.target.style.height=e.target.scrollHeight+'px';}
 
-// ═══════════════════════════════════════════════════════
-//  DOM ROW UPDATE  (used after AI fix or manual edit)
-// ═══════════════════════════════════════════════════════
-function updateRowDOM(idx) {
-  const rowEl = document.querySelector(`.row[data-idx="${idx}"]`);
-  if (!rowEl) return;
-
-  const r    = rows[idx];
-  const max  = maxChars(r);
-  const olen = origChars(r);
-  const tlen = transChars(r);
-  const over  = max > 0 && tlen > max;
-  const tight = max > 0 && !over && max - tlen <= 5;
-
-  rowEl.className = `row status-${r.status}`;
-
-  const textarea = rowEl.querySelector('.trans-input');
-  if (textarea) {
-    textarea.value = r.trans;
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
-  }
-
-  const badge = rowEl.querySelector('.status-badge');
-  if (badge) {
-    badge.className = `status-badge badge-${r.status}`;
-    badge.textContent = r.status === 'ok' ? t('badge_ok') : r.status === 'warn' ? t('badge_warn') : t('badge_err');
-  }
-
-  if (max > 0) {
-    // Update or create char-info
-    let charInfo = rowEl.querySelector('.char-info');
-    if (!charInfo) {
-      charInfo = document.createElement('div');
-      charInfo.className = 'char-info';
-      const counter = document.createElement('span');
-      counter.className = 'char-counter';
-      const origCountEl = document.createElement('span');
-      origCountEl.className = 'char-orig';
-      charInfo.appendChild(counter);
-      charInfo.appendChild(origCountEl);
-      rowEl.querySelector('.status-cell').insertBefore(charInfo, rowEl.querySelector('.btn-magic'));
+// ═══ DOM ROW UPDATE ═══════════════════════════════════
+function updateRowDOM(idx){
+  const rowEl=document.querySelector(`.row[data-idx="${idx}"]`);if(!rowEl)return;
+  const r=rows[idx],max=maxChars(r),olen=origChars(r),tlen=transChars(r);
+  const over=max>0&&tlen>max,tight=max>0&&!over&&max-tlen<=5;
+  rowEl.className=`row status-${r.status}`;
+  const textarea=rowEl.querySelector('.trans-input');
+  if(textarea){textarea.value=r.trans;textarea.style.height='auto';textarea.style.height=textarea.scrollHeight+'px';}
+  const badge=rowEl.querySelector('.status-badge');
+  if(badge){badge.className=`status-badge badge-${r.status}`;badge.textContent=r.status==='ok'?t('badge_ok'):r.status==='warn'?t('badge_warn'):t('badge_err');}
+  if(max>0){
+    let charInfo=rowEl.querySelector('.char-info');
+    if(!charInfo){
+      charInfo=document.createElement('div');charInfo.className='char-info';
+      const c=document.createElement('span');c.className='char-counter';
+      const o=document.createElement('span');o.className='char-orig';
+      charInfo.appendChild(c);charInfo.appendChild(o);
+      rowEl.querySelector('.status-cell').insertBefore(charInfo,rowEl.querySelector('.btn-magic'));
     }
-    const counter = charInfo.querySelector('.char-counter');
-    counter.className = `char-counter${over ? ' over' : tight ? ' tight' : ''}`;
-    counter.textContent = `${tlen} / ${max}`;
-    const origEl = charInfo.querySelector('.char-orig');
-    if (origEl) origEl.textContent = `orig: ${olen}`;
-
-    // Add/remove ✨ button
-    let mb = rowEl.querySelector('.btn-magic');
-    if (over && !mb) {
-      mb = document.createElement('button');
-      mb.className = 'btn-magic';
-      mb.textContent = '✨';
-      mb.title = 'Auto-Fix with Gemini API';
-      mb.onclick = () => fixSingleRow(idx, mb);
-      rowEl.querySelector('.status-cell').appendChild(mb);
-    } else if (!over && mb) {
-      mb.remove();
-    }
+    const counter=charInfo.querySelector('.char-counter');
+    counter.className=`char-counter${over?' over':tight?' tight':''}`;counter.textContent=`${tlen} / ${max}`;
+    const origEl=charInfo.querySelector('.char-orig');if(origEl)origEl.textContent=`orig: ${olen}`;
+    let mb=rowEl.querySelector('.btn-magic');
+    if(over&&!mb){
+      mb=document.createElement('button');mb.className='btn-magic';mb.textContent='✨';mb.title='Auto-Fix with Gemini API';
+      mb.onclick=()=>fixSingleRow(idx,mb);rowEl.querySelector('.status-cell').appendChild(mb);
+    }else if(!over&&mb){mb.remove();}
   }
 }
 
-// ═══════════════════════════════════════════════════════
-//  STATS
-// ═══════════════════════════════════════════════════════
-function updateStats() {
-  let ok = 0, warn = 0, err = 0;
-  for (const r of rows) {
-    r.status = getStatus(r);
-    if (r.status === 'ok') ok++;
-    else if (r.status === 'warn') warn++;
-    else err++;
-  }
-  const total = rows.length, pct = total ? Math.round(ok / total * 100) : 0;
-  document.getElementById('s-total').textContent = total;
-  document.getElementById('s-ok').textContent = ok;
-  document.getElementById('s-warn').textContent = warn;
-  document.getElementById('s-err').textContent = err;
-  document.getElementById('s-pct').textContent = pct + '%';
-  document.getElementById('progress-bar').style.width = pct + '%';
-  const hasIssues = warn + err > 0;
-  document.getElementById('btn-prev-issue').disabled = !hasIssues;
-  document.getElementById('btn-next-issue').disabled = !hasIssues;
-  document.getElementById('btn-export').disabled = rows.length === 0;
+// ═══ STATS ════════════════════════════════════════════
+function updateStats(){
+  let ok=0,warn=0,err=0;
+  for(const r of rows){r.status=getStatus(r);if(r.status==='ok')ok++;else if(r.status==='warn')warn++;else err++;}
+  const total=rows.length,pct=total?Math.round(ok/total*100):0;
+  document.getElementById('s-total').textContent=total;document.getElementById('s-ok').textContent=ok;
+  document.getElementById('s-warn').textContent=warn;document.getElementById('s-err').textContent=err;
+  document.getElementById('s-pct').textContent=pct+'%';document.getElementById('progress-bar').style.width=pct+'%';
+  const has=warn+err>0;
+  document.getElementById('btn-prev-issue').disabled=!has;document.getElementById('btn-next-issue').disabled=!has;
+  document.getElementById('btn-export').disabled=rows.length===0;
 }
 
-// ═══════════════════════════════════════════════════════
-//  FILTER / SEARCH
-// ═══════════════════════════════════════════════════════
-function setFilter(f, el) {
-  filter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  render();
-}
-function onSearch(v) { searchQ = v; render(); }
-
-// ═══════════════════════════════════════════════════════
-//  JUMP TO ISSUE
-// ═══════════════════════════════════════════════════════
-function jumpIssue(dir) {
-  const issues = rows.map((r, i) => i).filter(i => rows[i].status !== 'ok');
-  if (!issues.length) return;
-  issueIdx = Math.max(0, Math.min(issues.length - 1, issueIdx + dir));
-  const target = issues[issueIdx];
-  filter = 'all'; searchQ = '';
-  document.getElementById('search-box').value = '';
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+// ═══ FILTER / SEARCH / JUMP ═══════════════════════════
+function setFilter(f,el){filter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');render();}
+function onSearch(v){searchQ=v;render();}
+function jumpIssue(dir){
+  const issues=rows.map((r,i)=>i).filter(i=>rows[i].status!=='ok');if(!issues.length)return;
+  issueIdx=Math.max(0,Math.min(issues.length-1,issueIdx+dir));
+  const target=issues[issueIdx];filter='all';searchQ='';
+  document.getElementById('search-box').value='';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   document.querySelector('.filter-btn.all').classList.add('active');
   render();
-  const el = document.querySelector(`.row[data-idx="${target}"]`);
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    el.style.outline = '2px solid var(--accent)';
-    setTimeout(() => el.style.outline = '', 1200);
-    el.querySelector('.trans-input').focus();
-  }
+  const el=document.querySelector(`.row[data-idx="${target}"]`);
+  if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.outline='2px solid var(--accent)';setTimeout(()=>el.style.outline='',1200);el.querySelector('.trans-input').focus();}
 }
 
-// ═══════════════════════════════════════════════════════
-//  EXPORT
-// ═══════════════════════════════════════════════════════
-function exportFile() {
-  const errs = rows.filter(r => r.status === 'err').length;
-  if (errs > 0 && !confirm(errs + t('confirm_truncate'))) return;
-
-  const detFmt = document.getElementById('footer-fmt').textContent.replace('Format: ', '').toLowerCase();
-  let output = '';
-
-  if (detFmt === 'sf3') {
-    const lines = ['# LoreScribe Translation File', '# Format: OFFSET|BYTE_LEN|TEXT', '#'];
-    for (const r of rows) lines.push(`${r.offset}|${r.byteLen}|${r.trans}`);
-    output = lines.join('\n');
-  } else if (detFmt === 'csv') {
-    const lines = ['id,original,translation'];
-    rows.forEach((r, i) => lines.push(`${i + 1},"${r.orig.replace(/"/g, '""')}","${r.trans.replace(/"/g, '""')}"`));
-    output = lines.join('\n');
-  } else if (detFmt === 'tsv') {
-    const lines = ['id\toriginal\ttranslation'];
-    rows.forEach((r, i) => lines.push(`${i + 1}\t${r.orig}\t${r.trans}`));
-    output = lines.join('\n');
-  } else if (detFmt === 'po') {
-    const lines = ['# Generated by LoreScribe', ''];
-    for (const r of rows) {
-      lines.push(`msgid "${r.orig.replace(/"/g, '\\"')}"`);
-      lines.push(`msgstr "${r.trans.replace(/"/g, '\\"')}"`);
-      lines.push('');
-    }
-    output = lines.join('\n');
-  } else {
-    output = rows.map(r => r.trans).join('\n');
-  }
-
-  const blob = new Blob([output], { type: 'text/plain;charset=utf-8' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = fileName.replace(/\.[^.]+$/, '') + '_TRANSLATED.' + (detFmt === 'tsv' ? 'tsv' : detFmt === 'po' ? 'po' : 'txt');
-  a.click();
-  URL.revokeObjectURL(a.href);
-  document.getElementById('footer-saved').textContent = t('footer_exported');
-  showToast(t('toast_exported'), 'ok');
+// ═══ EXPORT ═══════════════════════════════════════════
+function exportFile(){
+  const errs=rows.filter(r=>r.status==='err').length;
+  if(errs>0&&!confirm(errs+t('confirm_truncate')))return;
+  const detFmt=document.getElementById('footer-fmt').textContent.replace('Format: ','').toLowerCase();
+  let output='';
+  if(detFmt==='sf3'){
+    const lines=['# LoreScribe Translation File','# Format: OFFSET|BYTE_LEN|TEXT','#'];
+    for(const r of rows)lines.push(`${r.offset}|${r.byteLen}|${r.trans}`);output=lines.join('\n');
+  }else if(detFmt==='csv'){
+    const lines=['id,original,translation'];
+    rows.forEach((r,i)=>lines.push(`${i+1},"${r.orig.replace(/"/g,'""')}","${r.trans.replace(/"/g,'""')}"`));output=lines.join('\n');
+  }else if(detFmt==='tsv'){
+    const lines=['id\toriginal\ttranslation'];
+    rows.forEach((r,i)=>lines.push(`${i+1}\t${r.orig}\t${r.trans}`));output=lines.join('\n');
+  }else if(detFmt==='po'){
+    const lines=['# Generated by LoreScribe',''];
+    for(const r of rows){lines.push(`msgid "${r.orig.replace(/"/g,'\\"')}"`);lines.push(`msgstr "${r.trans.replace(/"/g,'\\"')}"`);lines.push('');}
+    output=lines.join('\n');
+  }else{output=rows.map(r=>r.trans).join('\n');}
+  const blob=new Blob([output],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=fileName.replace(/\.[^.]+$/,'')+'_TRANSLATED.'+(detFmt==='tsv'?'tsv':detFmt==='po'?'po':'txt');
+  a.click();URL.revokeObjectURL(a.href);
+  document.getElementById('footer-saved').textContent=t('footer_exported');showToast(t('toast_exported'),'ok');
 }
 
-// ═══════════════════════════════════════════════════════
-//  FILE LOAD
-// ═══════════════════════════════════════════════════════
-function loadText(text, name) {
-  const result = parseFile(text, fmt);
-  if (!result.rows.length) { showToast(t('toast_no_rows'), 'err'); return; }
-  rows = result.rows;
-  fileName = name;
-  issueIdx = -1;
+// ═══ LOAD ═════════════════════════════════════════════
+function loadText(text,name){
+  const result=parseFile(text,fmt);if(!result.rows.length){showToast(t('toast_no_rows'),'err');return;}
+  rows=result.rows;fileName=name;issueIdx=-1;
   document.getElementById('drop-zone').classList.add('hidden');
   document.getElementById('table-wrap').classList.remove('hidden');
   document.getElementById('col-headers').classList.remove('hidden');
-  document.getElementById('footer-file').textContent = name;
-  render();
-  showToast(rows.length + t('toast_loaded') + ' (' + result.fmt.toUpperCase() + ')', 'ok');
+  document.getElementById('footer-file').textContent=name;
+  render();showToast(rows.length+t('toast_loaded')+' ('+result.fmt.toUpperCase()+')','ok');
 }
-
-document.getElementById('file-input').addEventListener('change', e => {
-  const file = e.target.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => loadText(ev.target.result, file.name);
-  reader.readAsText(file, 'UTF-8');
-  e.target.value = '';
+document.getElementById('file-input').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();reader.onload=ev=>loadText(ev.target.result,file.name);reader.readAsText(file,'UTF-8');e.target.value='';
+});
+const dz=document.getElementById('drop-zone');
+document.body.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag-over');});
+document.body.addEventListener('dragleave',e=>{if(!e.relatedTarget)dz.classList.remove('drag-over');});
+document.body.addEventListener('drop',e=>{
+  e.preventDefault();dz.classList.remove('drag-over');
+  const file=e.dataTransfer.files[0];if(!file)return;
+  const reader=new FileReader();reader.onload=ev=>loadText(ev.target.result,file.name);reader.readAsText(file,'UTF-8');
 });
 
-const dz = document.getElementById('drop-zone');
-document.body.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
-document.body.addEventListener('dragleave', e => { if (!e.relatedTarget) dz.classList.remove('drag-over'); });
-document.body.addEventListener('drop', e => {
-  e.preventDefault(); dz.classList.remove('drag-over');
-  const file = e.dataTransfer.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => loadText(ev.target.result, file.name);
-  reader.readAsText(file, 'UTF-8');
-});
-
-// ═══════════════════════════════════════════════════════
-//  DUAL LOAD MODE
-// ═══════════════════════════════════════════════════════
-function setLoadMode(mode, el) {
-  loadMode = mode;
-  document.querySelectorAll('.load-mode-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  const bar = document.getElementById('dual-load-bar');
-  const sBtn = document.getElementById('btn-single-load');
-  if (mode === 'dual') { bar.classList.add('visible'); sBtn.style.display = 'none'; }
-  else { bar.classList.remove('visible'); sBtn.style.display = ''; }
+// ═══ DUAL LOAD ════════════════════════════════════════
+function setLoadMode(mode,el){
+  loadMode=mode;document.querySelectorAll('.load-mode-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');
+  const bar=document.getElementById('dual-load-bar'),sBtn=document.getElementById('btn-single-load');
+  if(mode==='dual'){bar.classList.add('visible');sBtn.style.display='none';}
+  else{bar.classList.remove('visible');sBtn.style.display='';}
 }
-
-document.getElementById('file-input-orig').addEventListener('change', e => {
-  const file = e.target.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    origRows = parseFile(ev.target.result, fmt).rows;
-    document.getElementById('btn-load-orig').classList.add('loaded');
-    document.getElementById('orig-filename').textContent = '✓ ' + file.name;
-    checkMergeReady();
-    showToast(origRows.length + ' original rows loaded', 'ok');
-  };
-  reader.readAsText(file, 'UTF-8');
-  e.target.value = '';
+document.getElementById('file-input-orig').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{origRows=parseFile(ev.target.result,fmt).rows;document.getElementById('btn-load-orig').classList.add('loaded');document.getElementById('orig-filename').textContent='✓ '+file.name;checkMergeReady();showToast(origRows.length+' original rows loaded','ok');};
+  reader.readAsText(file,'UTF-8');e.target.value='';
 });
-
-document.getElementById('file-input-trans').addEventListener('change', e => {
-  const file = e.target.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    transRows = parseFile(ev.target.result, fmt).rows;
-    document.getElementById('btn-load-trans').classList.add('loaded');
-    document.getElementById('trans-filename').textContent = '✓ ' + file.name;
-    checkMergeReady();
-    showToast(transRows.length + ' translated rows loaded', 'ok');
-  };
-  reader.readAsText(file, 'UTF-8');
-  e.target.value = '';
+document.getElementById('file-input-trans').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{transRows=parseFile(ev.target.result,fmt).rows;document.getElementById('btn-load-trans').classList.add('loaded');document.getElementById('trans-filename').textContent='✓ '+file.name;checkMergeReady();showToast(transRows.length+' translated rows loaded','ok');};
+  reader.readAsText(file,'UTF-8');e.target.value='';
 });
-
-function checkMergeReady() {
-  document.getElementById('btn-merge').disabled = !(origRows && origRows.length > 0);
-  if (origRows && transRows) mergeFiles();
-}
-
-function mergeFiles() {
-  if (!origRows || !origRows.length) { showToast(t('dual_orig_missing'), 'err'); return; }
-  const merged = [];
-  if (transRows && transRows.length > 0) {
-    const hasSF3 = origRows.some(r => r.offset >= 0) && transRows.some(r => r.offset >= 0);
-    if (hasSF3) {
-      const byOffset = {};
-      transRows.forEach(r => { if (r.offset >= 0) byOffset[r.offset] = r.trans; });
-      origRows.forEach(r => merged.push({
-        offset: r.offset, byteLen: r.byteLen, orig: r.orig,
-        trans: (byOffset[r.offset] !== undefined && byOffset[r.offset] !== r.orig) ? byOffset[r.offset] : r.orig
-      }));
-    } else {
-      origRows.forEach((r, i) => {
-        const tRow = transRows[i];
-        const trans = (tRow && tRow.trans && tRow.trans !== tRow.orig) ? tRow.trans : r.orig;
-        merged.push({ offset: r.offset, byteLen: r.byteLen, orig: r.orig, trans });
-      });
+function checkMergeReady(){document.getElementById('btn-merge').disabled=!(origRows&&origRows.length>0);if(origRows&&transRows)mergeFiles();}
+function mergeFiles(){
+  if(!origRows||!origRows.length){showToast(t('dual_orig_missing'),'err');return;}
+  const merged=[];
+  if(transRows&&transRows.length>0){
+    const hasSF3=origRows.some(r=>r.offset>=0)&&transRows.some(r=>r.offset>=0);
+    if(hasSF3){
+      const byOffset={};transRows.forEach(r=>{if(r.offset>=0)byOffset[r.offset]=r.trans;});
+      origRows.forEach(r=>merged.push({offset:r.offset,byteLen:r.byteLen,orig:r.orig,trans:(byOffset[r.offset]!==undefined&&byOffset[r.offset]!==r.orig)?byOffset[r.offset]:r.orig}));
+    }else{
+      origRows.forEach((r,i)=>{const tRow=transRows[i];const trans=(tRow&&tRow.trans&&tRow.trans!==tRow.orig)?tRow.trans:r.orig;merged.push({offset:r.offset,byteLen:r.byteLen,orig:r.orig,trans});});
     }
-    if (!merged.length) { showToast(t('dual_no_match'), 'err'); return; }
-  } else {
-    origRows.forEach(r => merged.push({ offset: r.offset, byteLen: r.byteLen, orig: r.orig, trans: r.orig }));
-  }
-  rows = merged; issueIdx = -1;
-  fileName = document.getElementById('orig-filename').textContent.replace('✓ ', '') || 'merged';
-  document.getElementById('drop-zone').classList.add('hidden');
-  document.getElementById('table-wrap').classList.remove('hidden');
-  document.getElementById('col-headers').classList.remove('hidden');
-  document.getElementById('footer-file').textContent = fileName;
-  render();
-  const matched = merged.filter(r => r.trans !== r.orig).length;
-  showToast(merged.length + t('dual_merged') + ' (' + matched + ' translated)', 'ok');
+    if(!merged.length){showToast(t('dual_no_match'),'err');return;}
+  }else{origRows.forEach(r=>merged.push({offset:r.offset,byteLen:r.byteLen,orig:r.orig,trans:r.orig}));}
+  rows=merged;issueIdx=-1;fileName=document.getElementById('orig-filename').textContent.replace('✓ ','')||'merged';
+  document.getElementById('drop-zone').classList.add('hidden');document.getElementById('table-wrap').classList.remove('hidden');document.getElementById('col-headers').classList.remove('hidden');document.getElementById('footer-file').textContent=fileName;
+  render();const matched=merged.filter(r=>r.trans!==r.orig).length;showToast(merged.length+t('dual_merged')+' ('+matched+' translated)','ok');
 }
 
-// ═══════════════════════════════════════════════════════
-//  TOAST
-// ═══════════════════════════════════════════════════════
-let toastTimer = null;
-function showToast(msg, type = '') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = `show ${type}`;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.className = type, 2800);
+// ═══ TOAST ════════════════════════════════════════════
+let toastTimer=null;
+function showToast(msg,type=''){
+  const el=document.getElementById('toast');el.textContent=msg;el.className=`show ${type}`;
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.className=type,3200);
 }
 
-// ═══════════════════════════════════════════════════════
-//  KEYBOARD SHORTCUTS
-// ═══════════════════════════════════════════════════════
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape')              { closeHelp(); return; }
-  if (e.ctrlKey && e.key === 's')      { e.preventDefault(); if (rows.length) exportFile(); return; }
-  if (e.key === 'F3')                  { e.preventDefault(); jumpIssue(e.shiftKey ? -1 : 1); }
+// ═══ KEYBOARD ═════════════════════════════════════════
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeHelp();return;}
+  if(e.ctrlKey&&e.key==='s'){e.preventDefault();if(rows.length)exportFile();return;}
+  if(e.key==='F3'){e.preventDefault();jumpIssue(e.shiftKey?-1:1);}
 });
 
 // ═══════════════════════════════════════════════════════
-//  GEMINI API  — CORE
+//  GEMINI API
 // ═══════════════════════════════════════════════════════
-function getAPIKey()   { return document.getElementById('api-key-input').value.trim(); }
-function getAPIModel() { return document.getElementById('api-model-select').value; }
+function getAPIKey()  {return document.getElementById('api-key-input').value.trim();}
+function getAPIModel(){return document.getElementById('api-model-select').value;}
 
 /**
- * Build Gemini endpoint URL.
- * Uses AbortController for a configurable timeout.
+ * Core Gemini request.
+ * Returns: response text | "RATE_LIMIT" | null
  */
-async function geminiRequest(prompt, timeoutMs = 50000) {
-  const apiKey = getAPIKey();
-  if (!apiKey) { showToast('Missing Gemini API Key!', 'err'); return null; }
-
-  const model    = getAPIModel();
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-
-  try {
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      signal: controller.signal,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.1,
-          response_mime_type: 'application/json'
-        }
-      })
-    });
+async function geminiRequest(prompt,timeoutMs=30000){
+  const apiKey=getAPIKey();
+  if(!apiKey){showToast('Missing Gemini API Key!','err');return null;}
+  const endpoint=`https://generativelanguage.googleapis.com/v1beta/models/${getAPIModel()}:generateContent?key=${apiKey}`;
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
+  try{
+    const res=await fetch(endpoint,{method:'POST',signal:controller.signal,headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.1,response_mime_type:'application/json'}})});
     clearTimeout(timer);
-
-    const data = await res.json();
-
-    if (data.error) {
-      if (data.error.code === 429) return 'RATE_LIMIT';
-      showToast('API Error: ' + data.error.message, 'err');
-      return null;
-    }
-
-    return data.candidates?.[0]?.content?.parts?.[0]?.text ?? null;
-
-  } catch (err) {
+    const data=await res.json();
+    if(data.error){if(data.error.code===429)return'RATE_LIMIT';showToast('API Error: '+data.error.message,'err');console.error('[LoreScribe]',data.error);return null;}
+    return data.candidates?.[0]?.content?.parts?.[0]?.text??null;
+  }catch(err){
     clearTimeout(timer);
-    if (err.name === 'AbortError') {
-      showToast(`Timeout after ${timeoutMs / 1000}s — try a smaller batch or faster model`, 'err');
-    } else {
-      showToast('Network error — check console', 'err');
-      console.error('[LoreScribe] geminiRequest error:', err);
-    }
+    if(err.name==='AbortError')showToast(`Timeout after ${timeoutMs/1000}s — try a faster model`,'err');
+    else{showToast('Network error — check console','err');console.error('[LoreScribe] fetch error:',err);}
     return null;
   }
 }
 
-// ═══════════════════════════════════════════════════════
-//  SINGLE ROW FIX  (✨ button per row)
-// ═══════════════════════════════════════════════════════
-async function fixSingleRow(idx, btnEl) {
-  const r = rows[idx];
-  const max = maxChars(r);
-  if (max <= 0) return;
-
-  if (!getAPIKey()) { showToast('Missing Gemini API Key!', 'err'); return; }
-
-  if (btnEl) btnEl.classList.add('loading');
-
-  const origLen = origChars(r);
-  const prompt = `You are a professional game localization expert.
-Shorten the translation so it fits in STRICTLY ${max} characters or fewer.
-Keep the SAME language as the current translation.
-Preserve the original meaning as much as possible.
-The original text has ${origLen} characters for reference.
-
-Original: ${JSON.stringify(r.orig)}
+// ═══ SINGLE ROW FIX ═══════════════════════════════════
+async function fixSingleRow(idx,btnEl){
+  const r=rows[idx],max=maxChars(r);if(max<=0)return;
+  if(!getAPIKey()){showToast('Missing Gemini API Key!','err');return;}
+  if(btnEl)btnEl.classList.add('loading');
+  const prompt=`You are a professional game localization expert.
+Shorten the translation to STRICTLY ${max} characters or fewer.
+Keep the SAME language as the current translation. Preserve meaning.
+Original text (${origChars(r)} chars): ${JSON.stringify(r.orig)}
 Current translation (TOO LONG): ${JSON.stringify(r.trans)}
-Max allowed characters: ${max}
-
-Return ONLY a JSON object, no extra text, no markdown:
-{"trans": "shortened text here"}`;
-
-  const raw = await geminiRequest(prompt, 45000);
-  if (btnEl) btnEl.classList.remove('loading');
-
-  if (raw === 'RATE_LIMIT') {
-    showToast('Rate limit — wait 60s and try again', 'err'); return;
-  }
-  if (!raw) return;
-
-  try {
-    const clean = raw.replace(/```json|```/g, '').trim();
-    const obj   = JSON.parse(clean);
-    if (obj && typeof obj.trans === 'string') {
-      rows[idx].trans  = obj.trans;
-      rows[idx].status = getStatus(rows[idx]);
-      updateRowDOM(idx);
-      updateStats();
-      document.getElementById('footer-saved').textContent = t('footer_unsaved');
-
-      const newLen = transChars(rows[idx]);
-      if (newLen > max) {
-        showToast(`Row ${idx + 1}: still ${newLen}/${max} chars — try editing manually`, 'warn');
-      }
+Max allowed: ${max} characters
+Return ONLY a JSON object, no markdown: {"trans": "shortened text here"}`;
+  const raw=await geminiRequest(prompt,30000);
+  if(btnEl)btnEl.classList.remove('loading');
+  if(raw==='RATE_LIMIT'){showToast('Rate limit — wait ~60s then try again','err');return;}
+  if(!raw)return;
+  try{
+    const obj=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    if(typeof obj.trans==='string'&&obj.trans.trim()){
+      rows[idx].trans=obj.trans;rows[idx].status=getStatus(rows[idx]);
+      updateRowDOM(idx);updateStats();document.getElementById('footer-saved').textContent=t('footer_unsaved');
+      const newLen=transChars(rows[idx]);
+      if(newLen>max)showToast(`Row ${idx+1}: still ${newLen}/${max} chars — edit manually`,'warn');
     }
-  } catch (err) {
-    showToast('Parse error — check console', 'err');
-    console.error('[LoreScribe] fixSingleRow parse error:', err, '\nRaw:', raw);
-  }
+  }catch(err){showToast('Parse error — check console','err');console.error('[LoreScribe] fixSingleRow parse:',err,'\nRaw:',raw);}
 }
 
 // ═══════════════════════════════════════════════════════
-//  BATCH FIX  (Auto-Fix Long button)
+//  AUTO-FIX ALL LONG ROWS
+//  One request per row — no batch complexity, no hangs.
+//  Rate limit → stop immediately and report progress.
 // ═══════════════════════════════════════════════════════
-async function fixAllLongRows() {
-  if (!getAPIKey()) { showToast('Missing Gemini API Key!', 'err'); return; }
+async function fixAllLongRows(){
+  if(!getAPIKey()){showToast('Missing Gemini API Key!','err');return;}
+  const longRows=rows.map((r,i)=>({r,i})).filter(x=>x.r.status==='err');
+  if(!longRows.length){showToast('No long rows to fix.','ok');return;}
+  if(!confirm(`Auto-Fix Long: ${longRows.length} rows will be fixed one by one.\nModel: ${getAPIModel()}\n~500ms between requests.\n\nProceed?`))return;
 
-  const longRows = rows.map((r, i) => ({ r, i })).filter(x => x.r.status === 'err');
-  if (!longRows.length) { showToast('No long rows to fix.', 'ok'); return; }
+  const fixBtn=document.getElementById('btn-autofix'),origText=fixBtn.textContent;
+  fixBtn.disabled=true;
+  let totalFixed=0,totalFailed=0;
 
-  const BATCH_SIZE = 10;   // safe for all models
-  const DELAY_MS   = 3000; // between batches to respect rate limits
+  for(let i=0;i<longRows.length;i++){
+    const{r,i:idx}=longRows[i];
+    fixBtn.textContent=`⏳ ${i+1} / ${longRows.length}`;
 
-  const confirmed = confirm(
-    `BATCH MODE: ${longRows.length} long rows → processed in chunks of ${BATCH_SIZE}.\n\n` +
-    `Model: ${getAPIModel()}\n` +
-    `Estimated time: ~${Math.ceil(longRows.length / BATCH_SIZE) * (DELAY_MS / 1000 + 5)}s\n\nProceed?`
-  );
-  if (!confirmed) return;
+    // Show spinner on this row
+    const rowEl=document.querySelector(`.row[data-idx="${idx}"]`);
+    const mb=rowEl?.querySelector('.btn-magic');
+    if(mb)mb.classList.add('loading');
 
-  const fixBtn   = document.getElementById('btn-autofix');
-  const origText = fixBtn.textContent;
-  fixBtn.disabled = true;
+    const max=maxChars(r);
+    const prompt=`You are a professional game localization expert.
+Shorten this translation to STRICTLY ${max} characters or fewer.
+Keep the SAME language as the current translation. Preserve meaning.
+Original text (${origChars(r)} chars): ${JSON.stringify(r.orig)}
+Current translation (TOO LONG): ${JSON.stringify(r.trans)}
+Max allowed: ${max} characters
+Return ONLY a JSON object, no markdown: {"trans": "shortened text here"}`;
 
-  let totalFixed = 0, totalFailed = 0;
+    const raw=await geminiRequest(prompt,30000);
+    if(mb)mb.classList.remove('loading');
 
-  for (let i = 0; i < longRows.length; i += BATCH_SIZE) {
-    const batch = longRows.slice(i, i + BATCH_SIZE);
-    const done  = Math.min(i + batch.length, longRows.length);
-    fixBtn.textContent = `⏳ ${done} / ${longRows.length}`;
-
-    // Set loading spinners
-    batch.forEach(item => {
-      const rowEl = document.querySelector(`.row[data-idx="${item.i}"]`);
-      rowEl?.querySelector('.btn-magic')?.classList.add('loading');
-    });
-
-    // Build batch payload — include orig char count for AI context
-    const payload = batch.map(item => ({
-      id:      item.i,          // row index (integer), returned as-is
-      orig:    item.r.orig,
-      trans:   item.r.trans,
-      max:     maxChars(item.r),
-      origLen: origChars(item.r)
-    }));
-
-    const prompt = `You are a professional game localization expert.
-For each item below, shorten "trans" so it is STRICTLY within "max" characters.
-Keep the SAME language as the current "trans" value.
-Preserve meaning. Use "origLen" as a reference for the intended text length.
-
-CRITICAL RULES:
-- Output ONLY a valid JSON array.
-- Each element must be: {"id": <number>, "trans": "<shortened text>"}
-- No markdown, no code blocks, no extra text.
-- "id" must be the exact integer from the input.
-- Every item in the input MUST have a corresponding output entry.
-
-Input:
-${JSON.stringify(payload)}`;
-
-    const raw = await geminiRequest(prompt, 60000);
-
-    // Clear spinners
-    batch.forEach(item => {
-      document.querySelector(`.row[data-idx="${item.i}"]`)?.querySelector('.btn-magic')?.classList.remove('loading');
-    });
-
-    if (raw === 'RATE_LIMIT') {
-      showToast('Rate limit hit — pausing 60s…', 'warn');
-      await sleep(60000);
-      i -= BATCH_SIZE; // retry same batch
-      continue;
-    }
-    if (!raw) { totalFailed += batch.length; continue; }
-
-    // Parse & apply
-    try {
-      const clean   = raw.replace(/```json|```/g, '').trim();
-      const results = JSON.parse(clean);
-
-      if (!Array.isArray(results)) throw new Error('Response is not an array');
-
-      results.forEach(obj => {
-        // Force id to integer — AI sometimes returns string
-        const targetIdx = parseInt(obj.id, 10);
-        if (isNaN(targetIdx) || !rows[targetIdx]) {
-          console.warn('[LoreScribe] Unknown id in response:', obj.id);
-          return;
-        }
-        if (typeof obj.trans !== 'string' || !obj.trans.trim()) {
-          console.warn('[LoreScribe] Empty trans for id', targetIdx);
-          totalFailed++;
-          return;
-        }
-        rows[targetIdx].trans  = obj.trans;
-        rows[targetIdx].status = getStatus(rows[targetIdx]);
-        updateRowDOM(targetIdx);
-        totalFixed++;
-      });
-    } catch (err) {
-      console.error('[LoreScribe] Batch parse error:', err, '\nRaw:', raw);
-      totalFailed += batch.length;
-      showToast('Batch parse failed — see console', 'err');
+    // ── Rate limit: stop, report, let user retry ──────
+    if(raw==='RATE_LIMIT'){
+      updateStats();fixBtn.disabled=false;fixBtn.textContent=origText;
+      document.getElementById('footer-saved').textContent=t('footer_unsaved');
+      showToast(`⏸ Rate limit at row ${i+1}/${longRows.length}. Fixed: ${totalFixed}. Wait ~60s then click Auto-Fix again.`,'warn');
+      return;
     }
 
-    // Delay between batches (skip after last)
-    if (i + BATCH_SIZE < longRows.length) await sleep(DELAY_MS);
+    if(!raw){totalFailed++;continue;}
+
+    try{
+      const obj=JSON.parse(raw.replace(/```json|```/g,'').trim());
+      if(typeof obj.trans==='string'&&obj.trans.trim()){
+        rows[idx].trans=obj.trans;rows[idx].status=getStatus(rows[idx]);
+        updateRowDOM(idx);totalFixed++;
+      }else{totalFailed++;}
+    }catch(err){
+      totalFailed++;console.warn('[LoreScribe] parse fail row',idx,err,'\nRaw:',raw);
+    }
+
+    // 500ms gap — stays well inside free-tier 15 req/min limit
+    if(i<longRows.length-1)await sleep(500);
   }
 
-  updateStats();
-  fixBtn.disabled  = false;
-  fixBtn.textContent = origText;
-  document.getElementById('footer-saved').textContent = t('footer_unsaved');
-
-  const type = totalFixed > 0 ? 'ok' : 'warn';
-  showToast(
-    `✨ Fixed: ${totalFixed}  |  Failed: ${totalFailed}  (of ${longRows.length})`,
-    type
-  );
+  updateStats();fixBtn.disabled=false;fixBtn.textContent=origText;
+  document.getElementById('footer-saved').textContent=t('footer_unsaved');
+  showToast(`✨ Fixed: ${totalFixed}  |  Failed: ${totalFailed}  (of ${longRows.length})`,totalFixed>0?'ok':'warn');
 }
 
-function sleep(ms) { return new Promise(res => setTimeout(res, ms)); }
+function sleep(ms){return new Promise(res=>setTimeout(res,ms));}
 
-// ═══════════════════════════════════════════════════════
-//  HELP MODAL
-// ═══════════════════════════════════════════════════════
-const HELP_CONTENT = {
-  tr:{ title:"KULLANIM KILAVUZU", html:`<div class="help-section"><h2>LoreScribe Nedir?</h2><p>Oyun çevirilerindeki metin uyumsuzluklarını tespit etmek ve düzeltmek için ücretsiz, tarayıcı tabanlı bir editör. Kurulum yok, kayıt yok.</p></div><div class="help-section"><h2>Hızlı Başlangıç</h2><ul><li><span class="help-key">1. Adım</span><span>Yukarıdan dosya formatını seçin veya Otomatik bırakın</span></li><li><span class="help-key">2. Adım</span><span>Dosyayı sürükle-bırak yapın ya da 📂 ile açın</span></li><li><span class="help-key">3. Adım</span><span>Sağ sütundaki çevirileri düzenleyin</span></li><li><span class="help-key">4. Adım</span><span>Ctrl+S ile düzeltilmiş dosyayı indirin</span></li></ul></div><div class="help-section"><h2>Karakter Sayacı</h2><p>SF3 formatında her satır için iki sayaç gösterilir: <b>geçerli/max</b> (çeviri uzunluğu) ve <b>orig:</b> (orijinal metnin karakter sayısı). Bu, ne kadar alan olduğunu görmek için referans sağlar.</p></div><div class="help-section"><h2>Durum Renkleri</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>TAMAM</span><span>Çeviri mevcut ve uzunluk uygun</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>EKSİK</span><span>Çeviri yok veya orijinalle aynı</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>UZUN</span><span>Metin izin verilen sınırı aşıyor</span></li></ul></div><div class="help-section"><h2>Gemini Auto-Fix</h2><p>Gemini API anahtarı girin ve model seçin. ✨ butonu tek satırı, "✨ Uzunları Kısalt" tüm hatalı satırları otomatik düzeltir. Model önerisi: <b>gemini-2.0-flash</b> (hız ve kararlılık).</p></div><div class="help-section"><h2>Klavye Kısayolları</h2><ul><li><span class="help-key">Ctrl+S</span><span>Dosyayı indir</span></li><li><span class="help-key">F3</span><span>Sonraki soruna git</span></li><li><span class="help-key">Shift+F3</span><span>Önceki soruna git</span></li><li><span class="help-key">Esc</span><span>Bu pencereyi kapat</span></li></ul></div><div class="help-footer-note">Dosyayı UTF-8 BOM olmadan kaydedin.</div>` },
-  en:{ title:"USER GUIDE", html:`<div class="help-section"><h2>What is LoreScribe?</h2><p>A free, browser-based translation editor for detecting and fixing text issues in game localizations. No install, no sign-up.</p></div><div class="help-section"><h2>Quick Start</h2><ul><li><span class="help-key">Step 1</span><span>Select file format above or leave on Auto</span></li><li><span class="help-key">Step 2</span><span>Drag & drop your file or click 📂 to browse</span></li><li><span class="help-key">Step 3</span><span>Edit translations in the right column</span></li><li><span class="help-key">Step 4</span><span>Press Ctrl+S to download the corrected file</span></li></ul></div><div class="help-section"><h2>Character Counter</h2><p>For SF3 format, each row shows two counters: <b>current / max</b> (translation length vs. byte budget) and <b>orig:</b> (original text character count as reference). This helps you gauge how much room you have.</p></div><div class="help-section"><h2>Status Colors</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>OK</span><span>Translation exists and fits the allowed length</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>MISSING</span><span>No translation or same as original</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>TOO LONG</span><span>Translation exceeds the byte limit</span></li></ul></div><div class="help-section"><h2>Gemini Auto-Fix</h2><p>Enter your Gemini API key and select a model. The ✨ button fixes one row; "Auto-Fix Long" processes all over-limit rows in batches. Recommended model: <b>gemini-2.0-flash</b> for speed and stability. Use 2.5-flash for quality on hard texts.</p></div><div class="help-section"><h2>Supported Formats</h2><ul><li><span class="help-key">SF3</span><span>OFFSET|BYTE_LEN|TEXT — sf3_tool output</span></li><li><span class="help-key">Plain TXT</span><span>Each line is one text block</span></li><li><span class="help-key">CSV</span><span>id,"original","translation"</span></li><li><span class="help-key">PO</span><span>GNU gettext</span></li><li><span class="help-key">XML</span><span>string id style</span></li><li><span class="help-key">JSON</span><span>Flat object or array</span></li><li><span class="help-key">INI</span><span>key=value</span></li></ul></div><div class="help-section"><h2>Keyboard Shortcuts</h2><ul><li><span class="help-key">Ctrl+S</span><span>Download corrected file</span></li><li><span class="help-key">F3</span><span>Jump to next issue</span></li><li><span class="help-key">Shift+F3</span><span>Jump to previous issue</span></li><li><span class="help-key">Esc</span><span>Close this panel</span></li></ul></div><div class="help-footer-note">Save files as UTF-8 without BOM. Notepad: Save As → UTF-8 | VS Code: bottom-right → UTF-8</div>` },
-  ja:{ title:"使用ガイド", html:`<div class="help-section"><h2>クイックスタート</h2><ul><li><span class="help-key">ステップ1</span><span>形式を選択（自動でも可）</span></li><li><span class="help-key">ステップ2</span><span>ファイルをドラッグ＆ドロップまたは📂で選択</span></li><li><span class="help-key">ステップ3</span><span>右列の翻訳を編集</span></li><li><span class="help-key">ステップ4</span><span>Ctrl+Sでダウンロード</span></li></ul></div><div class="help-section"><h2>文字カウンター</h2><p>SF3形式では各行に2つのカウンター: <b>現在/最大</b>（翻訳長）と <b>orig:</b>（原文文字数の参考値）。</p></div><div class="help-section"><h2>ステータス</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>完了</span><span>翻訳あり、長さOK</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>未翻訳</span><span>翻訳なしまたは原文と同じ</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>長過ぎ</span><span>制限超過</span></li></ul></div><div class="help-section"><h2>キーボード</h2><ul><li><span class="help-key">Ctrl+S</span><span>ダウンロード</span></li><li><span class="help-key">F3</span><span>次の問題</span></li><li><span class="help-key">Shift+F3</span><span>前の問題</span></li></ul></div><div class="help-footer-note">BOMなしUTF-8で保存。</div>` },
-  zh:{ title:"使用指南", html:`<div class="help-section"><h2>快速开始</h2><ul><li><span class="help-key">第一步</span><span>选择格式或保留自动</span></li><li><span class="help-key">第二步</span><span>拖放文件或点击📂</span></li><li><span class="help-key">第三步</span><span>编辑右列翻译</span></li><li><span class="help-key">第四步</span><span>Ctrl+S下载</span></li></ul></div><div class="help-section"><h2>字符计数器</h2><p>SF3格式下每行显示两个计数：<b>当前/最大</b>（译文长度）和 <b>orig:</b>（原文字符数参考）。</p></div><div class="help-section"><h2>状态颜色</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>完成</span><span>存在翻译且长度合适</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>缺失</span><span>无翻译或与原文相同</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>过长</span><span>超出限制</span></li></ul></div><div class="help-section"><h2>快捷键</h2><ul><li><span class="help-key">Ctrl+S</span><span>下载</span></li><li><span class="help-key">F3</span><span>下一个问题</span></li><li><span class="help-key">Shift+F3</span><span>上一个问题</span></li></ul></div><div class="help-footer-note">请以UTF-8无BOM格式保存文件。</div>` },
-  ur:{ title:"استعمال کی رہنمائی", html:`<div class="help-section"><h2>فوری آغاز</h2><ul><li><span class="help-key">مرحلہ 1</span><span>فارمیٹ منتخب کریں</span></li><li><span class="help-key">مرحلہ 2</span><span>فائل ڈراپ کریں</span></li><li><span class="help-key">مرحلہ 3</span><span>ترجمہ ترمیم کریں</span></li><li><span class="help-key">مرحلہ 4</span><span>Ctrl+S سے محفوظ کریں</span></li></ul></div><div class="help-section"><h2>کردار کاؤنٹر</h2><p>SF3 فارمیٹ میں دو کاؤنٹر: <b>موجودہ/زیادہ سے زیادہ</b> اور <b>orig:</b> (اصل متن کے حروف)۔</p></div><div class="help-footer-note">فائل UTF-8 بغیر BOM کے محفوظ کریں۔</div>` },
-  hi:{ title:"उपयोग मार्गदर्शिका", html:`<div class="help-section"><h2>त्वरित प्रारंभ</h2><ul><li><span class="help-key">चरण 1</span><span>प्रारूप चुनें</span></li><li><span class="help-key">चरण 2</span><span>फ़ाइल खींचें-छोड़ें</span></li><li><span class="help-key">चरण 3</span><span>अनुवाद संपादित करें</span></li><li><span class="help-key">चरण 4</span><span>Ctrl+S से डाउनलोड करें</span></li></ul></div><div class="help-section"><h2>वर्ण काउंटर</h2><p>SF3 प्रारूप में प्रत्येक पंक्ति: <b>वर्तमान/अधिकतम</b> और <b>orig:</b> (मूल वर्ण संख्या संदर्भ)।</p></div><div class="help-footer-note">फ़ाइल UTF-8 बिना BOM के सहेजें।</div>` },
-  ar:{ title:"دليل الاستخدام", html:`<div class="help-section"><h2>البدء السريع</h2><ul><li><span class="help-key">الخطوة 1</span><span>اختر الصيغة</span></li><li><span class="help-key">الخطوة 2</span><span>اسحب الملف أو انقر 📂</span></li><li><span class="help-key">الخطوة 3</span><span>عدّل الترجمات</span></li><li><span class="help-key">الخطوة 4</span><span>Ctrl+S للتنزيل</span></li></ul></div><div class="help-section"><h2>عداد الأحرف</h2><p>في صيغة SF3 يظهر عداد مزدوج: <b>الحالي/الأقصى</b> و <b>orig:</b> (عدد أحرف النص الأصلي كمرجع).</p></div><div class="help-footer-note">احفظ الملف بترميز UTF-8 بدون BOM.</div>` }
+// ═══ HELP MODAL ═══════════════════════════════════════
+const HELP_CONTENT={
+  tr:{title:"KULLANIM KILAVUZU",html:`<div class="help-section"><h2>LoreScribe Nedir?</h2><p>Oyun çevirilerindeki metin uyumsuzluklarını tespit etmek ve düzeltmek için ücretsiz, tarayıcı tabanlı bir editör. Kurulum yok, kayıt yok.</p></div><div class="help-section"><h2>Hızlı Başlangıç</h2><ul><li><span class="help-key">1. Adım</span><span>Yukarıdan dosya formatını seçin veya Otomatik bırakın</span></li><li><span class="help-key">2. Adım</span><span>Dosyayı sürükle-bırak yapın ya da 📂 ile açın</span></li><li><span class="help-key">3. Adım</span><span>Sağ sütundaki çevirileri düzenleyin</span></li><li><span class="help-key">4. Adım</span><span>Ctrl+S ile düzeltilmiş dosyayı indirin</span></li></ul></div><div class="help-section"><h2>Karakter Sayacı</h2><p>SF3 formatında her satır için: <b>geçerli / max</b> (çeviri uzunluğu) ve <b>orig:</b> (orijinal metnin karakter sayısı — referans).</p></div><div class="help-section"><h2>Durum Renkleri</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>TAMAM</span><span>Çeviri mevcut ve uzunluk uygun</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>EKSİK</span><span>Çeviri yok veya orijinalle aynı</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>UZUN</span><span>Metin izin verilen sınırı aşıyor</span></li></ul></div><div class="help-section"><h2>Gemini Auto-Fix</h2><p>API anahtarı girin, model seçin. ✨ = tek satır. "Uzunları Kısalt" = tüm hatalı satırları sırayla işler, 500ms aralıkla.</p><p>Rate limit gelirse hemen durur ve kaçıncı satırda kaldığını söyler — 60 sn bekleyip tekrar basabilirsiniz.</p><p>Önerilen: <b>gemini-2.0-flash ⚡</b>. Zor metinler için <b>2.5-flash 🧠</b>.</p></div><div class="help-section"><h2>Klavye Kısayolları</h2><ul><li><span class="help-key">Ctrl+S</span><span>Dosyayı indir</span></li><li><span class="help-key">F3</span><span>Sonraki soruna git</span></li><li><span class="help-key">Shift+F3</span><span>Önceki soruna git</span></li><li><span class="help-key">Esc</span><span>Bu pencereyi kapat</span></li></ul></div><div class="help-footer-note">Dosyayı UTF-8 BOM olmadan kaydedin.</div>`},
+  en:{title:"USER GUIDE",html:`<div class="help-section"><h2>What is LoreScribe?</h2><p>A free, browser-based translation editor for detecting and fixing text issues in game localizations. No install, no sign-up.</p></div><div class="help-section"><h2>Quick Start</h2><ul><li><span class="help-key">Step 1</span><span>Select file format above or leave on Auto</span></li><li><span class="help-key">Step 2</span><span>Drag & drop your file or click 📂 to browse</span></li><li><span class="help-key">Step 3</span><span>Edit translations in the right column</span></li><li><span class="help-key">Step 4</span><span>Press Ctrl+S to download the corrected file</span></li></ul></div><div class="help-section"><h2>Character Counter</h2><p>For SF3 format each row shows: <b>current / max</b> (translation length vs. byte budget) and <b>orig:</b> (original character count as reference). This tells you exactly how much room you have.</p></div><div class="help-section"><h2>Status Colors</h2><ul><li><span class="help-key"><span class="help-dot" style="background:var(--ok)"></span>OK</span><span>Translation exists and fits the allowed length</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--warn)"></span>MISSING</span><span>No translation or same as original</span></li><li><span class="help-key"><span class="help-dot" style="background:var(--err)"></span>TOO LONG</span><span>Translation exceeds the byte budget</span></li></ul></div><div class="help-section"><h2>Gemini Auto-Fix</h2><p>Enter your API key and pick a model. The ✨ button fixes one row. "Auto-Fix Long" processes every over-limit row one by one with a 500ms gap between requests.</p><p>If a rate limit is hit it stops immediately and tells you how many were fixed — wait ~60s and click again to resume from where it left off.</p><p>Recommended: <b>gemini-2.0-flash ⚡</b> for speed. Use <b>2.5-flash 🧠</b> for difficult or context-heavy texts.</p></div><div class="help-section"><h2>Supported Formats</h2><ul><li><span class="help-key">SF3</span><span>OFFSET|BYTE_LEN|TEXT — sf3_tool output</span></li><li><span class="help-key">Plain TXT</span><span>Each line is one text block</span></li><li><span class="help-key">CSV</span><span>id,"original","translation"</span></li><li><span class="help-key">PO</span><span>GNU gettext</span></li><li><span class="help-key">XML</span><span>string id style</span></li><li><span class="help-key">JSON</span><span>Flat object or array</span></li><li><span class="help-key">INI</span><span>key=value</span></li></ul></div><div class="help-section"><h2>Keyboard Shortcuts</h2><ul><li><span class="help-key">Ctrl+S</span><span>Download corrected file</span></li><li><span class="help-key">F3</span><span>Jump to next issue</span></li><li><span class="help-key">Shift+F3</span><span>Jump to previous issue</span></li><li><span class="help-key">Esc</span><span>Close this panel</span></li></ul></div><div class="help-footer-note">Save files as UTF-8 without BOM. Notepad: Save As → UTF-8 | VS Code: bottom-right → UTF-8</div>`},
+  ja:{title:"使用ガイド",html:`<div class="help-section"><h2>クイックスタート</h2><ul><li><span class="help-key">ステップ1</span><span>形式を選択（自動でも可）</span></li><li><span class="help-key">ステップ2</span><span>ドラッグ＆ドロップまたは📂で選択</span></li><li><span class="help-key">ステップ3</span><span>右列の翻訳を編集</span></li><li><span class="help-key">ステップ4</span><span>Ctrl+Sでダウンロード</span></li></ul></div><div class="help-section"><h2>Auto-Fix</h2><p>APIキーとモデルを選択。✨ = 1行。"自動修正" = 全超過行を順番に処理。レート制限で停止 → 60秒後に再度クリック。推奨: <b>gemini-2.0-flash</b>。</p></div><div class="help-section"><h2>キーボード</h2><ul><li><span class="help-key">Ctrl+S</span><span>ダウンロード</span></li><li><span class="help-key">F3</span><span>次の問題</span></li><li><span class="help-key">Shift+F3</span><span>前の問題</span></li></ul></div><div class="help-footer-note">BOMなしUTF-8で保存。</div>`},
+  zh:{title:"使用指南",html:`<div class="help-section"><h2>快速开始</h2><ul><li><span class="help-key">第一步</span><span>选择格式或保留自动</span></li><li><span class="help-key">第二步</span><span>拖放文件或点击📂</span></li><li><span class="help-key">第三步</span><span>编辑右列翻译</span></li><li><span class="help-key">第四步</span><span>Ctrl+S下载</span></li></ul></div><div class="help-section"><h2>自动修复</h2><p>输入API密钥，选择模型。✨ = 单行。"自动修复过长" = 逐行处理，每次间隔500ms。遇到频率限制立即停止 → 等60秒后再点击。推荐: <b>gemini-2.0-flash</b>。</p></div><div class="help-section"><h2>快捷键</h2><ul><li><span class="help-key">Ctrl+S</span><span>下载</span></li><li><span class="help-key">F3</span><span>下一个问题</span></li><li><span class="help-key">Shift+F3</span><span>上一个问题</span></li></ul></div><div class="help-footer-note">请以UTF-8无BOM格式保存。</div>`},
+  ur:{title:"استعمال کی رہنمائی",html:`<div class="help-section"><h2>فوری آغاز</h2><ul><li><span class="help-key">مرحلہ 1</span><span>فارمیٹ منتخب کریں</span></li><li><span class="help-key">مرحلہ 2</span><span>فائل ڈراپ کریں</span></li><li><span class="help-key">مرحلہ 3</span><span>ترجمہ ترمیم کریں</span></li><li><span class="help-key">مرحلہ 4</span><span>Ctrl+S محفوظ کریں</span></li></ul></div><div class="help-section"><h2>خودکار درستی</h2><p>API کلید درج کریں۔ ✨ = ایک سطر۔ "خودکار درستی" = تمام لمبی سطریں۔ ریٹ لمٹ پر رک جاتا ہے — 60 سیکنڈ بعد دوبارہ دبائیں۔</p></div><div class="help-footer-note">UTF-8 بغیر BOM محفوظ کریں۔</div>`},
+  hi:{title:"उपयोग मार्गदर्शिका",html:`<div class="help-section"><h2>त्वरित प्रारंभ</h2><ul><li><span class="help-key">चरण 1</span><span>प्रारूप चुनें</span></li><li><span class="help-key">चरण 2</span><span>फ़ाइल खींचें-छोड़ें</span></li><li><span class="help-key">चरण 3</span><span>अनुवाद संपादित करें</span></li><li><span class="help-key">चरण 4</span><span>Ctrl+S डाउनलोड</span></li></ul></div><div class="help-section"><h2>स्वचालित सुधार</h2><p>API कुंजी दर्ज करें। ✨ = एक पंक्ति। "स्वचालित सुधार" = सभी लंबी पंक्तियाँ। दर सीमा पर रुकता है — 60 सेकंड बाद फिर क्लिक करें।</p></div><div class="help-footer-note">UTF-8 बिना BOM सहेजें।</div>`},
+  ar:{title:"دليل الاستخدام",html:`<div class="help-section"><h2>البدء السريع</h2><ul><li><span class="help-key">الخطوة 1</span><span>اختر الصيغة</span></li><li><span class="help-key">الخطوة 2</span><span>اسحب الملف</span></li><li><span class="help-key">الخطوة 3</span><span>عدّل الترجمات</span></li><li><span class="help-key">الخطوة 4</span><span>Ctrl+S للتنزيل</span></li></ul></div><div class="help-section"><h2>الإصلاح التلقائي</h2><p>أدخل مفتاح API. ✨ = سطر واحد. "إصلاح تلقائي" = جميع السطور الطويلة. عند الوصول لحد المعدل يتوقف فوراً — انتظر 60 ثانية ثم انقر مجدداً.</p></div><div class="help-footer-note">احفظ بترميز UTF-8 بدون BOM.</div>`}
 };
-
-function openHelp() {
-  const c = HELP_CONTENT[currentLang] || HELP_CONTENT.en;
-  document.getElementById('help-modal-title').textContent  = c.title;
-  document.getElementById('help-body-content').innerHTML   = c.html;
-  document.getElementById('help-modal').dir = (currentLang === 'ar' || currentLang === 'ur') ? 'rtl' : 'ltr';
+function openHelp(){
+  const c=HELP_CONTENT[currentLang]||HELP_CONTENT.en;
+  document.getElementById('help-modal-title').textContent=c.title;
+  document.getElementById('help-body-content').innerHTML=c.html;
+  document.getElementById('help-modal').dir=(currentLang==='ar'||currentLang==='ur')?'rtl':'ltr';
   document.getElementById('help-overlay').classList.add('open');
 }
-function closeHelp() { document.getElementById('help-overlay').classList.remove('open'); }
-document.getElementById('help-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeHelp(); });
+function closeHelp(){document.getElementById('help-overlay').classList.remove('open');}
+document.getElementById('help-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeHelp();});
 
-// ── Init ──────────────────────────────────────────────
+// ── Init ─────────────────────────────────────────────
 setLang('en');
 </script>
 </body>
