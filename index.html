@@ -70,6 +70,15 @@
   .search-wrap input:focus{border-color:var(--accent);}
   .search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:12px;pointer-events:none;}
 
+  /* API VE AUTO-FIX STİLLERİ */
+  .api-wrap { position: relative; display: flex; align-items: center; margin-left: auto; }
+  .api-wrap input { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; color: var(--txt); font-family: var(--mono); font-size: 11px; padding: 5px 8px; width: 160px; outline: none; transition: border-color .15s; }
+  .api-wrap input:focus { border-color: var(--gold); }
+  .btn-magic { font-size: 13px; background: none; border: none; cursor: pointer; opacity: 0.5; transition: all .15s; margin-left: 6px; }
+  .btn-magic:hover { opacity: 1; transform: scale(1.15); text-shadow: 0 0 8px var(--gold); }
+  .btn-magic.loading { animation: pulse 1s infinite; cursor: wait; pointer-events: none; }
+  @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+
   /* COL HEADERS */
   .col-headers{display:grid;grid-template-columns:48px 1fr 1fr 90px;background:var(--bg2);border-bottom:1px solid var(--border2);flex-shrink:0;}
   .col-hdr{font-family:var(--title);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);padding:6px 12px;border-right:1px solid var(--border);}
@@ -229,42 +238,6 @@
   .help-footer-note{margin-top:20px;padding:12px 16px;background:rgba(0,180,216,.06);border:1px solid rgba(0,180,216,.2);border-radius:6px;font-family:var(--mono);font-size:12px;color:var(--txt3);}
   .btn-help{font-family:var(--mono);font-size:14px;font-weight:700;width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);color:var(--txt3);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
   .btn-help:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,180,216,.1);}
-
-
-  /* HELP MODAL */
-  #help-overlay {
-    position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
-    display:flex;align-items:center;justify-content:center;
-    backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .2s;
-  }
-  #help-overlay.open{opacity:1;pointer-events:all;}
-  #help-modal {
-    background:var(--bg2);border:1px solid var(--border2);border-radius:10px;
-    width:min(780px,94vw);max-height:86vh;display:flex;flex-direction:column;
-    box-shadow:0 24px 80px rgba(0,0,0,.7);
-    transform:translateY(16px) scale(.98);transition:transform .2s;
-  }
-  #help-overlay.open #help-modal{transform:translateY(0) scale(1);}
-  .help-header{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border2);flex-shrink:0;}
-  .help-header-icon{font-size:22px;}
-  .help-title{font-family:var(--title);font-size:18px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);flex:1;}
-  .help-close{background:none;border:1px solid var(--border2);border-radius:4px;color:var(--txt3);cursor:pointer;padding:4px 10px;font-size:18px;line-height:1;transition:all .15s;}
-  .help-close:hover{border-color:var(--err);color:var(--err);}
-  .help-body{overflow-y:auto;padding:24px 28px;flex:1;line-height:1.8;}
-  .help-body::-webkit-scrollbar{width:5px;}
-  .help-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
-  .help-section{margin-bottom:28px;}
-  .help-section h2{font-family:var(--title);font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
-  .help-section p{color:var(--txt2);font-size:13px;margin-bottom:8px;}
-  .help-section ul{list-style:none;padding:0;}
-  .help-section ul li{font-size:13px;color:var(--txt2);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:10px;align-items:baseline;}
-  .help-section ul li:last-child{border-bottom:none;}
-  .help-key{font-family:var(--mono);font-size:11px;color:var(--accent);background:rgba(0,180,216,.1);border:1px solid rgba(0,180,216,.25);border-radius:3px;padding:1px 7px;white-space:nowrap;flex-shrink:0;}
-  .help-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle;}
-  .help-footer-note{margin-top:20px;padding:12px 16px;background:rgba(0,180,216,.06);border:1px solid rgba(0,180,216,.2);border-radius:6px;font-family:var(--mono);font-size:12px;color:var(--txt3);}
-  .btn-help{font-family:var(--mono);font-size:14px;font-weight:700;width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);color:var(--txt3);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .btn-help:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,180,216,.1);}
-
 </style>
 </head>
 <body>
@@ -286,8 +259,6 @@
     <button class="lang-btn" onclick="setLang('ja')" title="日本語">🇯🇵<span class="lang-code">JA</span></button>
     <button class="lang-btn" onclick="setLang('zh')" title="中文">🇨🇳<span class="lang-code">ZH</span></button>
     <button class="lang-btn" onclick="setLang('ur')" title="اردو">🇵🇰<span class="lang-code">UR</span></button>
-    <button class="lang-btn" onclick="setLang('hi')" title="हिन्दी">🇮🇳<span class="lang-code">HI</span></button>
-    <button class="lang-btn" onclick="setLang('ar')" title="العربية">🇸🇦<span class="lang-code">AR</span></button>
     <button class="lang-btn" onclick="setLang('hi')" title="हिन्दी">🇮🇳<span class="lang-code">HI</span></button>
     <button class="lang-btn" onclick="setLang('ar')" title="العربية">🇸🇦<span class="lang-code">AR</span></button>
   </div>
@@ -341,6 +312,13 @@
   <button class="btn" id="btn-next-issue" onclick="jumpIssue(1)"  disabled data-i18n="btn_next">↓ Next Issue</button>
   <div class="header-sep"></div>
   <button class="btn gold" id="btn-export" onclick="exportFile()" disabled data-i18n="btn_export">⬇ Export Fixed File</button>
+  
+  <div class="header-sep"></div>
+  <div class="api-wrap" title="Google Gemini API Key">
+    <input type="password" id="api-key-input" placeholder="Gemini API Key...">
+  </div>
+  <button class="btn gold" id="btn-autofix" onclick="fixAllLongRows()" data-i18n="btn_autofix">✨ Auto-Fix Long</button>
+
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
     <input type="text" id="search-box" data-i18n-placeholder="search_placeholder" placeholder="Search text..." oninput="onSearch(this.value)">
@@ -348,7 +326,6 @@
 </div>
 
 
-<!-- DUAL LOAD BAR -->
 <div id="dual-load-bar">
   <div class="dual-slot">
     <span class="dual-slot-label" data-i18n="dual_orig_label">🌐 Original (English)</span>
@@ -402,18 +379,6 @@
   </div>
 </div>
 
-
-<div id="help-overlay">
-  <div id="help-modal">
-    <div class="help-header">
-      <span class="help-header-icon">📖</span>
-      <span class="help-title" id="help-modal-title">USER GUIDE</span>
-      <button class="help-close" onclick="closeHelp()">&#x2715;</button>
-    </div>
-    <div class="help-body" id="help-body-content"></div>
-  </div>
-</div>
-
 <footer>
   <span id="footer-file" data-i18n="footer_no_file">No file loaded</span>
   <span>|</span>
@@ -438,6 +403,7 @@ const I18N = {
     fmt_plain_name:'Sade TXT', fmt_plain_desc:'Her satır bir metin',
     fmt_auto_name:'Otomatik', fmt_auto_desc:'Formatı kendisi seçer',
     btn_load:'📂 Dosya Yükle', btn_prev:'↑ Önceki Sorun', btn_next:'↓ Sonraki Sorun', btn_export:'⬇ Düzeltilmiş Dosyayı İndir',
+    btn_autofix: '✨ Uzunları Kısalt',
     filter_all:'Tümü', filter_ok:'✓ Tamam', filter_warn:'⚠ Eksik', filter_err:'✗ Uzun',
     col_orig:'🌐 Orijinal', col_trans:'🖊 Çeviri — düzenlenebilir', col_status:'Durum',
     drop_title:'Çeviri Dosyasını Yükle',
@@ -473,6 +439,7 @@ const I18N = {
     fmt_plain_name:'Plain TXT', fmt_plain_desc:'One line per text',
     fmt_auto_name:'Auto', fmt_auto_desc:'Auto-detect format',
     btn_load:'📂 Load File', btn_prev:'↑ Prev Issue', btn_next:'↓ Next Issue', btn_export:'⬇ Export Fixed File',
+    btn_autofix: '✨ Auto-Fix Long',
     filter_all:'All', filter_ok:'✓ OK', filter_warn:'⚠ Missing', filter_err:'✗ Long',
     col_orig:'🌐 Original', col_trans:'🖊 Translation — editable', col_status:'Status',
     drop_title:'Load Translation File',
@@ -508,6 +475,7 @@ const I18N = {
     fmt_plain_name:'プレーンTXT', fmt_plain_desc:'1行1テキスト',
     fmt_auto_name:'自動', fmt_auto_desc:'形式を自動検出',
     btn_load:'📂 ファイル読込', btn_prev:'↑ 前の問題', btn_next:'↓ 次の問題', btn_export:'⬇ 修正ファイルを保存',
+    btn_autofix: '✨ 自動修正',
     filter_all:'すべて', filter_ok:'✓ 完了', filter_warn:'⚠ 未翻訳', filter_err:'✗ 長すぎ',
     col_orig:'🌐 原文', col_trans:'🖊 翻訳 — 編集可', col_status:'状態',
     drop_title:'翻訳ファイルを読み込む',
@@ -543,6 +511,7 @@ const I18N = {
     fmt_plain_name:'纯文本', fmt_plain_desc:'每行一段文本',
     fmt_auto_name:'自动', fmt_auto_desc:'自动检测格式',
     btn_load:'📂 加载文件', btn_prev:'↑ 上一个问题', btn_next:'↓ 下一个问题', btn_export:'⬇ 导出修正文件',
+    btn_autofix: '✨ 自动修复过长',
     filter_all:'全部', filter_ok:'✓ 完成', filter_warn:'⚠ 缺失', filter_err:'✗ 过长',
     col_orig:'🌐 原文', col_trans:'🖊 译文 — 可编辑', col_status:'状态',
     drop_title:'加载翻译文件',
@@ -578,6 +547,7 @@ const I18N = {
     fmt_plain_name:'سادہ TXT', fmt_plain_desc:'ہر سطر ایک متن',
     fmt_auto_name:'خودکار', fmt_auto_desc:'فارمیٹ خود شناخت کرے',
     btn_load:'📂 فائل لوڈ کریں', btn_prev:'↑ پچھلا مسئلہ', btn_next:'↓ اگلا مسئلہ', btn_export:'⬇ درست فائل ڈاؤنلوڈ',
+    btn_autofix: '✨ خودکار درستی',
     filter_all:'سب', filter_ok:'✓ مکمل', filter_warn:'⚠ نامکمل', filter_err:'✗ لمبا',
     col_orig:'🌐 اصل', col_trans:'🖊 ترجمہ — قابل ترمیم', col_status:'حالت',
     drop_title:'ترجمہ فائل لوڈ کریں',
@@ -613,6 +583,7 @@ const I18N = {
     fmt_plain_name:'सादा TXT', fmt_plain_desc:'प्रत्येक पंक्ति एक पाठ',
     fmt_auto_name:'स्वचालित', fmt_auto_desc:'प्रारूप स्वयं पहचाने',
     btn_load:'📂 फ़ाइल लोड करें', btn_prev:'↑ पिछली समस्या', btn_next:'↓ अगली समस्या', btn_export:'⬇ सुधरी फ़ाइल डाउनलोड',
+    btn_autofix: '✨ स्वचालित सुधार',
     filter_all:'सभी', filter_ok:'✓ पूर्ण', filter_warn:'⚠ शेष', filter_err:'✗ लंबा',
     col_orig:'🌐 मूल पाठ', col_trans:'🖊 अनुवाद — संपादन योग्य', col_status:'स्थिति',
     drop_title:'अनुवाद फ़ाइल लोड करें',
@@ -648,6 +619,7 @@ const I18N = {
     fmt_plain_name:'نص عادي', fmt_plain_desc:'سطر واحد لكل نص',
     fmt_auto_name:'تلقائي', fmt_auto_desc:'اكتشاف الصيغة تلقائياً',
     btn_load:'📂 تحميل ملف', btn_prev:'↑ المشكلة السابقة', btn_next:'↓ المشكلة التالية', btn_export:'⬇ تنزيل الملف المُصحَّح',
+    btn_autofix: '✨ إصلاح تلقائي',
     filter_all:'الكل', filter_ok:'✓ مكتمل', filter_warn:'⚠ ناقص', filter_err:'✗ طويل',
     col_orig:'🌐 النص الأصلي', col_trans:'🖊 الترجمة — قابل للتعديل', col_status:'الحالة',
     drop_title:'تحميل ملف الترجمة',
@@ -687,9 +659,7 @@ const LANG_FONTS = {
   zh: '"Noto Sans SC", "Exo 2", sans-serif',
   ur: '"Noto Nastaliq Urdu", "Exo 2", sans-serif',
   hi: '"Noto Sans Devanagari", "Exo 2", sans-serif',
-  ar: '"Noto Naskh Arabic", "Exo 2", sans-serif',
-  hi: '"Noto Sans Devanagari", "Exo 2", sans-serif',
-  ar: '"Noto Naskh Arabic", "Exo 2", sans-serif',
+  ar: '"Noto Naskh Arabic", "Exo 2", sans-serif'
 };
 
 // ═══ APPLY LANGUAGE ═══════════════════════════════════
@@ -880,7 +850,24 @@ function render() {
     const badge=document.createElement('span'); badge.className=`status-badge badge-${r.status}`;
     badge.textContent=r.status==='ok'?t('badge_ok'):r.status==='warn'?t('badge_warn'):t('badge_err');
     statusCell.appendChild(badge);
-    if(max>0){const counter=document.createElement('span'); counter.className=`char-counter${over?' over':tight?' tight':''}`;counter.textContent=`${cur} / ${max}`;statusCell.appendChild(counter);}
+    
+    // Geliştirilmiş Karakter Sayacı ve API Butonu
+    if(max>0){
+      const counter=document.createElement('span'); 
+      counter.className=`char-counter${over?' over':tight?' tight':''}`;
+      counter.textContent=`${cur} / ${max}`;
+      statusCell.appendChild(counter);
+
+      if(over) {
+        const magicBtn = document.createElement('button');
+        magicBtn.className = 'btn-magic';
+        magicBtn.textContent = '✨';
+        magicBtn.title = currentLang === 'tr' ? 'Gemini API ile Kısalt' : 'Auto-Fix with Gemini API';
+        magicBtn.onclick = () => fixSingleRow(i, magicBtn);
+        statusCell.appendChild(magicBtn);
+      }
+    }
+
     div.appendChild(numCell); div.appendChild(origCell); div.appendChild(transCell); div.appendChild(statusCell);
     frag.appendChild(div);
   }
@@ -895,7 +882,25 @@ function onTransInput(e) {
   const rowEl=e.target.closest('.row'); rowEl.className=`row status-${rows[i].status}`;
   const max=maxChars(rows[i]),cur=[...rows[i].trans].length,over=max>0&&cur>max,tight=max>0&&!over&&max-cur<=5;
   const counter=rowEl.querySelector('.char-counter');
-  if(counter){counter.className=`char-counter${over?' over':tight?' tight':''}`;counter.textContent=`${cur} / ${max}`;}
+  
+  if(counter){
+    counter.className=`char-counter${over?' over':tight?' tight':''}`;
+    counter.textContent=`${cur} / ${max}`;
+    
+    // Sihirli butonu yönet
+    let magicBtn = rowEl.querySelector('.btn-magic');
+    if (over && !magicBtn) {
+      magicBtn = document.createElement('button');
+      magicBtn.className = 'btn-magic';
+      magicBtn.textContent = '✨';
+      magicBtn.title = 'API ile kısalt';
+      magicBtn.onclick = () => fixSingleRow(i, magicBtn);
+      rowEl.querySelector('.status-cell').appendChild(magicBtn);
+    } else if (!over && magicBtn) {
+      magicBtn.remove();
+    }
+  }
+
   const badge=rowEl.querySelector('.status-badge'); badge.className=`status-badge badge-${rows[i].status}`;
   badge.textContent=rows[i].status==='ok'?t('badge_ok'):rows[i].status==='warn'?t('badge_warn'):t('badge_err');
   updateStats(); document.getElementById('footer-saved').textContent=t('footer_unsaved');
@@ -1001,17 +1006,6 @@ function showToast(msg,type=''){
   const el=document.getElementById('toast'); el.textContent=msg; el.className=`show ${type}`;
   setTimeout(()=>el.className=type,2500);
 }
-
-
-
-
-
-
-
-
-// Init with English
-setLang('en');
-
 
 // ═══ DUAL LOAD ════════════════════════════════════════
 var loadMode   = 'single';
@@ -1168,6 +1162,111 @@ document.addEventListener('keydown', function(e) {
   if (e.ctrlKey && e.key === 's') { e.preventDefault(); if (rows.length) exportFile(); return; }
   if (e.key === 'F3') { e.preventDefault(); jumpIssue(e.shiftKey ? -1 : 1); }
 });
+
+// ═══ GEMINI AUTO-FIX API ══════════════════════════════
+async function callGeminiAPI(orig, trans, maxChars) {
+  const apiKey = document.getElementById('api-key-input').value.trim();
+  if (!apiKey) { 
+    showToast(currentLang === 'tr' ? 'API Anahtarınızı girin!' : 'Please enter API Key!', 'err'); 
+    return null; 
+  }
+  
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  const prompt = `Sen profesyonel bir oyun yerelleştirme uzmanısın. Oyun arayüzü ve lore metinleri çeviriyorsun.
+  Orijinal metin: "${orig}"
+  Mevcut çeviri: "${trans}"
+  
+  Görev: Mevcut çeviri karakter sınırını aşıyor. Anlamı olabildiğince koruyarak ve doğal bir dil kullanarak MAKSİMUM ${maxChars} karakter olacak şekilde kısalt.
+  Kurallar: 
+  1. Karakter sınırını (boşluklar dahil ${maxChars} karakter) KESİNLİKLE aşma.
+  2. Sadece yeni çeviriyi yaz. Tırnak işareti, ek açıklama veya not ekleme.`;
+
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.1 } 
+      })
+    });
+    const data = await res.json();
+    if (data.error) { 
+      console.error(data.error); 
+      showToast('API Error: ' + data.error.message, 'err'); 
+      return null; 
+    }
+    return data.candidates[0].content.parts[0].text.trim();
+  } catch (err) {
+    console.error(err); 
+    showToast(currentLang === 'tr' ? 'Bağlantı hatası!' : 'Connection error!', 'err'); 
+    return null;
+  }
+}
+
+async function fixSingleRow(idx, btnEl) {
+  const r = rows[idx];
+  const max = maxChars(r);
+  if (max <= 0) return;
+  
+  if(btnEl) btnEl.classList.add('loading');
+  
+  const newText = await callGeminiAPI(r.orig, r.trans, max);
+  
+  if(btnEl) btnEl.classList.remove('loading');
+  
+  if (newText) {
+    rows[idx].trans = newText;
+    rows[idx].status = getStatus(rows[idx]);
+    render();
+    document.getElementById('footer-saved').textContent = t('footer_unsaved');
+    showToast(currentLang === 'tr' ? 'Çeviri başarıyla kısaltıldı!' : 'Translation shortened successfully!', 'ok');
+  }
+}
+
+async function fixAllLongRows() {
+  const apiKey = document.getElementById('api-key-input').value.trim();
+  if (!apiKey) { 
+    showToast(currentLang === 'tr' ? 'API Anahtarı eksik!' : 'Missing API Key!', 'err'); 
+    return; 
+  }
+
+  const longRows = rows.map((r, i) => ({r, i})).filter(x => x.r.status === 'err');
+  if (longRows.length === 0) { 
+    showToast(currentLang === 'tr' ? 'Kısaltılacak uzun satır yok. Harika!' : 'No long rows to fix. Great!', 'ok'); 
+    return; 
+  }
+
+  const msg = currentLang === 'tr' 
+    ? `${longRows.length} adet uzun satır API kullanılarak otomatik kısaltılacak. İşlem biraz sürebilir. Devam edilsin mi?` 
+    : `Auto-fix ${longRows.length} long rows using API? This might take a moment.`;
+  
+  if(!confirm(msg)) return;
+
+  let successCount = 0;
+  const autoFixBtn = document.getElementById('btn-autofix');
+  const origText = autoFixBtn.textContent;
+  autoFixBtn.disabled = true;
+  autoFixBtn.textContent = '⏳...';
+
+  for (const item of longRows) {
+    const max = maxChars(item.r);
+    const newText = await callGeminiAPI(item.r.orig, item.r.trans, max);
+    if (newText) {
+      rows[item.i].trans = newText;
+      rows[item.i].status = getStatus(rows[item.i]);
+      successCount++;
+      render();
+    }
+    // Limitlere takılmamak için 1 saniye bekleme süresi eklendi
+    await new Promise(res => setTimeout(res, 1000)); 
+  }
+
+  autoFixBtn.disabled = false;
+  autoFixBtn.textContent = origText;
+  document.getElementById('footer-saved').textContent = t('footer_unsaved');
+  showToast(`${successCount}/${longRows.length} ` + (currentLang === 'tr' ? 'satır başarıyla düzeltildi!' : 'rows fixed successfully!'), 'ok');
+}
 
 // Init
 setLang('en');
