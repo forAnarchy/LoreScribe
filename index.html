@@ -1270,7 +1270,7 @@ async function fixAllLongRows() {
   const origText = autoFixBtn.textContent;
   autoFixBtn.disabled = true;
 
-  const BATCH_SIZE = 100; // Tek seferde kaç satır gidecek? (20 idealdir)
+  const BATCH_SIZE = 30; // Tek seferde kaç satır gidecek? (20 idealdir)
 
   for (let i = 0; i < longRows.length; i += BATCH_SIZE) {
     const batch = longRows.slice(i, i + BATCH_SIZE);
@@ -1312,7 +1312,7 @@ async function fixAllLongRows() {
     
     // Toplu istek attığımız için yine dakikalık kotayı doldurmamak adına paket aralarında 5 Saniye dinlenme molası
     if (i + BATCH_SIZE < longRows.length) {
-      await new Promise(res => setTimeout(res, 500)); 
+      await new Promise(res => setTimeout(res, 2000)); 
     }
   }
 
