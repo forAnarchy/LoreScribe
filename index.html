@@ -312,7 +312,6 @@ body.rtl .footer-status{margin-left:0;margin-right:auto;}
 // ═══ STATE ════════════════════════════════════════════
 let rows=[], filtered=[], filter='all', searchQ='', fileName='', fmt='sf3', issueIdx=-1;
 let currentLang='en', origRows=null, transRows=null, loadMode='single';
-const rowElCache=new Map(); // idx → DOM element cache, O(1) lookup
 
 // ═══ i18n ═════════════════════════════════════════════
 const I18N = {
@@ -457,7 +456,6 @@ function render(){
     return true;
   });
   const wrap=document.getElementById('table-wrap');wrap.innerHTML='';
-  rowElCache.clear(); // DOM yenileniyor, cache sıfırla
   const frag=document.createDocumentFragment();
   for(const i of filtered){
     const r=rows[i],max=maxChars(r),olen=origChars(r),tlen=transChars(r);
@@ -484,7 +482,6 @@ function render(){
       }
     }
     div.appendChild(numCell);div.appendChild(origCell);div.appendChild(transCell);div.appendChild(statusCell);
-    rowElCache.set(i,div); // cache'e ekle
     frag.appendChild(div);
   }
   wrap.appendChild(frag);updateStats();
@@ -493,17 +490,14 @@ function render(){
 
 // ═══ INPUT HANDLERS ═══════════════════════════════════
 function onTransInput(e){
-  const i=parseInt(e.target.dataset.idx,10);
-  const oldStatus=rows[i].status;
-  rows[i].trans=e.target.value;rows[i].status=getStatus(rows[i]);
-  updateRowDOM(i);updateStatsDelta(oldStatus,rows[i].status);
-  document.getElementById('footer-saved').textContent=t('footer_unsaved');
+  const i=parseInt(e.target.dataset.idx,10);rows[i].trans=e.target.value;rows[i].status=getStatus(rows[i]);
+  updateRowDOM(i);updateStats();document.getElementById('footer-saved').textContent=t('footer_unsaved');
 }
 function onTransFocus(e){e.target.style.height='auto';e.target.style.height=e.target.scrollHeight+'px';}
 
 // ═══ DOM ROW UPDATE ═══════════════════════════════════
 function updateRowDOM(idx){
-  const rowEl=rowElCache.get(idx);if(!rowEl)return; // O(1) cache lookup
+  const rowEl=document.querySelector(`.row[data-idx="${idx}"]`);if(!rowEl)return;
   const r=rows[idx],max=maxChars(r),olen=origChars(r),tlen=transChars(r);
   const over=max>0&&tlen>max,tight=max>0&&!over&&max-tlen<=5;
   rowEl.className=`row status-${r.status}`;
@@ -532,16 +526,9 @@ function updateRowDOM(idx){
 }
 
 // ═══ STATS ════════════════════════════════════════════
-// updateStats: incremental sayaçlar tutar, tüm rows'u yeniden taramaz
-let _statsCache={ok:0,warn:0,err:0};
-function updateStats(force=false){
-  if(force||_statsCache.ok+_statsCache.warn+_statsCache.err!==rows.length){
-    // Tam yeniden hesapla (ilk yükleme veya zorla)
-    let ok=0,warn=0,err=0;
-    for(const r of rows){r.status=getStatus(r);if(r.status==='ok')ok++;else if(r.status==='warn')warn++;else err++;}
-    _statsCache={ok,warn,err};
-  }
-  const {ok,warn,err}=_statsCache;
+function updateStats(){
+  let ok=0,warn=0,err=0;
+  for(const r of rows){r.status=getStatus(r);if(r.status==='ok')ok++;else if(r.status==='warn')warn++;else err++;}
   const total=rows.length,pct=total?Math.round(ok/total*100):0;
   document.getElementById('s-total').textContent=total;document.getElementById('s-ok').textContent=ok;
   document.getElementById('s-warn').textContent=warn;document.getElementById('s-err').textContent=err;
@@ -549,13 +536,6 @@ function updateStats(force=false){
   const has=warn+err>0;
   document.getElementById('btn-prev-issue').disabled=!has;document.getElementById('btn-next-issue').disabled=!has;
   document.getElementById('btn-export').disabled=rows.length===0;
-}
-// Tek satır değişince sayacı hızlıca güncelle
-function updateStatsDelta(oldStatus,newStatus){
-  if(oldStatus===newStatus)return;
-  if(oldStatus)_statsCache[oldStatus]=Math.max(0,(_statsCache[oldStatus]||0)-1);
-  if(newStatus)_statsCache[newStatus]=(_statsCache[newStatus]||0)+1;
-  updateStats();
 }
 
 // ═══ FILTER / SEARCH / JUMP ═══════════════════════════
@@ -723,12 +703,10 @@ Return ONLY a JSON object, no markdown: {"trans": "shortened text here"}`;
   if(raw==='RATE_LIMIT'){showToast('Rate limit — wait ~60s then try again','err');return;}
   if(!raw)return;
   try{
-    const obj=JSON.parse(raw.replace(/```json|```/g,'').trim());
-    if(typeof obj.trans==='string'&&obj.trans.trim()){
-      const oldStatus=rows[idx].status;
+    const obj=parseTransJSON(raw);
+    if(obj&&obj.trans.trim()){
       rows[idx].trans=obj.trans;rows[idx].status=getStatus(rows[idx]);
-      updateRowDOM(idx);updateStatsDelta(oldStatus,rows[idx].status);
-      document.getElementById('footer-saved').textContent=t('footer_unsaved');
+      updateRowDOM(idx);updateStats();document.getElementById('footer-saved').textContent=t('footer_unsaved');
       const newLen=transChars(rows[idx]);
       if(newLen>max)showToast(`Row ${idx+1}: still ${newLen}/${max} chars — edit manually`,'warn');
     }
@@ -754,10 +732,8 @@ async function fixAllLongRows(){
     const{r,i:idx}=longRows[i];
     fixBtn.textContent=`⏳ ${i+1} / ${longRows.length}`;
 
-    // Tarayıcıya nefes aldır (UI donmasını önler)
-    await new Promise(res=>setTimeout(res,0));
-
-    const rowEl=rowElCache.get(idx);
+    // Show spinner on this row
+    const rowEl=document.querySelector(`.row[data-idx="${idx}"]`);
     const mb=rowEl?.querySelector('.btn-magic');
     if(mb)mb.classList.add('loading');
 
@@ -773,8 +749,9 @@ Return ONLY a JSON object, no markdown: {"trans": "shortened text here"}`;
     const raw=await geminiRequest(prompt,30000);
     if(mb)mb.classList.remove('loading');
 
+    // ── Rate limit: stop, report, let user retry ──────
     if(raw==='RATE_LIMIT'){
-      updateStats(true);fixBtn.disabled=false;fixBtn.textContent=origText;
+      updateStats();fixBtn.disabled=false;fixBtn.textContent=origText;
       document.getElementById('footer-saved').textContent=t('footer_unsaved');
       showToast(`⏸ Rate limit at row ${i+1}/${longRows.length}. Fixed: ${totalFixed}. Wait ~60s then click Auto-Fix again.`,'warn');
       return;
@@ -783,28 +760,42 @@ Return ONLY a JSON object, no markdown: {"trans": "shortened text here"}`;
     if(!raw){totalFailed++;continue;}
 
     try{
-      const obj=JSON.parse(raw.replace(/```json|```/g,'').trim());
-      if(typeof obj.trans==='string'&&obj.trans.trim()){
-        const oldStatus=rows[idx].status;
+      const obj=parseTransJSON(raw);
+      if(obj&&obj.trans.trim()){
         rows[idx].trans=obj.trans;rows[idx].status=getStatus(rows[idx]);
-        // DOM güncellemesini requestAnimationFrame'e bırak — layout thrash önler
-        requestAnimationFrame(()=>updateRowDOM(idx));
-        updateStatsDelta(oldStatus,rows[idx].status);
-        totalFixed++;
+        updateRowDOM(idx);totalFixed++;
       }else{totalFailed++;}
     }catch(err){
       totalFailed++;console.warn('[LoreScribe] parse fail row',idx,err,'\nRaw:',raw);
     }
 
+    // 500ms gap — stays well inside free-tier 15 req/min limit
     if(i<longRows.length-1)await sleep(500);
   }
 
-  updateStats(true);fixBtn.disabled=false;fixBtn.textContent=origText;
+  updateStats();fixBtn.disabled=false;fixBtn.textContent=origText;
   document.getElementById('footer-saved').textContent=t('footer_unsaved');
   showToast(`✨ Fixed: ${totalFixed}  |  Failed: ${totalFailed}  (of ${longRows.length})`,totalFixed>0?'ok':'warn');
 }
 
 function sleep(ms){return new Promise(res=>setTimeout(res,ms));}
+
+// Gemini bazen geçerli JSON'ın altına çöp satırlar ekliyor.
+// Bu fonksiyon sadece ilk geçerli {"trans":...} bloğunu alır.
+function parseTransJSON(raw){
+  if(!raw)return null;
+  const cleaned=raw.replace(/```json|```/g,'');
+  // Önce satır satır dene — geçerli JSON genelde ilk satırda
+  for(const line of cleaned.split('\n')){
+    const t=line.trim();
+    if(!t.startsWith('{'))continue;
+    try{const o=JSON.parse(t);if(typeof o.trans==='string')return o;}catch{}
+  }
+  // Fallback: regex ile ilk {...} bloğunu çıkar
+  const m=cleaned.match(/\{[^{}]*"trans"\s*:\s*"(?:[^"\\]|\\.)*"[^{}]*\}/);
+  if(m){try{const o=JSON.parse(m[0]);if(typeof o.trans==='string')return o;}catch{}}
+  return null;
+}
 
 // ═══ HELP MODAL ═══════════════════════════════════════
 const HELP_CONTENT={
